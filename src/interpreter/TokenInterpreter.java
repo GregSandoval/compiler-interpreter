@@ -1,9 +1,6 @@
 package interpreter;
 
-import compiler.lexer.token.FloatToken;
-import compiler.lexer.token.IntegerToken;
-import compiler.lexer.token.StringToken;
-import compiler.lexer.token.Token;
+import compiler.lexer.token.*;
 import compiler.parser.AbstractGrammarNode;
 import compiler.parser.TokenEvaluator;
 
@@ -18,16 +15,45 @@ import static compiler.lexer.token.OperatorToken.*;
 import static compiler.lexer.token.SymbolToken.*;
 
 public class TokenInterpreter implements TokenEvaluator {
+  private final SymbolTable symtab;
+
+  public TokenInterpreter(SymbolTable symtab) {
+    this.symtab = symtab;
+  }
+
   @Override
   public Void visit(WhileKeywordToken token) throws Exception {
     final var paren = (LeftParen) token.children.get(0);
     final var body = (LeftBrace) token.children.get(1);
 
-    while ((Integer) paren.accept(this).get(0) != 0) {
+    while ((Boolean) paren.accept(this).get(0)) {
       body.accept(this);
-      Thread.sleep(500);
     }
 
+    return null;
+  }
+
+  @Override
+  public Object visit(IdentifierToken token) throws Exception {
+    return symtab.getValue(token);
+  }
+
+  @Override
+  public Void visit(Equal token) throws Exception {
+    Token identifier;
+    final var identifierOrType = (Token) token.children.get(0);
+
+    if (identifierOrType instanceof KeywordToken) {
+      identifier = (Token) token.children.get(0).children.get(0);
+    } else {
+      identifier = (Token) token.children.get(0);
+    }
+
+    final var value = ((Token) token.children.get(1)).accept(this);
+    if (!symtab.hasSymbol(identifier)) {
+      throw new Exception(identifier.getValue() + " is not defined");
+    }
+    symtab.setSymbolValue(identifier, value);
     return null;
   }
 
@@ -230,7 +256,7 @@ public class TokenInterpreter implements TokenEvaluator {
     BiFunction<Object, Object, Exception> onError
   ) throws Exception {
     var left = evaluate(Object.class, leftToken);
-    var right = evaluate(Object.class, rightToken.children.get(1));
+    var right = evaluate(Object.class, rightToken);
 
     final var result = this.numberBiFunction(
       leftToken,

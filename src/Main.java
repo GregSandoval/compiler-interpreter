@@ -16,11 +16,17 @@ public class Main {
   prog
 
   main {
+      var(
+        int count = 0;
+      )
 
-      print(
-        "go sucks" + ""
-      );
+      while(count < 10){
+        print(count);
+        count = count + 1;
+      };
 
+      print("count should be 10","");
+      print("");
   }
 
 """;

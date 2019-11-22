@@ -10,6 +10,10 @@ public class Interpreter {
       throw new Exception("Grammar node in AST?");
     }
 
-    ((Token) tree).accept(new TokenInterpreter());
+    final SymbolTable symtab = new SymbolTable();
+    SymbolTableVisitor.build((Token) tree, symtab);
+    ((Token) tree).accept(new TokenInterpreter(symtab));
+    System.out.println("Symbol table: \n" + symtab.toString());
   }
+
 }
