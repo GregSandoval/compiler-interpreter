@@ -1,6 +1,7 @@
 import compiler.a5.grammar.A5GrammarNonTerminals;
 import compiler.a5.grammar.A5GrammarRules;
 import compiler.a5.lexicon.A5LexiconDFA;
+import compiler.interpreter.Interpreter;
 import compiler.lexer.AlexHydrator;
 import compiler.lexer.LexerBuilder;
 import compiler.lexer.token.Token;
@@ -9,7 +10,6 @@ import compiler.parser.AbstractSyntaxTreeBuilder;
 import compiler.parser.GrammarNode;
 import compiler.parser.ParseTreeBuilder;
 import compiler.utils.TextCursor;
-import interpreter.Interpreter;
 import visualization.TreeVisualizer;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package interpreter;
+package compiler.interpreter;
 
 import compiler.lexer.token.*;
 import compiler.parser.AbstractGrammarNode;
