@@ -5,7 +5,7 @@ main {
         int test = 0;
     )
     while(test < 10){
-        print(test);
+        print("The number is: ", test);
         test = test + 1;
     };
 }
