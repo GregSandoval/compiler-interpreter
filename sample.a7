@@ -9,11 +9,15 @@ main {
     print("Hey buddy, what's your name? ");
     name = input();
 
-    print("Nice to meet you ", name, "! what's your favorite programming language?");
+    print("Nice to meet you ", name, "! what's your favorite programming language? ");
     favoriteLanguage = input();
 
-    if(favoriteLanguage == "golang"){
+    if (favoriteLanguage == "golang"){
         print("Ah, does that have generics yet?");
+    } elseif(favoriteLanguage == "go") {
+        print("Ah, does that have generics yet?");
+    } elseif(favoriteLanguage == "java") {
+        print("Shall we pray to thy holy java?");
     } else {
         // 99% accurate
         print("Nice! That language has generics. ");

@@ -11,8 +11,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static compiler.lexer.token.KeywordToken.PrintKeywordToken;
-import static compiler.lexer.token.KeywordToken.WhileKeywordToken;
+import static compiler.lexer.token.KeywordToken.*;
 import static compiler.lexer.token.OperatorToken.*;
 import static compiler.lexer.token.SymbolToken.*;
 
@@ -25,7 +24,7 @@ public class TokenInterpreter implements TokenEvaluator {
   }
 
   @Override
-  public String visit(KeywordToken.InputKeywordToken token) throws Exception {
+  public String visit(InputKeywordToken token) throws Exception {
     return scanner.nextLine();
   }
 
@@ -40,6 +39,49 @@ public class TokenInterpreter implements TokenEvaluator {
 
     return null;
   }
+
+  @Override
+  public Void visit(IfKeywordToken token) throws Exception {
+    final var paren = (LeftParen) token.children.get(0);
+    final var body = (LeftBrace) token.children.get(1);
+
+    if ((Boolean) paren.accept(this).get(0)) {
+      body.accept(this);
+      return null;
+    }
+
+    if (token.children.size() < 3) {
+      return null;
+    }
+
+    ((Token) token.children.get(2)).accept(this);
+    return null;
+  }
+
+  @Override
+  public Void visit(ElseIfKeywordToken token) throws Exception {
+    final var paren = (LeftParen) token.children.get(0);
+    final var body = (LeftBrace) token.children.get(1);
+
+    if ((Boolean) paren.accept(this).get(0)) {
+      body.accept(this);
+    }
+
+    if (token.children.size() < 3) {
+      return null;
+    }
+
+    ((Token) token.children.get(2)).accept(this);
+    return null;
+  }
+
+  @Override
+  public Void visit(ElseKeywordToken token) throws Exception {
+    final var body = (LeftBrace) token.children.get(0);
+    body.accept(this);
+    return null;
+  }
+
 
   @Override
   public Object visit(IdentifierToken token) throws Exception {
