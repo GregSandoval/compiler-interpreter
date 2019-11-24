@@ -431,6 +431,13 @@ public class A5GrammarNonTerminals {
     }
   }
 
+  public static class Stinput extends GrammarNode {
+    @Override
+    public void accept(GrammarNodeVisitor visitor) {
+      visitor.visit(this);
+    }
+  }
+
   public static class Strtn extends GrammarNode {
     @Override
     public void accept(GrammarNodeVisitor visitor) {

@@ -31,14 +31,25 @@ public class SymbolTableVisitor implements TokenEvaluator {
   public Void visit(VarKeywordToken kwdvar) throws Exception {
     final var paren = kwdvar.children.get(0);
     for (final var equal : paren.children) {
-      final var identifier = (IdentifierToken) equal
-        .children.get(0)
-        .children.get(0);
+      final var equalOrIdentifier = equal.children.get(0);
+      if (equalOrIdentifier instanceof Equal) {
+        final var identifier = (IdentifierToken) equalOrIdentifier
+          .children.get(0);
 
-      if (symtab.hasSymbol(identifier)) {
-        throw new Exception(identifier.getClass().getSimpleName() + " has already been declared");
+        if (symtab.hasSymbol(identifier)) {
+          throw new Exception(identifier.getClass().getSimpleName() + " has already been declared");
+        }
+        symtab.setSymbolValue(identifier, undefined);
+      } else if (equalOrIdentifier instanceof IdentifierToken) {
+        final var identifier = (IdentifierToken) equalOrIdentifier;
+
+        if (symtab.hasSymbol(identifier)) {
+          throw new Exception(identifier.getClass().getSimpleName() + " has already been declared");
+        }
+        symtab.setSymbolValue(identifier, undefined);
+      } else {
+        throw new Exception("Please check symbol table, unchecked type:" + equalOrIdentifier);
       }
-      symtab.setSymbolValue(identifier, undefined);
     }
     return null;
   }
@@ -97,6 +108,11 @@ public class SymbolTableVisitor implements TokenEvaluator {
 
   @Override
   public Number visit(ForwardSlash forwardSlash) throws Exception {
+    return null;
+  }
+
+  @Override
+  public String visit(KeywordToken.InputKeywordToken token) throws Exception {
     return null;
   }
 

@@ -253,6 +253,10 @@ public interface GrammarNodeVisitor {
     throw new RuntimeException("Not implemented: visit(Stprint node); this: " + this);
   }
 
+  default void visit(Stinput node) {
+    throw new RuntimeException("Not implemented: visit(Stinput node); this: " + this);
+  }
+
   default void visit(Strtn node) {
     throw new RuntimeException("Not implemented: visit(Strtn node); this: " + this);
   }

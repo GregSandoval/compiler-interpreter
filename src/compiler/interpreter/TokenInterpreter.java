@@ -6,6 +6,7 @@ import compiler.parser.TokenEvaluator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -16,10 +17,16 @@ import static compiler.lexer.token.OperatorToken.*;
 import static compiler.lexer.token.SymbolToken.*;
 
 public class TokenInterpreter implements TokenEvaluator {
+  private final Scanner scanner = new Scanner(System.in);
   private final SymbolTable symtab;
 
   public TokenInterpreter(SymbolTable symtab) {
     this.symtab = symtab;
+  }
+
+  @Override
+  public String visit(KeywordToken.InputKeywordToken token) throws Exception {
+    return scanner.nextLine();
   }
 
   @Override
@@ -164,7 +171,7 @@ public class TokenInterpreter implements TokenEvaluator {
       token.children.get(1),
       (left, right) -> left * right,
       (left, right) -> left * right,
-      (left, right) -> null
+      (left, right) -> new Exception("Operator * isn't defined for strings")
     );
   }
 
@@ -175,7 +182,7 @@ public class TokenInterpreter implements TokenEvaluator {
       token.children.get(1),
       (left, right) -> left - right,
       (left, right) -> left - right,
-      (left, right) -> null
+      (left, right) -> new Exception("Operator - isn't defined for strings")
     );
   }
 
@@ -186,7 +193,7 @@ public class TokenInterpreter implements TokenEvaluator {
       token.children.get(1),
       Float::sum,
       Integer::sum,
-      (left, right) -> null
+      (left, right) -> new Exception("Operator + isn't defined for strings")
     );
   }
 
@@ -197,7 +204,7 @@ public class TokenInterpreter implements TokenEvaluator {
       token.children.get(1),
       (left, right) -> left,
       (left, right) -> left << right,
-      (left, right) -> null
+      (left, right) -> new Exception("Operator << isn't defined for strings")
     );
   }
 
@@ -208,7 +215,7 @@ public class TokenInterpreter implements TokenEvaluator {
       token.children.get(1),
       (left, right) -> left,
       (left, right) -> left >> right,
-      (left, right) -> null
+      (left, right) -> new Exception("Operator >> isn't defined for strings")
     );
   }
 
@@ -219,7 +226,7 @@ public class TokenInterpreter implements TokenEvaluator {
       token.children.get(1),
       Math::pow,
       Math::pow,
-      (left, right) -> null
+      (left, right) -> new Exception("Operator ^ isn't defined for strings")
     );
   }
 
@@ -230,7 +237,7 @@ public class TokenInterpreter implements TokenEvaluator {
       token.children.get(1),
       (left, right) -> left / right,
       (left, right) -> left / right,
-      (left, right) -> null
+      (left, right) -> new Exception("Operator / isn't defined for strings")
     );
   }
 
@@ -299,11 +306,7 @@ public class TokenInterpreter implements TokenEvaluator {
       throw exception;
     }
 
-    throw new Exception(
-      "Type " + left.getClass().getSimpleName() +
-        " and " + right.getClass().getSimpleName() +
-        " are not comparable"
-    );
+    return null;
   }
 
   public <T> T numberBiFunction(
@@ -340,11 +343,7 @@ public class TokenInterpreter implements TokenEvaluator {
       throw exception;
     }
 
-    throw new Exception(
-      "Type " + left.getClass().getSimpleName() +
-        " and " + right.getClass().getSimpleName() +
-        " are not comparable"
-    );
+    return null;
   }
 
   public static Exception classNotCompatibleException(Object left, Object right) {

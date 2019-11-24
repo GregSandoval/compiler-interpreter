@@ -34,6 +34,7 @@ public class A5GrammarRules {
         IfKeywordToken.class,
         WhileKeywordToken.class,
         PrintKeywordToken.class,
+        InputKeywordToken.class,
         ReturnKeywordToken.class,
         RightBrace.class,
         Colon.class
@@ -274,6 +275,7 @@ public class A5GrammarRules {
         IfKeywordToken.class,
         WhileKeywordToken.class,
         PrintKeywordToken.class,
+        InputKeywordToken.class,
         ReturnKeywordToken.class
       )
       .useRHS(Stmt::new, SemiColon::new, Stmts::new)
@@ -288,6 +290,8 @@ public class A5GrammarRules {
       .useRHS(Stwhile::new)
       .on(PrintKeywordToken.class)
       .useRHS(Stprint::new)
+      .on(InputKeywordToken.class)
+      .useRHS(Stinput::new)
       .on(ReturnKeywordToken.class)
       .useRHS(Strtn::new);
 
@@ -357,6 +361,9 @@ public class A5GrammarRules {
     new Stprint()
       .on(PrintKeywordToken.class)
       .useRHS(PrintKeywordToken::new, PPexprs::new);
+    new Stinput()
+      .on(InputKeywordToken.class)
+      .useRHS(InputKeywordToken::new, PPexprs::new);
     new Strtn()
       .on(ReturnKeywordToken.class)
       .useRHS(ReturnKeywordToken::new, Strtn_Suffix::new);
@@ -371,7 +378,7 @@ public class A5GrammarRules {
       .on(LeftParen.class)
       .useRHS(LeftParen::new, Expr::new, RightParen::new);
     new Expr()
-      .on(IntegerToken.class, FloatToken.class, StringToken.class, IdentifierToken.class, Asterisk.class, Ampersand.class, LeftParen.class)
+      .on(IntegerToken.class, FloatToken.class, StringToken.class, IdentifierToken.class, Asterisk.class, Ampersand.class, LeftParen.class, InputKeywordToken.class)
       .useRHS(Rterm::new, Expr_Tail::new);
     new Expr_Tail()
       .on(EqualEqual.class, NotEqual.class, LessThan.class, LessThanOrEqual.class, GreaterThanOrEqual.class, GreaterThan.class)
@@ -379,7 +386,7 @@ public class A5GrammarRules {
       .on(RightBrace.class, RightBracket.class, SemiColon.class, RightParen.class, Comma.class)
       .useRHS();
     new Rterm()
-      .on(IntegerToken.class, FloatToken.class, StringToken.class, IdentifierToken.class, Asterisk.class, Ampersand.class, LeftParen.class)
+      .on(IntegerToken.class, FloatToken.class, StringToken.class, IdentifierToken.class, Asterisk.class, Ampersand.class, LeftParen.class, InputKeywordToken.class)
       .useRHS(Term::new, Rterm_Tail::new);
     new Rterm_Tail()
       .on(Plus.class, Minus.class)
@@ -399,7 +406,7 @@ public class A5GrammarRules {
       )
       .useRHS();
     new Term()
-      .on(IntegerToken.class, FloatToken.class, StringToken.class, IdentifierToken.class, Asterisk.class, Ampersand.class, LeftParen.class)
+      .on(IntegerToken.class, FloatToken.class, StringToken.class, IdentifierToken.class, Asterisk.class, Ampersand.class, LeftParen.class, InputKeywordToken.class)
       .useRHS(Fact::new, Term_Tail::new);
     new Term_Tail()
       .on(Asterisk.class, ForwardSlash.class, Caret.class)
@@ -414,7 +421,9 @@ public class A5GrammarRules {
       .on(Ampersand.class)
       .useRHS(Addrof_id::new)
       .on(LeftParen.class)
-      .useRHS(PPexpr::new);
+      .useRHS(PPexpr::new)
+      .on(InputKeywordToken.class)
+      .useRHS(Stinput::new);
     new LvalOrFcall()
       .on(Asterisk.class)
       .useRHS(Deref_id::new)

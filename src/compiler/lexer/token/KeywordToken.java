@@ -195,7 +195,7 @@ public abstract class KeywordToken extends Token {
     }
 
     @Override
-    public Void accept(TokenEvaluator visitor) throws Exception {
+    public String accept(TokenEvaluator visitor) throws Exception {
       return visitor.visit(this);
     }
   }

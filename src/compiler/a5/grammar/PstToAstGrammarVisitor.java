@@ -475,6 +475,11 @@ public class PstToAstGrammarVisitor implements GrammarNodeVisitor {
   }
 
   @Override
+  public void visit(Stinput node) {
+    hoist(node);
+  }
+
+  @Override
   public void visit(Strtn node) {
     if (node.children.size() <= 1) {
       return;

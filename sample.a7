@@ -2,20 +2,22 @@ prog
 
 main {
     var(
-        int value = 99;
-        int valuePtr = &value;
-        int valuePtrPtr = &valuePtr;
-        int current = 0;
+        string name;
+        string favoriteLanguage;
     )
 
-    print("valuePtrPtr => ");
+    print("Hey buddy, what's your name? ");
+    name = input();
 
-    current = valuePtrPtr;
-    print(current);
+    print("Nice to meet you ", name, "! what's your favorite programming language?");
+    favoriteLanguage = input();
 
-    current = *current;
-    print(" => ", current);
+    if(favoriteLanguage == "golang"){
+        print("Ah, does that have generics yet?");
+    } else {
+        // 99% accurate
+        print("Nice! That language has generics. ");
+        print("Can you believe golang still lacks generics?");
+    };
 
-    current = *current;
-    print(" => ", current);
 }

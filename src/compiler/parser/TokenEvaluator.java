@@ -108,9 +108,7 @@ public interface TokenEvaluator {
     return visitChildren(token);
   }
 
-  default Void visit(InputKeywordToken token) throws Exception {
-    return visitChildren(token);
-  }
+  String visit(InputKeywordToken token) throws Exception;
 
   default Void visit(PrintKeywordToken token) throws Exception {
     return visitChildren(token);
