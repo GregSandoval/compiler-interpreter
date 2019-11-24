@@ -21,6 +21,14 @@ public class SymbolTable {
     return this.symtab.get(hashcode(token));
   }
 
+  public String getAddress(Token token) {
+    return this.hashcode(token);
+  }
+
+  public Object getValueAtAddress(String address) {
+    return this.symtab.get(address);
+  }
+
   public Object removeSymbol(Token token) {
     return this.symtab.remove(hashcode(token));
   }

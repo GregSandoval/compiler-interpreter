@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static compiler.lexer.token.KeywordToken.PrintKeywordToken;
 import static compiler.lexer.token.KeywordToken.WhileKeywordToken;
@@ -68,9 +69,13 @@ public class TokenInterpreter implements TokenEvaluator {
 
   @Override
   public Void visit(PrintKeywordToken token) throws Exception {
-    ((LeftParen) token.children.get(0))
-      .accept(this)
-      .forEach(System.out::println);
+    System.out.print(
+      ((LeftParen) token.children.get(0))
+        .accept(this)
+        .stream()
+        .map(Object::toString)
+        .collect(Collectors.joining(""))
+    );
     return null;
   }
 
@@ -147,7 +152,13 @@ public class TokenInterpreter implements TokenEvaluator {
 
   // Operators
   @Override
-  public Number visit(Asterisk token) throws Exception {
+  public Object visit(Asterisk token) throws Exception {
+    if (token.children.size() == 1) {
+      final var pointer = (Token) token.children.get(0);
+      final var address = (String) this.symtab.getValue(pointer);
+      return symtab.getValueAtAddress(address);
+    }
+
     return numberBiFunction(
       token.children.get(0),
       token.children.get(1),
@@ -224,8 +235,8 @@ public class TokenInterpreter implements TokenEvaluator {
   }
 
   @Override
-  public Number visit(Ampersand token) throws Exception {
-    throw new Exception("Symbol table isn't implemented");
+  public Object visit(Ampersand token) throws Exception {
+    return symtab.getAddress((Token) token.children.get(0));
   }
 
 

@@ -61,7 +61,7 @@ public class SymbolTableVisitor implements TokenEvaluator {
   }
 
   @Override
-  public Number visit(Asterisk asterisk) throws Exception {
+  public Object visit(Asterisk asterisk) throws Exception {
     return null;
   }
 
@@ -76,7 +76,7 @@ public class SymbolTableVisitor implements TokenEvaluator {
   }
 
   @Override
-  public Number visit(Ampersand ampersand) throws Exception {
+  public Object visit(Ampersand ampersand) throws Exception {
     return null;
   }
 

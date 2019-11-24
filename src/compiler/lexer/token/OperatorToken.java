@@ -52,7 +52,7 @@ public abstract class OperatorToken extends Token {
     }
 
     @Override
-    public Number accept(TokenEvaluator visitor) throws Exception {
+    public Object accept(TokenEvaluator visitor) throws Exception {
       return visitor.visit(this);
     }
   }
@@ -116,7 +116,7 @@ public abstract class OperatorToken extends Token {
     }
 
     @Override
-    public Number accept(TokenEvaluator visitor) throws Exception {
+    public Object accept(TokenEvaluator visitor) throws Exception {
       return visitor.visit(this);
     }
   }

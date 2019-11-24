@@ -32,13 +32,13 @@ public interface TokenEvaluator {
 
 
   // Operators
-  Number visit(Asterisk token) throws Exception;
+  Object visit(Asterisk token) throws Exception;
 
   Number visit(Minus token) throws Exception;
 
   Number visit(Plus token) throws Exception;
 
-  Number visit(Ampersand token) throws Exception;
+  Object visit(Ampersand token) throws Exception;
 
   Number visit(BitShiftLeft token) throws Exception;
 

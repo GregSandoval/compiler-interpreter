@@ -2,10 +2,20 @@ prog
 
 main {
     var(
-        int test = 0;
+        int value = 99;
+        int valuePtr = &value;
+        int valuePtrPtr = &valuePtr;
+        int current = 0;
     )
-    while(test < 10){
-        print("The number is: ", test);
-        test = test + 1;
-    };
+
+    print("valuePtrPtr => ");
+
+    current = valuePtrPtr;
+    print(current);
+
+    current = *current;
+    print(" => ", current);
+
+    current = *current;
+    print(" => ", current);
 }
