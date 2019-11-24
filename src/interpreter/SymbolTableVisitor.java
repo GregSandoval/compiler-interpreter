@@ -11,7 +11,12 @@ import static compiler.lexer.token.SymbolToken.*;
 
 public class SymbolTableVisitor implements TokenEvaluator {
   private final SymbolTable symtab;
-  private final Object undefined = new Object();
+  private final Object undefined = new Object() {
+    @Override
+    public String toString() {
+      return "undefined";
+    }
+  };
 
   private SymbolTableVisitor(SymbolTable symtab) {
     this.symtab = symtab;
