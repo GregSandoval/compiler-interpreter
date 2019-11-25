@@ -38,7 +38,13 @@ public class SymbolTable {
   }
 
   public Object getValue(Token token) {
-    return this.symtab.get(hashcode(token));
+    final var value = this.symtab.get(hashcode(token));
+
+    if (value == null) {
+      throw new UndeclaredIdentifierException(token);
+    }
+
+    return value;
   }
 
   public String getAddress(Token token) {

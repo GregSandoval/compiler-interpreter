@@ -37,7 +37,7 @@ public class SymbolTableVisitor implements TokenTypedAdapterVisitor<TypeToken> {
         type = (TypeToken) equalOrDataType.children.get(0);
         identifier = (IdentifierToken) type.children.get(0);
       } else {
-        throw new RuntimeException("Please check symbol table, unchecked type:" + equalOrDataType);
+        throw new UnknownDataTypeException((Token) equalOrDataType);
       }
 
       if (symtab.hasSymbol(identifier)) {

@@ -22,7 +22,19 @@ public class TypeChecker implements TokenTypedAdapterVisitor<TypeToken> {
 
   @Override
   public TypeToken visit(OperatorToken.Asterisk token) {
+    if (token.children.size() == 1) {
+      return ((Token) token.children.get(0)).accept(this);
+    }
     return checkBinaryOperator(token);
+  }
+
+  @Override
+  public TypeToken visit(OperatorToken.Ampersand token) {
+    if (token.children.size() == 1) {
+      return ((Token) token.children.get(0)).accept(this);
+    }
+
+    return voidType;
   }
 
   @Override
