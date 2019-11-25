@@ -14,9 +14,9 @@ main {
     guess = input();
     while(guess != "java"){
         if(guess == "go"){
-            print("That's not event top 10, try again:");
+            print("That's not event top 10, try again: ");
         }elseif(guess == "golang"){
-            print("That's not event top 10, try again:");
+            print("That's not event top 10, try again: ");
         }else{
             print("I'm sorry, that's not correct, try again: ");
         };

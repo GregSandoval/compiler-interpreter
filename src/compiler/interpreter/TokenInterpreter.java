@@ -11,6 +11,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static compiler.interpreter.SymbolTableVisitor.undefined;
 import static compiler.lexer.token.KeywordToken.*;
 import static compiler.lexer.token.OperatorToken.*;
 import static compiler.lexer.token.SymbolToken.LeftBrace;
@@ -87,7 +88,17 @@ public class TokenInterpreter implements TokenEvaluator {
 
   @Override
   public Object visit(IdentifierToken token) throws Exception {
-    return symtab.getValue(token);
+    if (token.parent instanceof TypeToken) {
+      return null;
+    }
+
+    final var value = symtab.getValue(token);
+
+    if (value == undefined) {
+      throw new IdentifierUsedBeforeInitializationException(token);
+    }
+
+    return value;
   }
 
   @Override

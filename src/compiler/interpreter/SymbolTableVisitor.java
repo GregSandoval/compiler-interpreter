@@ -10,8 +10,8 @@ import static compiler.lexer.token.OperatorToken.Equal;
 import static compiler.lexer.token.TypeToken.*;
 
 public class SymbolTableVisitor implements TokenTypedAdapterVisitor<TypeToken> {
-  private final VoidToken voidToken = new VoidToken();
-  private final Undefined undefined = new Undefined();
+  public static final VoidToken voidToken = new VoidToken();
+  public static final Undefined undefined = new Undefined();
   private final SymbolTable symtab;
 
   private SymbolTableVisitor(SymbolTable symtab) {

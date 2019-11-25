@@ -15,7 +15,7 @@ public class SymbolTable {
     final var type = this.types.get(this.hashcode(token));
 
     if (type == null) {
-      throw new RuntimeException(token.getValue() + " is not defined");
+      throw new UndeclaredIdentifierException(token);
     }
 
     return type;
