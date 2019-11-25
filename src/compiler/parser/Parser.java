@@ -55,25 +55,19 @@ public class Parser {
 
       if (top instanceof Token) {
         onUnexpectedToken.accept(top, token);
-        throw new Exception("\nUnexpected token; Expected a " + top.getClass().getSimpleName() + " but found a " + token.getClass().getSimpleName() +
-          "\n\tat " + inputName + "(" + inputName + ":" + token.getLineNumber() + ")");
+        throw new UnexpectedToken(top, token, inputName);
       }
 
       if (!(top instanceof GrammarNode)) {
         onUnknownGrammarRule.accept(top, token);
-        throw new Exception("Node is neither Token nor Grammar rule: " + top);
+        throw new RuntimeException("Node is neither Token nor Grammar rule: " + top);
       }
 
       final var rhs = ((GrammarNode) top).getRHS(token.getClass());
 
       if (rhs == null) {
         onPredictionNotFoundError.accept(top, token);
-        throw new Exception(
-          "\nLL Table missing entry exception; " + top + "(" + token.getClass().getSimpleName() + ") = undefined\n" +
-            top.getClass().getSimpleName() + " expected " + ((GrammarNode) top).getRHS().stream().map(Class::getSimpleName).collect(Collectors.joining(" or ")) +
-            " but found " + token.getClass().getSimpleName() +
-            "\n\tat " + inputName + "(" + inputName + ":" + token.getLineNumber() + ")"
-        );
+        throw new PredictiveParserException((GrammarNode) top, token, inputName);
       }
 
       onGrammarRuleApplication.accept(top, token, rhs);

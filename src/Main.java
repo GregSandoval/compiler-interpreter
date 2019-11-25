@@ -4,6 +4,7 @@ import compiler.a5.lexicon.A5LexiconDFA;
 import compiler.interpreter.Interpreter;
 import compiler.lexer.AlexHydrator;
 import compiler.lexer.LexerBuilder;
+import compiler.lexer.UnknownTokenException;
 import compiler.lexer.token.Token;
 import compiler.parser.AbstractGrammarNode;
 import compiler.parser.AbstractSyntaxTreeBuilder;
@@ -130,18 +131,7 @@ public class Main {
 
   private static BiConsumer<String, TextCursor> logUnknownToken(String inputName) {
     return (unknownToken, cursor) -> {
-      final var line = cursor.getCursorLineNumber();
-      final var pos = cursor.getCursorLinePosition() - unknownToken.length();
-      Main.exception = "\nCould not lex input: " + "Error occurred on line " +
-        line +
-        ", position " +
-        pos +
-        "; Unexpected symbol\n" +
-        cursor.getCurrentLineOfText() +
-        "\n" +
-        " ".repeat(Math.max(0, pos)) +
-        "^\n" +
-        "\tat " + inputName + "(" + inputName + ":" + line + ")";
+      throw new UnknownTokenException(unknownToken, cursor, inputName);
     };
   }
 
