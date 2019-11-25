@@ -13,7 +13,8 @@ import java.util.stream.Collectors;
 
 import static compiler.lexer.token.KeywordToken.*;
 import static compiler.lexer.token.OperatorToken.*;
-import static compiler.lexer.token.SymbolToken.*;
+import static compiler.lexer.token.SymbolToken.LeftBrace;
+import static compiler.lexer.token.SymbolToken.LeftParen;
 
 public class TokenInterpreter implements TokenEvaluator {
   private final Scanner scanner = new Scanner(System.in);
@@ -209,78 +210,92 @@ public class TokenInterpreter implements TokenEvaluator {
       return symtab.getValueAtAddress(address);
     }
 
+    final var leftToken = (Token) token.children.get(0);
+    final var rightToken = (Token) token.children.get(1);
     return numberBiFunction(
-      token.children.get(0),
-      token.children.get(1),
+      leftToken,
+      rightToken,
       (left, right) -> left * right,
       (left, right) -> left * right,
-      (left, right) -> new Exception("Operator * isn't defined for strings")
+      (left, right) -> new OperatorUsageUndefined(token, symtab.getSymbolType(leftToken), symtab.getSymbolType(rightToken))
     );
   }
 
   @Override
   public Number visit(Minus token) throws Exception {
+    final var leftToken = (Token) token.children.get(0);
+    final var rightToken = (Token) token.children.get(1);
     return numberBiFunction(
-      token.children.get(0),
-      token.children.get(1),
+      leftToken,
+      rightToken,
       (left, right) -> left - right,
       (left, right) -> left - right,
-      (left, right) -> new Exception("Operator - isn't defined for strings")
+      (left, right) -> new OperatorUsageUndefined(token, symtab.getSymbolType(leftToken), symtab.getSymbolType(rightToken))
     );
   }
 
   @Override
   public Number visit(Plus token) throws Exception {
+    final var leftToken = (Token) token.children.get(0);
+    final var rightToken = (Token) token.children.get(1);
     return numberBiFunction(
-      token.children.get(0),
-      token.children.get(1),
+      leftToken,
+      rightToken,
       Float::sum,
       Integer::sum,
-      (left, right) -> new Exception("Operator + isn't defined for strings")
+      (left, right) -> new OperatorUsageUndefined(token, symtab.getSymbolType(leftToken), symtab.getSymbolType(rightToken))
     );
   }
 
   @Override
   public Number visit(BitShiftLeft token) throws Exception {
+    final var leftToken = (Token) token.children.get(0);
+    final var rightToken = (Token) token.children.get(1);
     return numberBiFunction(
-      token.children.get(0),
-      token.children.get(1),
+      leftToken,
+      rightToken,
       (left, right) -> left,
       (left, right) -> left << right,
-      (left, right) -> new Exception("Operator << isn't defined for strings")
+      (left, right) -> new OperatorUsageUndefined(token, symtab.getSymbolType(leftToken), symtab.getSymbolType(rightToken))
     );
   }
 
   @Override
   public Number visit(BitShiftRight token) throws Exception {
+    final var leftToken = (Token) token.children.get(0);
+    final var rightToken = (Token) token.children.get(1);
     return numberBiFunction(
-      token.children.get(0),
-      token.children.get(1),
+      leftToken,
+      rightToken,
       (left, right) -> left,
       (left, right) -> left >> right,
-      (left, right) -> new Exception("Operator >> isn't defined for strings")
+      (left, right) -> new OperatorUsageUndefined(token, symtab.getSymbolType(leftToken), symtab.getSymbolType(rightToken))
     );
   }
 
   @Override
   public Number visit(Caret token) throws Exception {
+    final var leftToken = (Token) token.children.get(0);
+    final var rightToken = (Token) token.children.get(1);
     return numberBiFunction(
-      token.children.get(0),
-      token.children.get(1),
+      leftToken,
+      rightToken,
       Math::pow,
       Math::pow,
-      (left, right) -> new Exception("Operator ^ isn't defined for strings")
+      (left, right) -> new OperatorUsageUndefined(token, symtab.getSymbolType(leftToken), symtab.getSymbolType(rightToken))
     );
   }
 
   @Override
   public Number visit(ForwardSlash token) throws Exception {
+    final var leftToken = (Token) token.children.get(0);
+    final var rightToken = (Token) token.children.get(1);
     return numberBiFunction(
-      token.children.get(0),
-      token.children.get(1),
+      leftToken,
+      rightToken,
       (left, right) -> left / right,
       (left, right) -> left / right,
-      (left, right) -> new Exception("Operator / isn't defined for strings")
+      (left, right) -> new OperatorUsageUndefined(token, symtab.getSymbolType(leftToken), symtab.getSymbolType(rightToken))
     );
   }
 
@@ -331,11 +346,11 @@ public class TokenInterpreter implements TokenEvaluator {
       return result;
     }
 
-    if (left instanceof List) {
+    while (left instanceof List) {
       left = ((List) left).get(0);
     }
 
-    if (right instanceof List) {
+    while (right instanceof List) {
       right = ((List) right).get(0);
     }
 
@@ -362,11 +377,11 @@ public class TokenInterpreter implements TokenEvaluator {
     var left = evaluate(Object.class, leftToken);
     var right = evaluate(Object.class, rightToken);
 
-    if (left instanceof List) {
+    while (left instanceof List) {
       left = ((List) left).get(0);
     }
 
-    if (right instanceof List) {
+    while (right instanceof List) {
       right = ((List) right).get(0);
     }
 

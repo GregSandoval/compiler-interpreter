@@ -45,13 +45,13 @@ public class A5LexiconDFA {
 
   // Other punctuation tokens
   public static final LexicalNode ASTERISK = new FinalState("ASTERISK", OperatorToken.Asterisk::new);
-  public static final LexicalNode CARET = new FinalState("CARET", SymbolToken.RightParen.Caret::new);
+  public static final LexicalNode CARET = new FinalState("CARET", OperatorToken.Caret::new);
   public static final LexicalNode COLON = new FinalState("COLON", SymbolToken.RightParen.Colon::new);
   public static final LexicalNode PERIOD = new FinalState("PERIOD", SymbolToken.RightParen.Period::new);
   public static final LexicalNode EQUAL = new FinalState("EQUAL", OperatorToken.Equal::new);
   public static final LexicalNode MINUS = new FinalState("MINUS", OperatorToken.Minus::new);
   public static final LexicalNode PLUS = new FinalState("PLUS", OperatorToken.Plus::new);
-  public static final LexicalNode FORWARD_SLASH = new FinalState("FORWARD_SLASH", SymbolToken.ForwardSlash::new);
+  public static final LexicalNode FORWARD_SLASH = new FinalState("FORWARD_SLASH", OperatorToken.ForwardSlash::new);
   public static final LexicalNode AND = new FinalState("AND", OperatorToken.Ampersand::new);
   public static final LexicalNode EXCLAMATION_MARK = new NonFinalState("EXCLAMATION_MARK");
 

@@ -7,7 +7,7 @@ import static compiler.parser.PstToAstHelpers.hoist;
 
 public class PstToAstTokenVisitor implements TokenVisitor<Void> {
   @Override
-  public Void visit(SymbolToken.ForwardSlash forwardSlash) {
+  public Void visit(OperatorToken.ForwardSlash forwardSlash) {
     hoist(forwardSlash);
     return null;
   }
@@ -219,7 +219,7 @@ public class PstToAstTokenVisitor implements TokenVisitor<Void> {
   }
 
   @Override
-  public Void visit(SymbolToken.Caret token) {
+  public Void visit(OperatorToken.Caret token) {
     return null;
   }
 

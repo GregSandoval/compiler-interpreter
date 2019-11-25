@@ -246,4 +246,38 @@ public abstract class OperatorToken extends Token {
       return visitor.visit(this);
     }
   }
+
+  public static class Caret extends OperatorToken {
+    public Caret() {
+      super("^", 42);
+    }
+
+    @Override
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
+    }
+
+
+    @Override
+    public Number accept(TokenEvaluator visitor) throws Exception {
+      return visitor.visit(this);
+    }
+  }
+
+  public static class ForwardSlash extends OperatorToken {
+    public ForwardSlash() {
+      super("/", 48);
+    }
+
+    @Override
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
+    }
+
+
+    @Override
+    public Number accept(TokenEvaluator visitor) throws Exception {
+      return visitor.visit(this);
+    }
+  }
 }

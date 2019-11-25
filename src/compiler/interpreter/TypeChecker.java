@@ -26,8 +26,61 @@ public class TypeChecker implements TokenTypedAdapterVisitor<TypeToken> {
   }
 
   @Override
-  public TypeToken visit(OperatorToken.Equal token) {
+  public TypeToken visit(OperatorToken.Equal equal) {
+    final var lval = ((Token) equal.children.get(0)).accept(this);
+    final var rval = ((Token) equal.children.get(1)).accept(this);
+
+    if (lval instanceof FloatKeywordToken && rval instanceof FloatKeywordToken) {
+      return lval;
+    }
+
+    if (lval instanceof IntegerKeywordToken && rval instanceof IntegerKeywordToken) {
+      return lval;
+    }
+
+    if (lval instanceof FloatKeywordToken && rval instanceof IntegerKeywordToken) {
+      return lval;
+    }
+
+    if (lval.getClass() != rval.getClass()) {
+      throw new OperatorTypeException(equal, lval, rval);
+    }
+
+    return lval;
+  }
+
+  @Override
+  public TypeToken visit(OperatorToken.Minus token) {
     return checkBinaryOperator(token);
+  }
+
+  @Override
+  public TypeToken visit(OperatorToken.Plus token) {
+    return checkBinaryOperator(token);
+  }
+
+  @Override
+  public TypeToken visit(OperatorToken.ForwardSlash token) {
+    return checkBinaryOperator(token);
+  }
+
+  @Override
+  public TypeToken visit(OperatorToken.Caret token) {
+    return checkBinaryOperator(token);
+  }
+
+  @Override
+  public TypeToken visit(SymbolToken.LeftParen token) {
+    if (token.parent instanceof OperatorToken || token.parent instanceof SymbolToken.LeftParen) {
+      final var type = ((Token) token.children.get(0)).accept(this);
+
+      if (type.getClass() == voidType.getClass()) {
+        throw new RuntimeException("Shit");
+      }
+      return type;
+    }
+
+    return voidType;
   }
 
   @Override

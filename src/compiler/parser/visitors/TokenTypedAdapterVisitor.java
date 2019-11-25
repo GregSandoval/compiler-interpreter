@@ -237,7 +237,7 @@ public interface TokenTypedAdapterVisitor<T> extends TokenVisitor<T> {
   }
 
   @Override
-  default T visit(SymbolToken.Caret token) {
+  default T visit(OperatorToken.Caret token) {
     return visitChildren(token);
   }
 
@@ -252,7 +252,7 @@ public interface TokenTypedAdapterVisitor<T> extends TokenVisitor<T> {
   }
 
   @Override
-  default T visit(SymbolToken.ForwardSlash token) {
+  default T visit(OperatorToken.ForwardSlash token) {
     return visitChildren(token);
   }
 

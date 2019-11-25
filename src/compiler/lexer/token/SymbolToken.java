@@ -7,7 +7,7 @@ import java.util.List;
 
 public abstract class SymbolToken extends Token {
 
-  private SymbolToken(String str, int UUID) {
+  public SymbolToken(String str, int UUID) {
     super(str, UUID);
   }
 
@@ -147,23 +147,6 @@ public abstract class SymbolToken extends Token {
     }
   }
 
-  public static class Caret extends SymbolToken {
-    public Caret() {
-      super("^", 42);
-    }
-
-    @Override
-    public <T> T accept(TokenVisitor<T> visitor) {
-      return visitor.visit(this);
-    }
-
-
-    @Override
-    public Number accept(TokenEvaluator visitor) throws Exception {
-      return visitor.visit(this);
-    }
-  }
-
   public static class Colon extends SymbolToken {
     public Colon() {
       super(":", 43);
@@ -194,23 +177,6 @@ public abstract class SymbolToken extends Token {
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
-      return visitor.visit(this);
-    }
-  }
-
-  public static class ForwardSlash extends SymbolToken {
-    public ForwardSlash() {
-      super("/", 48);
-    }
-
-    @Override
-    public <T> T accept(TokenVisitor<T> visitor) {
-      return visitor.visit(this);
-    }
-
-
-    @Override
-    public Number accept(TokenEvaluator visitor) throws Exception {
       return visitor.visit(this);
     }
   }

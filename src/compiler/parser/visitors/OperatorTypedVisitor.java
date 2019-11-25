@@ -30,4 +30,9 @@ public interface OperatorTypedVisitor<T> {
   T visit(BitShiftLeft token);
 
   T visit(BitShiftRight token);
+
+  T visit(Caret token);
+
+  T visit(ForwardSlash token);
+
 }

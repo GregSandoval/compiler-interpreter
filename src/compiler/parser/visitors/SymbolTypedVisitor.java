@@ -19,12 +19,8 @@ public interface SymbolTypedVisitor<T> {
 
   T visit(RightParen token);
 
-  T visit(Caret token);
-
   T visit(Colon token);
 
   T visit(Period token);
-
-  T visit(ForwardSlash token);
 
 }

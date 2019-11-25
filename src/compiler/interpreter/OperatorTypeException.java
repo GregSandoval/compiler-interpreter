@@ -11,7 +11,7 @@ public class OperatorTypeException extends UserException {
   }
 
   private static String formatMessage(OperatorToken operator, Token left, Token right) {
-    return "Operator '" + operator.getValue() + "' is not defined between types " + right.getValue() + " and " + left.getValue();
+    return "Operator '" + operator.getValue() + "' is not defined between types " + left.getValue() + " and " + right.getValue();
   }
 
 }
