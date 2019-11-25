@@ -2,6 +2,7 @@ package compiler.interpreter;
 
 import compiler.lexer.token.KeywordToken;
 import compiler.lexer.token.Token;
+import compiler.lexer.token.TypeToken;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class SymbolTable {
     return type;
   }
 
-  public void setSymbolType(Token token, KeywordToken type) {
+  public void setSymbolType(Token token, TypeToken type) {
     final var oldType = this.types.put(this.hashcode(token), type);
 
     if (oldType != null) {
@@ -61,7 +62,7 @@ public class SymbolTable {
   public String toString() {
     return symtab.entrySet()
       .stream()
-      .map(entry -> entry.getKey() + " = " + entry.getValue().toString())
+      .map(entry -> entry.getKey() + ":" + this.types.get(entry.getKey()) + " = " + entry.getValue().toString())
       .collect(Collectors.joining("\n"));
   }
 }

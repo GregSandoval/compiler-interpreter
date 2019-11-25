@@ -8,6 +8,23 @@ public abstract class TypeToken extends KeywordToken {
     super(str, UUID);
   }
 
+  public static class VoidToken extends TypeToken {
+    public VoidToken() {
+      super("void", -20);
+    }
+
+    @Override
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
+    }
+
+
+    @Override
+    public Void accept(TokenEvaluator visitor) throws Exception {
+      return visitor.visit(this);
+    }
+  }
+
   public static class FloatKeywordToken extends TypeToken {
     public FloatKeywordToken() {
       super("float", 13);

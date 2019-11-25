@@ -4,10 +4,10 @@ import compiler.lexer.token.FloatToken;
 import compiler.lexer.token.IntegerToken;
 import compiler.lexer.token.StringToken;
 
-public interface PrimitiveTypedVisitor<FloatType, IntegerType, StringType> {
-  FloatType visit(FloatToken token);
+public interface PrimitiveTypedVisitor<T> {
+  T visit(FloatToken token);
 
-  IntegerType visit(IntegerToken token);
+  T visit(IntegerToken token);
 
-  StringType visit(StringToken token);
+  T visit(StringToken token);
 }

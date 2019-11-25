@@ -239,6 +239,11 @@ public class PstToAstTokenVisitor implements TokenVisitor<Void> {
   }
 
   @Override
+  public Void visit(TypeToken.VoidToken ignored) {
+    return null;
+  }
+
+  @Override
   public Void visit(KeywordToken.ClassKeywordToken token) {
     return null;
   }

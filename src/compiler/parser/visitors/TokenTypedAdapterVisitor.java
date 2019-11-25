@@ -7,6 +7,8 @@ import static compiler.lexer.token.OperatorToken.*;
 import static compiler.lexer.token.SymbolToken.*;
 
 public interface TokenTypedAdapterVisitor<T> extends TokenVisitor<T> {
+  T defaultValue();
+
   @Override
   default T visit(CommentToken token) {
     return visitChildren(token);
@@ -252,11 +254,15 @@ public interface TokenTypedAdapterVisitor<T> extends TokenVisitor<T> {
     return visitChildren(token);
   }
 
+  @Override
+  default T visit(TypeToken.VoidToken ignored) {
+    return visitChildren(ignored);
+  }
+
   default T visitChildren(Token token) {
     for (final var child : token.children) {
       ((Token) child).accept(this);
     }
-    return null;
+    return defaultValue();
   }
-
 }

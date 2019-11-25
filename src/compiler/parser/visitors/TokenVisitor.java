@@ -5,6 +5,6 @@ public interface TokenVisitor<T> extends
   IdentifierTypedVisitor<T>,
   KeywordTypedVisitor<T>,
   OperatorTypedVisitor<T>,
-  PrimitiveTypedVisitor<T, T, T>,
+  PrimitiveTypedVisitor<T>,
   SymbolTypedVisitor<T> {
 }
