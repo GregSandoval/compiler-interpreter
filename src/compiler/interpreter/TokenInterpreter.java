@@ -65,6 +65,7 @@ public class TokenInterpreter implements TokenEvaluator {
 
     if ((Boolean) paren.accept(this).get(0)) {
       body.accept(this);
+      return null;
     }
 
     if (token.children.size() < 3) {
