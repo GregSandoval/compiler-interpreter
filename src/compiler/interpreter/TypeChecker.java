@@ -21,20 +21,18 @@ public class TypeChecker implements TokenTypedAdapterVisitor<TypeToken> {
   }
 
   @Override
+  public TypeToken visit(OperatorToken.Asterisk token) {
+    return checkBinaryOperator(token);
+  }
+
+  @Override
   public TypeToken visit(OperatorToken.Equal token) {
-    final var left = ((Token) token.children.get(0)).accept(this);
-    final var right = ((Token) token.children.get(1)).accept(this);
-
-    if (left.getClass() != right.getClass()) {
-      throw new RuntimeException(right.getValue() + " is not assignable to " + left.getValue());
-    }
-
-    return left;
+    return checkBinaryOperator(token);
   }
 
   @Override
   public TypeToken visit(InputKeywordToken token) {
-    return stringType;
+    return copyLineInfo(token, stringType);
   }
 
   @Override
@@ -49,7 +47,7 @@ public class TypeChecker implements TokenTypedAdapterVisitor<TypeToken> {
 
   @Override
   public TypeToken visit(StringToken token) {
-    return stringType;
+    return copyLineInfo(token, stringType);
   }
 
   @Override
@@ -59,7 +57,7 @@ public class TypeChecker implements TokenTypedAdapterVisitor<TypeToken> {
 
   @Override
   public TypeToken visit(FloatToken token) {
-    return floatType;
+    return copyLineInfo(token, floatType);
   }
 
   @Override
@@ -69,7 +67,40 @@ public class TypeChecker implements TokenTypedAdapterVisitor<TypeToken> {
 
   @Override
   public TypeToken visit(IntegerToken token) {
-    return integerType;
+    return copyLineInfo(token, integerType);
+  }
+
+  private static TypeToken copyLineInfo(Token from, TypeToken to) {
+    to.setLineNumber(from.getLineNumber());
+    to.setLinePosition(from.getLinePosition());
+    return to;
+  }
+
+  private TypeToken checkBinaryOperator(OperatorToken operator) {
+    final var left = ((Token) operator.children.get(0)).accept(this);
+    final var right = ((Token) operator.children.get(1)).accept(this);
+
+    if (left instanceof FloatKeywordToken && right instanceof FloatKeywordToken) {
+      return left;
+    }
+
+    if (left instanceof IntegerKeywordToken && right instanceof IntegerKeywordToken) {
+      return left;
+    }
+
+    if (left instanceof FloatKeywordToken && right instanceof IntegerKeywordToken) {
+      return left;
+    }
+
+    if (left instanceof IntegerKeywordToken && right instanceof FloatKeywordToken) {
+      return right;
+    }
+
+    if (left.getClass() != right.getClass()) {
+      throw new OperatorTypeException(operator, left, right);
+    }
+
+    return left;
   }
 
   @Override

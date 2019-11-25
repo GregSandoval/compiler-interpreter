@@ -1,3 +1,5 @@
+package compiler;
+
 import compiler.a5.grammar.A5GrammarNonTerminals;
 import compiler.a5.grammar.A5GrammarRules;
 import compiler.a5.lexicon.A5LexiconDFA;
@@ -19,10 +21,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
-public class Main {
+public class EntryPoint {
+  public static String inputName;
   private static String exception = null;
 
   public static void main(String[] args) throws Exception {
@@ -36,7 +38,7 @@ public class Main {
       // Tokenize file
       tokens = new LexerBuilder()
         .setStartState(A5LexiconDFA.START)
-        .onUnknownTokenFound(Main.logUnknownToken(settings.inputName))
+        .onUnknownTokenFound(EntryPoint::logUnknownToken)
         .createLexer()
         .analyze(settings.inputText);
     }
@@ -48,6 +50,7 @@ public class Main {
     // Prepare grammar rules
     A5GrammarRules.build();
 
+    EntryPoint.inputName = settings.inputName;
     // Parse token stream
     var tree = new ParseTreeBuilder()
       .setStartSymbol(new A5GrammarNonTerminals.Pgm())
@@ -129,10 +132,8 @@ public class Main {
     }
   }
 
-  private static BiConsumer<String, TextCursor> logUnknownToken(String inputName) {
-    return (unknownToken, cursor) -> {
-      throw new UnknownTokenException(unknownToken, cursor, inputName);
-    };
+  private static void logUnknownToken(String unknownToken, TextCursor cursor) {
+    throw new UnknownTokenException(unknownToken, cursor);
   }
 
   private static class ParserSettings {

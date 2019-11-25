@@ -1,15 +1,15 @@
 package compiler.lexer;
 
-import compiler.utils.LineErrorFormatter;
+import compiler.parser.UserException;
 import compiler.utils.TextCursor;
 
-public class UnknownTokenException extends RuntimeException {
+public class UnknownTokenException extends UserException {
 
-  public UnknownTokenException(String unknownToken, TextCursor cursor, String inputName) {
-    super(formatError(unknownToken, cursor, inputName));
+  public UnknownTokenException(String unknownToken, TextCursor cursor) {
+    super(formatError(unknownToken, cursor), cursor);
   }
 
-  private static String formatError(String unknownToken, TextCursor cursor, String inputName) {
+  private static String formatError(String unknownToken, TextCursor cursor) {
     final var line = cursor.getCursorLineNumber();
     final var pos = cursor.getCursorLinePosition() - unknownToken.length();
     return
@@ -18,7 +18,6 @@ public class UnknownTokenException extends RuntimeException {
         "\n" +
         cursor.getCurrentLineOfText() +
         "\n" +
-        " ".repeat(Math.max(0, pos)) + "^" +
-        "\n" + LineErrorFormatter.renderLineNumber(cursor, inputName);
+        " ".repeat(Math.max(0, pos)) + "^";
   }
 }

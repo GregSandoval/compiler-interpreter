@@ -67,7 +67,7 @@ public class Parser {
 
       if (rhs == null) {
         onPredictionNotFoundError.accept(top, token);
-        throw new PredictiveParserException((GrammarNode) top, token, inputName);
+        throw new PredictiveParserException((GrammarNode) top, token);
       }
 
       onGrammarRuleApplication.accept(top, token, rhs);
