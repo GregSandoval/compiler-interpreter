@@ -217,7 +217,7 @@ public class TokenInterpreter implements TokenEvaluator {
       rightToken,
       (left, right) -> left * right,
       (left, right) -> left * right,
-      (left, right) -> new OperatorUsageUndefined(token, symtab.getSymbolType(leftToken), symtab.getSymbolType(rightToken))
+      (left, right) -> new OperatorUsageUndefined(token, left, right)
     );
   }
 
@@ -230,7 +230,7 @@ public class TokenInterpreter implements TokenEvaluator {
       rightToken,
       (left, right) -> left - right,
       (left, right) -> left - right,
-      (left, right) -> new OperatorUsageUndefined(token, symtab.getSymbolType(leftToken), symtab.getSymbolType(rightToken))
+      (left, right) -> new OperatorUsageUndefined(token, left, right)
     );
   }
 
@@ -243,7 +243,7 @@ public class TokenInterpreter implements TokenEvaluator {
       rightToken,
       Float::sum,
       Integer::sum,
-      (left, right) -> new OperatorUsageUndefined(token, symtab.getSymbolType(leftToken), symtab.getSymbolType(rightToken))
+      (left, right) -> new OperatorUsageUndefined(token, left, right)
     );
   }
 
@@ -256,7 +256,7 @@ public class TokenInterpreter implements TokenEvaluator {
       rightToken,
       (left, right) -> left,
       (left, right) -> left << right,
-      (left, right) -> new OperatorUsageUndefined(token, symtab.getSymbolType(leftToken), symtab.getSymbolType(rightToken))
+      (left, right) -> new OperatorUsageUndefined(token, left, right)
     );
   }
 
@@ -269,7 +269,7 @@ public class TokenInterpreter implements TokenEvaluator {
       rightToken,
       (left, right) -> left,
       (left, right) -> left >> right,
-      (left, right) -> new OperatorUsageUndefined(token, symtab.getSymbolType(leftToken), symtab.getSymbolType(rightToken))
+      (left, right) -> new OperatorUsageUndefined(token, left, right)
     );
   }
 
@@ -282,7 +282,7 @@ public class TokenInterpreter implements TokenEvaluator {
       rightToken,
       Math::pow,
       Math::pow,
-      (left, right) -> new OperatorUsageUndefined(token, symtab.getSymbolType(leftToken), symtab.getSymbolType(rightToken))
+      (left, right) -> new OperatorUsageUndefined(token, left, right)
     );
   }
 
@@ -295,7 +295,7 @@ public class TokenInterpreter implements TokenEvaluator {
       rightToken,
       (left, right) -> left / right,
       (left, right) -> left / right,
-      (left, right) -> new OperatorUsageUndefined(token, symtab.getSymbolType(leftToken), symtab.getSymbolType(rightToken))
+      (left, right) -> new OperatorUsageUndefined(token, left, right)
     );
   }
 

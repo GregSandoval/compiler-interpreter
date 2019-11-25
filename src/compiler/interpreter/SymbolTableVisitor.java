@@ -11,14 +11,8 @@ import static compiler.lexer.token.TypeToken.*;
 
 public class SymbolTableVisitor implements TokenTypedAdapterVisitor<TypeToken> {
   private final VoidToken voidToken = new VoidToken();
+  private final Undefined undefined = new Undefined();
   private final SymbolTable symtab;
-
-  private final Object undefined = new Object() {
-    @Override
-    public String toString() {
-      return "undefined";
-    }
-  };
 
   private SymbolTableVisitor(SymbolTable symtab) {
     this.symtab = symtab;

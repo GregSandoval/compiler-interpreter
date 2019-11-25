@@ -27,26 +27,28 @@ public class TypeChecker implements TokenTypedAdapterVisitor<TypeToken> {
 
   @Override
   public TypeToken visit(OperatorToken.Equal equal) {
-    final var lval = ((Token) equal.children.get(0)).accept(this);
-    final var rval = ((Token) equal.children.get(1)).accept(this);
+    final var lval = (Token) equal.children.get(0);
+    final var rval = (Token) equal.children.get(1);
+    final var lvalType = lval.accept(this);
+    final var rvalType = rval.accept(this);
 
-    if (lval instanceof FloatKeywordToken && rval instanceof FloatKeywordToken) {
-      return lval;
+    if (lvalType instanceof FloatKeywordToken && rvalType instanceof FloatKeywordToken) {
+      return lvalType;
     }
 
-    if (lval instanceof IntegerKeywordToken && rval instanceof IntegerKeywordToken) {
-      return lval;
+    if (lvalType instanceof IntegerKeywordToken && rvalType instanceof IntegerKeywordToken) {
+      return lvalType;
     }
 
-    if (lval instanceof FloatKeywordToken && rval instanceof IntegerKeywordToken) {
-      return lval;
+    if (lvalType instanceof FloatKeywordToken && rvalType instanceof IntegerKeywordToken) {
+      return lvalType;
     }
 
-    if (lval.getClass() != rval.getClass()) {
-      throw new OperatorTypeException(equal, lval, rval);
+    if (lvalType.getClass() != rvalType.getClass()) {
+      throw new AssignmentTypeException(lval, rval, lvalType, rvalType);
     }
 
-    return lval;
+    return lvalType;
   }
 
   @Override
