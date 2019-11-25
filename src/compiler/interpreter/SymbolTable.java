@@ -62,7 +62,7 @@ public class SymbolTable {
   public String toString() {
     return symtab.entrySet()
       .stream()
-      .map(entry -> entry.getKey() + ":" + this.types.get(entry.getKey()) + " = " + entry.getValue().toString())
+      .map(entry -> entry.getKey() + ":" + this.types.get(entry.getKey()).getValue() + " = " + entry.getValue().toString())
       .collect(Collectors.joining("\n"));
   }
 }
