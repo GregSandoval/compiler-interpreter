@@ -31,24 +31,24 @@ public class SymbolTableVisitor implements TokenEvaluator {
   public Void visit(VarKeywordToken kwdvar) throws Exception {
     final var paren = kwdvar.children.get(0);
     for (final var equal : paren.children) {
-      final var equalOrIdentifier = equal.children.get(0);
-      if (equalOrIdentifier instanceof Equal) {
-        final var identifier = (IdentifierToken) equalOrIdentifier
+      final var equalOrDataType = equal.children.get(0);
+      if (equalOrDataType instanceof KeywordToken) {
+        final var identifier = (IdentifierToken) equalOrDataType
           .children.get(0);
 
         if (symtab.hasSymbol(identifier)) {
           throw new Exception(identifier.getClass().getSimpleName() + " has already been declared");
         }
         symtab.setSymbolValue(identifier, undefined);
-      } else if (equalOrIdentifier instanceof IdentifierToken) {
-        final var identifier = (IdentifierToken) equalOrIdentifier;
+      } else if (equalOrDataType instanceof IdentifierToken) {
+        final var identifier = (IdentifierToken) equalOrDataType;
 
         if (symtab.hasSymbol(identifier)) {
           throw new Exception(identifier.getClass().getSimpleName() + " has already been declared");
         }
         symtab.setSymbolValue(identifier, undefined);
       } else {
-        throw new Exception("Please check symbol table, unchecked type:" + equalOrIdentifier);
+        throw new Exception("Please check symbol table, unchecked type:" + equalOrDataType);
       }
     }
     return null;
