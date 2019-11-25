@@ -1,6 +1,5 @@
 package compiler.interpreter;
 
-import compiler.lexer.token.KeywordToken;
 import compiler.lexer.token.Token;
 import compiler.lexer.token.TypeToken;
 
@@ -10,9 +9,9 @@ import java.util.stream.Collectors;
 
 public class SymbolTable {
   private Map<String, Object> symtab = new HashMap<>();
-  private Map<String, KeywordToken> types = new HashMap<>();
+  private Map<String, TypeToken> types = new HashMap<>();
 
-  public KeywordToken getSymbolType(Token token) {
+  public TypeToken getSymbolType(Token token) {
     final var type = this.types.get(this.hashcode(token));
 
     if (type == null) {

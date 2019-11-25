@@ -2,9 +2,6 @@ package compiler.parser.visitors;
 
 import compiler.lexer.token.*;
 
-import static compiler.lexer.token.KeywordToken.*;
-import static compiler.lexer.token.OperatorToken.*;
-import static compiler.lexer.token.SymbolToken.*;
 
 public interface TokenTypedAdapterVisitor<T> extends TokenVisitor<T> {
   T defaultValue();
@@ -30,22 +27,22 @@ public interface TokenTypedAdapterVisitor<T> extends TokenVisitor<T> {
   }
 
   @Override
-  default T visit(ProgramKeywordToken token) {
+  default T visit(KeywordToken.ProgramKeywordToken token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(MainKeywordToken token) {
+  default T visit(KeywordToken.MainKeywordToken token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(FunctionKeywordToken token) {
+  default T visit(KeywordToken.FunctionKeywordToken token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(ClassKeywordToken token) {
+  default T visit(KeywordToken.ClassKeywordToken token) {
     return visitChildren(token);
   }
 
@@ -65,117 +62,122 @@ public interface TokenTypedAdapterVisitor<T> extends TokenVisitor<T> {
   }
 
   @Override
-  default T visit(IfKeywordToken token) {
+  default T visit(TypeToken.VoidToken ignored) {
+    return visitChildren(ignored);
+  }
+
+  @Override
+  default T visit(KeywordToken.IfKeywordToken token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(ElseIfKeywordToken token) {
+  default T visit(KeywordToken.ElseIfKeywordToken token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(ElseKeywordToken token) {
+  default T visit(KeywordToken.ElseKeywordToken token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(WhileKeywordToken token) {
+  default T visit(KeywordToken.WhileKeywordToken token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(InputKeywordToken token) {
+  default T visit(KeywordToken.InputKeywordToken token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(PrintKeywordToken token) {
+  default T visit(KeywordToken.PrintKeywordToken token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(NewKeywordToken token) {
+  default T visit(KeywordToken.NewKeywordToken token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(ReturnKeywordToken token) {
+  default T visit(KeywordToken.ReturnKeywordToken token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(VarKeywordToken token) {
+  default T visit(KeywordToken.VarKeywordToken token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(LessThan token) {
+  default T visit(OperatorToken.LessThan token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(GreaterThan token) {
+  default T visit(OperatorToken.GreaterThan token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(Asterisk token) {
+  default T visit(OperatorToken.Asterisk token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(Equal token) {
+  default T visit(OperatorToken.Equal token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(Minus token) {
+  default T visit(OperatorToken.Minus token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(Plus token) {
+  default T visit(OperatorToken.Plus token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(Ampersand token) {
+  default T visit(OperatorToken.Ampersand token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(Arrow token) {
+  default T visit(OperatorToken.Arrow token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(EqualEqual token) {
+  default T visit(OperatorToken.EqualEqual token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(NotEqual token) {
+  default T visit(OperatorToken.NotEqual token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(LessThanOrEqual token) {
+  default T visit(OperatorToken.LessThanOrEqual token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(GreaterThanOrEqual token) {
+  default T visit(OperatorToken.GreaterThanOrEqual token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(BitShiftLeft token) {
+  default T visit(OperatorToken.BitShiftLeft token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(BitShiftRight token) {
+  default T visit(OperatorToken.BitShiftRight token) {
     return visitChildren(token);
   }
 
@@ -195,69 +197,65 @@ public interface TokenTypedAdapterVisitor<T> extends TokenVisitor<T> {
   }
 
   @Override
-  default T visit(Comma token) {
+  default T visit(SymbolToken.Comma token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(SemiColon token) {
+  default T visit(SymbolToken.SemiColon token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(LeftBrace token) {
+  default T visit(SymbolToken.LeftBrace token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(RightBrace token) {
+  default T visit(SymbolToken.RightBrace token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(LeftBracket token) {
+  default T visit(SymbolToken.LeftBracket token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(RightBracket token) {
+  default T visit(SymbolToken.RightBracket token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(LeftParen token) {
+  default T visit(SymbolToken.LeftParen token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(RightParen token) {
+  default T visit(SymbolToken.RightParen token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(Caret token) {
+  default T visit(SymbolToken.Caret token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(Colon token) {
+  default T visit(SymbolToken.Colon token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(Period token) {
+  default T visit(SymbolToken.Period token) {
     return visitChildren(token);
   }
 
   @Override
-  default T visit(ForwardSlash token) {
+  default T visit(SymbolToken.ForwardSlash token) {
     return visitChildren(token);
   }
 
-  @Override
-  default T visit(TypeToken.VoidToken ignored) {
-    return visitChildren(ignored);
-  }
 
   default T visitChildren(Token token) {
     for (final var child : token.children) {
