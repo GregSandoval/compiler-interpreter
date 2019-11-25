@@ -1,10 +1,7 @@
 package compiler.a5.grammar;
 
-import compiler.lexer.token.FloatToken;
-import compiler.lexer.token.IdentifierToken;
-import compiler.lexer.token.IntegerToken;
+import compiler.lexer.token.*;
 import compiler.lexer.token.KeywordToken.*;
-import compiler.lexer.token.StringToken;
 
 import static compiler.a5.grammar.A5GrammarNonTerminals.*;
 import static compiler.lexer.token.OperatorToken.*;
@@ -46,9 +43,9 @@ public class A5GrammarRules {
       .useRHS(LeftParen::new, Varlist::new, RightParen::new);
     new Varlist()
       .on(
-        IntegerKeywordToken.class,
-        FloatKeywordToken.class,
-        StringKeywordToken.class,
+        TypeToken.IntegerKeywordToken.class,
+        TypeToken.FloatKeywordToken.class,
+        TypeToken.StringKeywordToken.class,
         IdentifierToken.class,
         ClassKeywordToken.class
       )
@@ -57,9 +54,9 @@ public class A5GrammarRules {
       .useRHS();
     new Varitem()
       .on(
-        IntegerKeywordToken.class,
-        FloatKeywordToken.class,
-        StringKeywordToken.class,
+        TypeToken.IntegerKeywordToken.class,
+        TypeToken.FloatKeywordToken.class,
+        TypeToken.StringKeywordToken.class,
         IdentifierToken.class
       )
       .useRHS(Vardecl::new, Varitem_Suffix::new)
@@ -72,28 +69,28 @@ public class A5GrammarRules {
       .useRHS();
     new Vardecl()
       .on(
-        IntegerKeywordToken.class,
-        FloatKeywordToken.class,
-        StringKeywordToken.class,
+        TypeToken.IntegerKeywordToken.class,
+        TypeToken.FloatKeywordToken.class,
+        TypeToken.StringKeywordToken.class,
         IdentifierToken.class
       )
       .useRHS(Simplekind::new, Varspec::new);
     new Simplekind()
       .on(
-        IntegerKeywordToken.class,
-        FloatKeywordToken.class,
-        StringKeywordToken.class
+        TypeToken.IntegerKeywordToken.class,
+        TypeToken.FloatKeywordToken.class,
+        TypeToken.StringKeywordToken.class
       )
       .useRHS(BaseKind::new)
       .on(IdentifierToken.class)
       .useRHS(Classid::new);
     new BaseKind()
-      .on(IntegerKeywordToken.class)
-      .useRHS(IntegerKeywordToken::new)
-      .on(FloatKeywordToken.class)
-      .useRHS(FloatKeywordToken::new)
-      .on(StringKeywordToken.class)
-      .useRHS(StringKeywordToken::new);
+      .on(TypeToken.IntegerKeywordToken.class)
+      .useRHS(TypeToken.IntegerKeywordToken::new)
+      .on(TypeToken.FloatKeywordToken.class)
+      .useRHS(TypeToken.FloatKeywordToken::new)
+      .on(TypeToken.StringKeywordToken.class)
+      .useRHS(TypeToken.StringKeywordToken::new);
     new Classid()
       .on(IdentifierToken.class)
       .useRHS(IdentifierToken::getSentinel);
@@ -248,9 +245,9 @@ public class A5GrammarRules {
       .useRHS(IdentifierToken::getSentinel);
     new Retkind()
       .on(
-        IntegerKeywordToken.class,
-        FloatKeywordToken.class,
-        StringKeywordToken.class
+        TypeToken.IntegerKeywordToken.class,
+        TypeToken.FloatKeywordToken.class,
+        TypeToken.StringKeywordToken.class
       )
       .useRHS(BaseKind::new);
     new PParmlist()

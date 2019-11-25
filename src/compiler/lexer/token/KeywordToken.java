@@ -1,10 +1,10 @@
 package compiler.lexer.token;
 
 import compiler.parser.TokenEvaluator;
-import compiler.parser.TokenVisitor;
+import compiler.parser.visitors.TokenVisitor;
 
 public abstract class KeywordToken extends Token {
-  private KeywordToken(String str, int UUID) {
+  protected KeywordToken(String str, int UUID) {
     super(str, UUID);
   }
 
@@ -14,8 +14,8 @@ public abstract class KeywordToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
 
     @Override
@@ -30,9 +30,10 @@ public abstract class KeywordToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -46,9 +47,10 @@ public abstract class KeywordToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -62,57 +64,10 @@ public abstract class KeywordToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
-    }
-
-    @Override
-    public Void accept(TokenEvaluator visitor) throws Exception {
+    public <T> T accept(TokenVisitor<T> visitor) {
       return visitor.visit(this);
     }
-  }
 
-  public static class FloatKeywordToken extends KeywordToken {
-    public FloatKeywordToken() {
-      super("float", 13);
-    }
-
-    @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
-    }
-
-    @Override
-    public Void accept(TokenEvaluator visitor) throws Exception {
-      return visitor.visit(this);
-    }
-  }
-
-  public static class IntegerKeywordToken extends KeywordToken {
-    public IntegerKeywordToken() {
-      super("int", 16);
-    }
-
-    @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
-    }
-
-    @Override
-    public Void accept(TokenEvaluator visitor) throws Exception {
-      return visitor.visit(this);
-    }
-  }
-
-  public static class StringKeywordToken extends KeywordToken {
-    public StringKeywordToken() {
-      super("string", 17);
-    }
-
-    @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
-    }
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -126,9 +81,10 @@ public abstract class KeywordToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -142,9 +98,10 @@ public abstract class KeywordToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -158,9 +115,10 @@ public abstract class KeywordToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -174,9 +132,10 @@ public abstract class KeywordToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -190,9 +149,10 @@ public abstract class KeywordToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public String accept(TokenEvaluator visitor) throws Exception {
@@ -206,9 +166,10 @@ public abstract class KeywordToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -222,9 +183,10 @@ public abstract class KeywordToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -238,9 +200,10 @@ public abstract class KeywordToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -254,9 +217,10 @@ public abstract class KeywordToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {

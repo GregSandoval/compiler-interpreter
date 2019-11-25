@@ -1,7 +1,7 @@
 package compiler.lexer.token;
 
 import compiler.parser.TokenEvaluator;
-import compiler.parser.TokenVisitor;
+import compiler.parser.visitors.TokenVisitor;
 
 import java.util.List;
 
@@ -17,9 +17,10 @@ public abstract class SymbolToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -33,9 +34,10 @@ public abstract class SymbolToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -49,9 +51,10 @@ public abstract class SymbolToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -70,9 +73,10 @@ public abstract class SymbolToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
   }
 
   public static class LeftBracket extends SymbolToken {
@@ -81,9 +85,10 @@ public abstract class SymbolToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -97,9 +102,10 @@ public abstract class SymbolToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -113,9 +119,10 @@ public abstract class SymbolToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public List<Object> accept(TokenEvaluator visitor) throws Exception {
@@ -129,9 +136,10 @@ public abstract class SymbolToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -145,9 +153,10 @@ public abstract class SymbolToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Number accept(TokenEvaluator visitor) throws Exception {
@@ -161,9 +170,10 @@ public abstract class SymbolToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -177,9 +187,10 @@ public abstract class SymbolToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -193,9 +204,10 @@ public abstract class SymbolToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Number accept(TokenEvaluator visitor) throws Exception {

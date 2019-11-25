@@ -1,15 +1,15 @@
 package compiler.interpreter;
 
-import compiler.lexer.token.*;
+import compiler.lexer.token.IdentifierToken;
+import compiler.lexer.token.KeywordToken;
 import compiler.lexer.token.KeywordToken.VarKeywordToken;
-import compiler.parser.TokenEvaluator;
+import compiler.lexer.token.Token;
+import compiler.lexer.token.TypeToken;
+import compiler.parser.visitors.TokenTypedAdapterVisitor;
 
-import java.util.List;
+import static compiler.lexer.token.OperatorToken.Equal;
 
-import static compiler.lexer.token.OperatorToken.*;
-import static compiler.lexer.token.SymbolToken.*;
-
-public class SymbolTableVisitor implements TokenEvaluator {
+public class SymbolTableVisitor implements TokenTypedAdapterVisitor<KeywordToken> {
   private final SymbolTable symtab;
   private final Object undefined = new Object() {
     @Override
@@ -22,142 +22,30 @@ public class SymbolTableVisitor implements TokenEvaluator {
     this.symtab = symtab;
   }
 
-  public static void build(Token node, SymbolTable symtab) throws Exception {
+  public static void build(Token node, SymbolTable symtab) {
     final var visitor = new SymbolTableVisitor(symtab);
     node.accept(visitor);
   }
 
   @Override
-  public Void visit(VarKeywordToken kwdvar) throws Exception {
+  public KeywordToken visit(VarKeywordToken kwdvar) {
     final var paren = kwdvar.children.get(0);
-    for (final var equal : paren.children) {
-      final var equalOrDataType = equal.children.get(0);
-      if (equalOrDataType instanceof KeywordToken) {
-        final var identifier = (IdentifierToken) equalOrDataType
-          .children.get(0);
+    for (final var equalOrDataType : paren.children) {
+      IdentifierToken identifier;
+      if (equalOrDataType instanceof TypeToken)
+        identifier = (IdentifierToken) equalOrDataType.children.get(0);
+      else if (equalOrDataType instanceof Equal)
+        identifier = (IdentifierToken) equalOrDataType.children.get(0).children.get(0);
+      else
+        throw new RuntimeException("Please check symbol table, unchecked type:" + equalOrDataType);
 
-        if (symtab.hasSymbol(identifier)) {
-          throw new Exception(identifier.getClass().getSimpleName() + " has already been declared");
-        }
-        symtab.setSymbolValue(identifier, undefined);
-      } else if (equalOrDataType instanceof IdentifierToken) {
-        final var identifier = (IdentifierToken) equalOrDataType;
-
-        if (symtab.hasSymbol(identifier)) {
-          throw new Exception(identifier.getClass().getSimpleName() + " has already been declared");
-        }
-        symtab.setSymbolValue(identifier, undefined);
-      } else {
-        throw new Exception("Please check symbol table, unchecked type:" + equalOrDataType);
+      if (symtab.hasSymbol(identifier)) {
+        throw new RuntimeException(identifier.getClass().getSimpleName() + " has already been declared");
       }
+
+      symtab.setSymbolType(identifier, identifier.accept(this));
+      symtab.setSymbolValue(identifier, undefined);
     }
-    return null;
-  }
-
-  @Override
-  public Void visit(Equal equal) throws Exception {
-    final var identifier = (IdentifierToken) equal.children.get(0);
-
-    if (!symtab.hasSymbol(identifier)) {
-      throw new Exception(identifier.getClass().getSimpleName() + " has not been declared");
-    }
-
-    symtab.setSymbolValue(identifier, undefined);
-    return null;
-  }
-
-  @Override
-  public Boolean visit(GreaterThanOrEqual greaterThanOrEqual) throws Exception {
-    return null;
-  }
-
-  @Override
-  public Object visit(Asterisk asterisk) throws Exception {
-    return null;
-  }
-
-  @Override
-  public Number visit(Minus minus) throws Exception {
-    return null;
-  }
-
-  @Override
-  public Number visit(Plus plus) throws Exception {
-    return null;
-  }
-
-  @Override
-  public Object visit(Ampersand ampersand) throws Exception {
-    return null;
-  }
-
-  @Override
-  public Number visit(BitShiftLeft bitShiftLeft) throws Exception {
-    return null;
-  }
-
-  @Override
-  public Number visit(BitShiftRight bitShiftRight) throws Exception {
-    return null;
-  }
-
-  @Override
-  public Number visit(Caret caret) throws Exception {
-    return null;
-  }
-
-  @Override
-  public Number visit(ForwardSlash forwardSlash) throws Exception {
-    return null;
-  }
-
-  @Override
-  public String visit(KeywordToken.InputKeywordToken token) throws Exception {
-    return null;
-  }
-
-  @Override
-  public List<Object> visit(LeftParen leftParen) throws Exception {
-    return null;
-  }
-
-  @Override
-  public Float visit(FloatToken floatToken) throws Exception {
-    return null;
-  }
-
-  @Override
-  public Integer visit(IntegerToken integerToken) throws Exception {
-    return null;
-  }
-
-  @Override
-  public String visit(StringToken stringToken) throws Exception {
-    return null;
-  }
-
-  @Override
-  public Boolean visit(LessThan lessThan) throws Exception {
-    return null;
-  }
-
-  @Override
-  public Boolean visit(GreaterThan greaterThan) throws Exception {
-    return null;
-  }
-
-  @Override
-  public Boolean visit(EqualEqual equalEqual) throws Exception {
-    return null;
-  }
-
-  @Override
-  public Boolean visit(NotEqual notEqual) throws Exception {
-    return null;
-  }
-
-  @Override
-  public Boolean visit(LessThanOrEqual lessThanOrEqual) throws Exception {
     return null;
   }
 

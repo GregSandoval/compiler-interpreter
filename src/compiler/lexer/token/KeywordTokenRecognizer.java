@@ -14,9 +14,9 @@ public class KeywordTokenRecognizer {
     keywords.put("main", MainKeywordToken::new);
     keywords.put("fcn", FunctionKeywordToken::new);
     keywords.put("class", ClassKeywordToken::new);
-    keywords.put("float", FloatKeywordToken::new);
-    keywords.put("int", IntegerKeywordToken::new);
-    keywords.put("string", StringKeywordToken::new);
+    keywords.put("float", TypeToken.FloatKeywordToken::new);
+    keywords.put("int", TypeToken.IntegerKeywordToken::new);
+    keywords.put("string", TypeToken.StringKeywordToken::new);
     keywords.put("if", IfKeywordToken::new);
     keywords.put("elseif", ElseIfKeywordToken::new);
     keywords.put("else", ElseKeywordToken::new);

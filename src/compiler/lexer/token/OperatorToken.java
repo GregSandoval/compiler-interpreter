@@ -1,7 +1,7 @@
 package compiler.lexer.token;
 
 import compiler.parser.TokenEvaluator;
-import compiler.parser.TokenVisitor;
+import compiler.parser.visitors.TokenVisitor;
 
 public abstract class OperatorToken extends Token {
 
@@ -15,9 +15,10 @@ public abstract class OperatorToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Boolean accept(TokenEvaluator visitor) throws Exception {
@@ -31,9 +32,10 @@ public abstract class OperatorToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Boolean accept(TokenEvaluator visitor) throws Exception {
@@ -47,9 +49,10 @@ public abstract class OperatorToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Object accept(TokenEvaluator visitor) throws Exception {
@@ -63,9 +66,10 @@ public abstract class OperatorToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -79,9 +83,10 @@ public abstract class OperatorToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Number accept(TokenEvaluator visitor) throws Exception {
@@ -95,9 +100,10 @@ public abstract class OperatorToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Number accept(TokenEvaluator visitor) throws Exception {
@@ -111,9 +117,10 @@ public abstract class OperatorToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Object accept(TokenEvaluator visitor) throws Exception {
@@ -127,9 +134,10 @@ public abstract class OperatorToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Void accept(TokenEvaluator visitor) throws Exception {
@@ -143,9 +151,10 @@ public abstract class OperatorToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Boolean accept(TokenEvaluator visitor) throws Exception {
@@ -159,9 +168,10 @@ public abstract class OperatorToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Boolean accept(TokenEvaluator visitor) throws Exception {
@@ -175,9 +185,10 @@ public abstract class OperatorToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Boolean accept(TokenEvaluator visitor) throws Exception {
@@ -191,9 +202,10 @@ public abstract class OperatorToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Boolean accept(TokenEvaluator visitor) throws Exception {
@@ -207,9 +219,10 @@ public abstract class OperatorToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Number accept(TokenEvaluator visitor) throws Exception {
@@ -223,9 +236,10 @@ public abstract class OperatorToken extends Token {
     }
 
     @Override
-    public void accept(TokenVisitor visitor) {
-      visitor.visit(this);
+    public <T> T accept(TokenVisitor<T> visitor) {
+      return visitor.visit(this);
     }
+
 
     @Override
     public Number accept(TokenEvaluator visitor) throws Exception {

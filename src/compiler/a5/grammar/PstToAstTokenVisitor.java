@@ -1,261 +1,256 @@
 package compiler.a5.grammar;
 
 import compiler.lexer.token.*;
-import compiler.parser.TokenNodeElement;
-import compiler.parser.TokenVisitor;
+import compiler.parser.visitors.TokenVisitor;
 
 import static compiler.parser.PstToAstHelpers.hoist;
 
-public class PstToAstTokenVisitor implements TokenVisitor {
-
+public class PstToAstTokenVisitor implements TokenVisitor<Void> {
   @Override
-  public void visit(SymbolToken.ForwardSlash forwardSlash) {
+  public Void visit(SymbolToken.ForwardSlash forwardSlash) {
     hoist(forwardSlash);
+    return null;
   }
 
   @Override
-  public void visit(OperatorToken.Asterisk asterisk) {
+  public Void visit(OperatorToken.Asterisk asterisk) {
     hoist(asterisk);
+    return null;
   }
 
   @Override
-  public void visit(SymbolToken.LeftParen token) {
-
+  public Void visit(SymbolToken.LeftParen token) {
+    return null;
   }
 
   @Override
-  public void visit(IdentifierToken token) {
-
+  public Void visit(IdentifierToken token) {
+    return null;
   }
 
   @Override
-  public void visit(TokenNodeElement node) {
-
+  public Void visit(CommentToken token) {
+    return null;
   }
 
   @Override
-  public void visit(CommentToken token) {
-
+  public Void visit(EOFToken token) {
+    return null;
   }
 
   @Override
-  public void visit(EOFToken token) {
-
+  public Void visit(FloatToken token) {
+    return null;
   }
 
   @Override
-  public void visit(FloatToken token) {
-
+  public Void visit(IntegerToken token) {
+    return null;
   }
 
   @Override
-  public void visit(IntegerToken token) {
-
+  public Void visit(KeywordToken.MainKeywordToken token) {
+    return null;
   }
 
   @Override
-  public void visit(KeywordToken.MainKeywordToken token) {
-
+  public Void visit(KeywordToken.FunctionKeywordToken token) {
+    return null;
   }
 
   @Override
-  public void visit(KeywordToken.FunctionKeywordToken token) {
-
+  public Void visit(TypeToken.FloatKeywordToken token) {
+    return null;
   }
 
   @Override
-  public void visit(KeywordToken.FloatKeywordToken token) {
-
+  public Void visit(TypeToken.IntegerKeywordToken token) {
+    return null;
   }
 
   @Override
-  public void visit(KeywordToken.IntegerKeywordToken token) {
-
+  public Void visit(TypeToken.StringKeywordToken token) {
+    return null;
   }
 
   @Override
-  public void visit(KeywordToken.StringKeywordToken token) {
-
+  public Void visit(KeywordToken.IfKeywordToken token) {
+    return null;
   }
 
   @Override
-  public void visit(KeywordToken.IfKeywordToken token) {
-
+  public Void visit(KeywordToken.ElseIfKeywordToken token) {
+    return null;
   }
 
   @Override
-  public void visit(KeywordToken.ElseIfKeywordToken token) {
-
+  public Void visit(KeywordToken.ElseKeywordToken token) {
+    return null;
   }
 
   @Override
-  public void visit(KeywordToken.ElseKeywordToken token) {
-
+  public Void visit(KeywordToken.WhileKeywordToken token) {
+    return null;
   }
 
   @Override
-  public void visit(KeywordToken.WhileKeywordToken token) {
-
+  public Void visit(KeywordToken.InputKeywordToken token) {
+    return null;
   }
 
   @Override
-  public void visit(KeywordToken.InputKeywordToken token) {
-
+  public Void visit(KeywordToken.PrintKeywordToken token) {
+    return null;
   }
 
   @Override
-  public void visit(KeywordToken.PrintKeywordToken token) {
-
+  public Void visit(KeywordToken.NewKeywordToken token) {
+    return null;
   }
 
   @Override
-  public void visit(KeywordToken.NewKeywordToken token) {
-
+  public Void visit(KeywordToken.ReturnKeywordToken token) {
+    return null;
   }
 
   @Override
-  public void visit(KeywordToken.ReturnKeywordToken token) {
-
+  public Void visit(OperatorToken.LessThan token) {
+    return null;
   }
 
   @Override
-  public void visit(OperatorToken.LessThan token) {
-
+  public Void visit(OperatorToken.GreaterThan token) {
+    return null;
   }
 
   @Override
-  public void visit(OperatorToken.GreaterThan token) {
-
+  public Void visit(OperatorToken.Equal token) {
+    return null;
   }
 
   @Override
-  public void visit(OperatorToken.Equal token) {
-
+  public Void visit(OperatorToken.Minus token) {
+    return null;
   }
 
   @Override
-  public void visit(OperatorToken.Minus token) {
-
+  public Void visit(OperatorToken.Plus token) {
+    return null;
   }
 
   @Override
-  public void visit(OperatorToken.Plus token) {
-
+  public Void visit(OperatorToken.Ampersand token) {
+    return null;
   }
 
   @Override
-  public void visit(OperatorToken.Ampersand token) {
-
+  public Void visit(OperatorToken.Arrow token) {
+    return null;
   }
 
   @Override
-  public void visit(OperatorToken.Arrow token) {
-
+  public Void visit(OperatorToken.EqualEqual token) {
+    return null;
   }
 
   @Override
-  public void visit(OperatorToken.EqualEqual token) {
-
+  public Void visit(OperatorToken.NotEqual token) {
+    return null;
   }
 
   @Override
-  public void visit(OperatorToken.NotEqual token) {
-
+  public Void visit(OperatorToken.LessThanOrEqual token) {
+    return null;
   }
 
   @Override
-  public void visit(OperatorToken.LessThanOrEqual token) {
-
+  public Void visit(OperatorToken.GreaterThanOrEqual token) {
+    return null;
   }
 
   @Override
-  public void visit(OperatorToken.GreaterThanOrEqual token) {
-
+  public Void visit(OperatorToken.BitShiftLeft token) {
+    return null;
   }
 
   @Override
-  public void visit(OperatorToken.BitShiftLeft token) {
-
+  public Void visit(OperatorToken.BitShiftRight token) {
+    return null;
   }
 
   @Override
-  public void visit(OperatorToken.BitShiftRight token) {
-
+  public Void visit(StringToken token) {
+    return null;
   }
 
   @Override
-  public void visit(StringToken token) {
-
+  public Void visit(SymbolToken.Comma token) {
+    return null;
   }
 
   @Override
-  public void visit(SymbolToken.Comma token) {
-
+  public Void visit(SymbolToken.SemiColon token) {
+    return null;
   }
 
   @Override
-  public void visit(SymbolToken.SemiColon token) {
-
+  public Void visit(SymbolToken.LeftBrace token) {
+    return null;
   }
 
   @Override
-  public void visit(SymbolToken.LeftBrace token) {
-
+  public Void visit(SymbolToken.RightBrace token) {
+    return null;
   }
 
   @Override
-  public void visit(SymbolToken.RightBrace token) {
-
+  public Void visit(SymbolToken.LeftBracket token) {
+    return null;
   }
 
   @Override
-  public void visit(SymbolToken.LeftBracket token) {
-
+  public Void visit(SymbolToken.RightBracket token) {
+    return null;
   }
 
   @Override
-  public void visit(SymbolToken.RightBracket token) {
-
+  public Void visit(SymbolToken.RightParen token) {
+    return null;
   }
 
   @Override
-  public void visit(SymbolToken.RightParen token) {
-
+  public Void visit(SymbolToken.Caret token) {
+    return null;
   }
 
   @Override
-  public void visit(SymbolToken.Caret token) {
-
+  public Void visit(SymbolToken.Colon token) {
+    return null;
   }
 
   @Override
-  public void visit(SymbolToken.Colon token) {
-
+  public Void visit(SymbolToken.Period token) {
+    return null;
   }
 
   @Override
-  public void visit(SymbolToken.Period token) {
-
+  public Void visit(WhitespaceToken token) {
+    return null;
   }
 
   @Override
-  public void visit(WhitespaceToken token) {
-
+  public Void visit(KeywordToken.ClassKeywordToken token) {
+    return null;
   }
 
   @Override
-  public void visit(KeywordToken.ClassKeywordToken token) {
-
+  public Void visit(KeywordToken.ProgramKeywordToken token) {
+    return null;
   }
 
   @Override
-  public void visit(KeywordToken.ProgramKeywordToken token) {
-
-  }
-
-  @Override
-  public void visit(KeywordToken.VarKeywordToken token) {
-
+  public Void visit(KeywordToken.VarKeywordToken token) {
+    return null;
   }
 
 }

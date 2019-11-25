@@ -1,7 +1,7 @@
 package compiler.lexer.token;
 
 import compiler.parser.TokenEvaluator;
-import compiler.parser.TokenVisitor;
+import compiler.parser.visitors.TokenVisitor;
 
 public final class WhitespaceToken extends Token {
   public WhitespaceToken(String str) {
@@ -9,8 +9,8 @@ public final class WhitespaceToken extends Token {
   }
 
   @Override
-  public void accept(TokenVisitor visitor) {
-    visitor.visit(this);
+  public <T> T accept(TokenVisitor<T> visitor) {
+    return visitor.visit(this);
   }
 
   @Override

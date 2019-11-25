@@ -1,8 +1,10 @@
 package compiler.parser;
 
 
+import compiler.parser.visitors.TokenVisitor;
+
 public interface TokenNodeElement {
-  void accept(TokenVisitor visitor);
+  <T> T accept(TokenVisitor<T> visitor);
 
   Object accept(TokenEvaluator visitor) throws Exception;
 }

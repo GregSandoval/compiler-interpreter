@@ -1,7 +1,7 @@
 package compiler.lexer.token;
 
 import compiler.parser.TokenEvaluator;
-import compiler.parser.TokenVisitor;
+import compiler.parser.visitors.TokenVisitor;
 
 public class IdentifierToken extends TypedToken<String> {
   private static final IdentifierToken sentinel = new IdentifierToken("Sentinel");
@@ -20,8 +20,8 @@ public class IdentifierToken extends TypedToken<String> {
   }
 
   @Override
-  public void accept(TokenVisitor visitor) {
-    visitor.visit(this);
+  public <T> T accept(TokenVisitor<T> visitor) {
+    return visitor.visit(this);
   }
 
   @Override

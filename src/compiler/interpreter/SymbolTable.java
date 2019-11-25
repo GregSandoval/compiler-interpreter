@@ -1,5 +1,6 @@
 package compiler.interpreter;
 
+import compiler.lexer.token.KeywordToken;
 import compiler.lexer.token.Token;
 
 import java.util.HashMap;
@@ -8,6 +9,25 @@ import java.util.stream.Collectors;
 
 public class SymbolTable {
   private Map<String, Object> symtab = new HashMap<>();
+  private Map<String, KeywordToken> types = new HashMap<>();
+
+  public KeywordToken getSymbolType(Token token) {
+    final var type = this.types.get(this.hashcode(token));
+
+    if (type == null) {
+      throw new RuntimeException(token.getValue() + " is not defined");
+    }
+
+    return type;
+  }
+
+  public void setSymbolType(Token token, KeywordToken type) {
+    final var oldType = this.types.put(this.hashcode(token), type);
+
+    if (oldType != null) {
+      throw new RuntimeException(token.getValue() + "'s datatype cannot be redefined");
+    }
+  }
 
   public void setSymbolValue(Token token, Object value) {
     final var previous = this.symtab.put(hashcode(token), value);

@@ -48,7 +48,7 @@ public interface TokenEvaluator {
 
   Number visit(ForwardSlash token) throws Exception;
 
-  default Void visit(StringKeywordToken token) throws Exception {
+  default Void visit(TypeToken.StringKeywordToken token) throws Exception {
     return visitChildren(token);
   }
 
@@ -84,11 +84,11 @@ public interface TokenEvaluator {
     return visitChildren(token);
   }
 
-  default Void visit(FloatKeywordToken token) throws Exception {
+  default Void visit(TypeToken.FloatKeywordToken token) throws Exception {
     return visitChildren(token);
   }
 
-  default Void visit(IntegerKeywordToken token) throws Exception {
+  default Void visit(TypeToken.IntegerKeywordToken token) throws Exception {
     return visitChildren(token);
   }
 
