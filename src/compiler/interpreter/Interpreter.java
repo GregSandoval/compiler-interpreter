@@ -16,10 +16,14 @@ public class Interpreter {
     TypeChecker.check((Token) tree, symtab);
 
     System.out.println();
+    System.out.println();
     System.out.println("Symbol table: \n" + symtab.toString() + '\n');
     System.out.println("Program output:");
 
     TokenInterpreter.interpret((Token) tree, symtab);
+    System.out.println();
+    System.out.println();
+    System.out.println("Symbol table: \n" + symtab.toString() + '\n');
   }
 
 }
