@@ -9,17 +9,17 @@ import compiler.parser.visitors.TokenTypedAdapterVisitor;
 import static compiler.lexer.token.OperatorToken.Equal;
 import static compiler.lexer.token.TypeToken.*;
 
-public class SymbolTableVisitor implements TokenTypedAdapterVisitor<TypeToken> {
+public class SymbolTableBuilder implements TokenTypedAdapterVisitor<TypeToken> {
   public static final VoidToken voidToken = new VoidToken();
   public static final Undefined undefined = new Undefined();
   private final SymbolTable symtab;
 
-  private SymbolTableVisitor(SymbolTable symtab) {
+  private SymbolTableBuilder(SymbolTable symtab) {
     this.symtab = symtab;
   }
 
   public static void build(Token node, SymbolTable symtab) {
-    final var visitor = new SymbolTableVisitor(symtab);
+    final var visitor = new SymbolTableBuilder(symtab);
     node.accept(visitor);
   }
 

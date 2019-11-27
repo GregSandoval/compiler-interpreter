@@ -56,7 +56,7 @@ public class TypeChecker implements TokenTypedAdapterVisitor<TypeToken> {
       return lvalType;
     }
 
-    if(lval instanceof TypeToken){
+    if (lval instanceof TypeToken) {
       lval = (Token) lval.children.get(0);
     }
 

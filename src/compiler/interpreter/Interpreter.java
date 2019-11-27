@@ -12,15 +12,14 @@ public class Interpreter {
 
 
     final SymbolTable symtab = new SymbolTable();
-    SymbolTableVisitor.build((Token) tree, symtab);
-
+    SymbolTableBuilder.build((Token) tree, symtab);
     TypeChecker.check((Token) tree, symtab);
 
     System.out.println();
     System.out.println("Symbol table: \n" + symtab.toString() + '\n');
     System.out.println("Program output:");
 
-    ((Token) tree).accept(new TokenInterpreter(symtab));
+    TokenInterpreter.interpret((Token) tree, symtab);
   }
 
 }

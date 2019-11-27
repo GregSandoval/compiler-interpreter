@@ -11,7 +11,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static compiler.interpreter.SymbolTableVisitor.undefined;
+import static compiler.interpreter.SymbolTableBuilder.undefined;
 import static compiler.lexer.token.KeywordToken.*;
 import static compiler.lexer.token.OperatorToken.*;
 import static compiler.lexer.token.SymbolToken.LeftBrace;
@@ -23,6 +23,10 @@ public class TokenInterpreter implements TokenEvaluator {
 
   public TokenInterpreter(SymbolTable symtab) {
     this.symtab = symtab;
+  }
+
+  public static void interpret(Token tree, SymbolTable symtab) throws Exception {
+    tree.accept(new TokenInterpreter(symtab));
   }
 
   @Override
@@ -137,7 +141,7 @@ public class TokenInterpreter implements TokenEvaluator {
         .stream()
         .map(Object::toString)
         .collect(Collectors.joining(""))
-      .replaceAll("\\\\n", System.lineSeparator())
+        .replaceAll("\\\\n", System.lineSeparator())
     );
     return null;
   }
