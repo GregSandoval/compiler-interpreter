@@ -39,7 +39,7 @@ public class TypeChecker implements TokenTypedAdapterVisitor<TypeToken> {
 
   @Override
   public TypeToken visit(OperatorToken.Equal equal) {
-    final var lval = (Token) equal.children.get(0);
+    var lval = (Token) equal.children.get(0);
     final var rval = (Token) equal.children.get(1);
     final var lvalType = lval.accept(this);
     final var rvalType = rval.accept(this);
@@ -54,6 +54,10 @@ public class TypeChecker implements TokenTypedAdapterVisitor<TypeToken> {
 
     if (lvalType instanceof FloatKeywordToken && rvalType instanceof IntegerKeywordToken) {
       return lvalType;
+    }
+
+    if(lval instanceof TypeToken){
+      lval = (Token) lval.children.get(0);
     }
 
     if (lvalType.getClass() != rvalType.getClass()) {
@@ -85,12 +89,20 @@ public class TypeChecker implements TokenTypedAdapterVisitor<TypeToken> {
 
   @Override
   public TypeToken visit(SymbolToken.LeftParen token) {
+    if (token.parent instanceof VarKeywordToken) {
+      for (final var child : token.children) {
+        ((Token) child).accept(this);
+      }
+      return voidType;
+    }
+
     if (token.parent instanceof OperatorToken || token.parent instanceof SymbolToken.LeftParen) {
       final var type = ((Token) token.children.get(0)).accept(this);
 
       if (type.getClass() == voidType.getClass()) {
-        throw new RuntimeException("Shit");
+        throw new RuntimeException("Operator returned void type?");
       }
+
       return type;
     }
 

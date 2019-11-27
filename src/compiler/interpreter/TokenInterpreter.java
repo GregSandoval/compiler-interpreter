@@ -137,6 +137,7 @@ public class TokenInterpreter implements TokenEvaluator {
         .stream()
         .map(Object::toString)
         .collect(Collectors.joining(""))
+      .replaceAll("\\\\n", System.lineSeparator())
     );
     return null;
   }
