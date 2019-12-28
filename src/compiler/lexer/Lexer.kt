@@ -1,5 +1,8 @@
 package compiler.lexer
 
+import compiler.lexer.LexicalNode.FinalState
+import compiler.lexer.LexicalNode.NonFinalState.END_OF_TERMINAL
+import compiler.lexer.LexicalNode.NonFinalState.FATAL_ERROR
 import compiler.lexer.token.KeywordTokenRecognizer
 import compiler.lexer.token.Token
 import compiler.lexer.token.Token.IgnoredTokens.*
@@ -23,8 +26,8 @@ class Lexer(
         for (letter in cursor) {
             val GOTO = CURRENT_STATE.ON(letter)
             transitionListeners.accept(CURRENT_STATE, letter, GOTO)
-            if (GOTO === NonFinalState.END_OF_TERMINAL) {
-                val token = (CURRENT_STATE as FinalState).getToken(currentToken.toString())
+            if (GOTO === END_OF_TERMINAL) {
+                val token = (CURRENT_STATE as FinalState).constructor(currentToken.toString())
                 token.lineNumber = cursor.getCursorLineNumber()
                 token.linePosition = cursor.getCursorLinePosition() - currentToken.length
                 tokens.add(token)
@@ -34,7 +37,7 @@ class Lexer(
                 CURRENT_STATE = START_STATE
                 continue
             }
-            if (GOTO === NonFinalState.FATAL_ERROR) {
+            if (GOTO === FATAL_ERROR) {
                 unknownTokenListener.accept(currentToken.toString() + letter, cursor)
                 break
             }

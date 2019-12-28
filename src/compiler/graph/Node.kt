@@ -1,5 +1,8 @@
 package compiler.graph
 
+import compiler.lexer.LexicalNode
+import compiler.lexer.LexicalNode.NonFinalState.END_OF_TERMINAL
+import compiler.lexer.LexicalNode.NonFinalState.FATAL_ERROR
 import java.util.*
 import java.util.function.Function
 import java.util.function.Predicate
@@ -16,8 +19,8 @@ import java.util.function.Supplier
  *
  * @param <T> A subclass of node
 </T> */
-abstract class Node<T : Node<T>>(private val name: String, onError: Function<T, Optional<T>>) {
-    private val onError: Supplier<Optional<T>> = Supplier { onError.apply(me()) }
+abstract class Node<T : Node<T>> {
+    private val onError = Supplier { routeErrorToCustomStates(me()) }
     private val transitions: ArrayList<Function<Char, Optional<T>>> = ArrayList()
 
     fun ON(predicate: Predicate<Char>): EdgeBuilder {
@@ -30,12 +33,19 @@ abstract class Node<T : Node<T>>(private val name: String, onError: Function<T, 
                 .map { it.apply(character) }
                 .filter { it.isPresent }
                 .findFirst()
-                .orElseGet(onError)
-                .orElseThrow { NoEdgeFound(this, character) }
+                .orElseGet { routeErrorToCustomStates(me()) }
+                .get()
+    }
+
+    private fun routeErrorToCustomStates(from: T): Optional<T> {
+        return when (from) {
+            is LexicalNode.FinalState -> Optional.of(END_OF_TERMINAL as T)
+            else -> Optional.of(FATAL_ERROR as T)
+        }
     }
 
     override fun toString(): String {
-        return name
+        return this.javaClass.simpleName
     }
 
     protected abstract fun me(): T

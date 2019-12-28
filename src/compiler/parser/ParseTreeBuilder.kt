@@ -3,7 +3,6 @@ package compiler.parser
 import compiler.lexer.token.Token
 import compiler.lexer.token.Token.IgnoredTokens.EOFToken
 import compiler.parser.GrammarNode.ParseTreeSentinel
-import java.util.function.Consumer
 
 class ParseTreeBuilder {
     private var root: AbstractGrammarNode? = null
@@ -39,11 +38,13 @@ class ParseTreeBuilder {
     private fun AttachToTree(top: AbstractGrammarNode, token: Token, rhs: List<AbstractGrammarNode>) {
         if (top is Token && top !is EOFToken) {
             token.parent = top.parent
-            top.parent!!.children[top.parent!!.children.indexOf(top)] = token
+            val siblings = top.parent!!.children
+            val topIndex = top.parent!!.children.indexOf(top)
+            siblings[topIndex] = token
         }
         if (top !is Token) {
             top.children.addAll(rhs)
-            rhs.forEach(Consumer { it.parent = top })
+            rhs.forEach { it.parent = top }
         }
     }
 

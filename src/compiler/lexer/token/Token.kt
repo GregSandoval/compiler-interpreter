@@ -6,14 +6,32 @@ import compiler.parser.AbstractGrammarNode
  * The base class for all token classes.
  * All tokens should extend this class.
  */
-sealed class Token constructor(val str: String, val tokenID: Int, var lineNumber: Int = 0, var linePosition: Int = 0) : AbstractGrammarNode() {
-    sealed class IgnoredTokens constructor(str: String, UUID: Int) : Token(str, UUID) {
+sealed class Token(val str: String, val tokenID: Int, var lineNumber: Int = 0, var linePosition: Int = 0) : AbstractGrammarNode() {
+    sealed class IgnoredTokens(str: String, UUID: Int) : Token(str, UUID) {
         class CommentToken(str: String) : IgnoredTokens(str, 1)
         class EOFToken : IgnoredTokens("", 0)
         class WhitespaceToken(str: String) : IgnoredTokens(str, 100)
     }
 
-    sealed class OperatorToken constructor(str: String, UUID: Int) : Token(str, UUID) {
+    sealed class TypedToken<Value>(str: String, tokenID: Int, val value: Value) : Token(str, tokenID) {
+        class IdentifierToken(str: String) : TypedToken<String>(str, 2, str) {
+            constructor() : this("Sentinel")
+        }
+
+        class FloatToken(str: String) : TypedToken<Float>(str, 4, str.toFloat()) {
+            constructor() : this("-0")
+        }
+
+        class IntegerToken(str: String) : TypedToken<Int>(str, 3, str.toInt()) {
+            constructor() : this("-0")
+        }
+
+        class StringToken(str: String) : TypedToken<String>(str.replace("\"", ""), 5, str) {
+            constructor() : this("Sentinel")
+        }
+    }
+
+    sealed class OperatorToken(str: String, UUID: Int) : Token(str, UUID) {
         class LessThan : OperatorToken("<", 31)
         class GreaterThan : OperatorToken(">", 32)
         class Asterisk : OperatorToken("*", 41)
@@ -32,7 +50,20 @@ sealed class Token constructor(val str: String, val tokenID: Int, var lineNumber
         class ForwardSlash : OperatorToken("/", 48)
     }
 
-    sealed class KeywordToken constructor(str: String, UUID: Int) : Token(str, UUID) {
+    sealed class SymbolToken(str: String, UUID: Int) : Token(str, UUID) {
+        class Comma : SymbolToken(",", 6)
+        class SemiColon : SymbolToken(";", 7)
+        class LeftBrace : SymbolToken("{", 33)
+        class RightBrace : SymbolToken("}", 34)
+        class LeftBracket : SymbolToken("[", 35)
+        class RightBracket : SymbolToken("]", 36)
+        class LeftParen : SymbolToken("(", 37)
+        class RightParen : SymbolToken(")", 38)
+        class Colon : SymbolToken(":", 43)
+        class Period : SymbolToken(".", 44)
+    }
+
+    sealed class KeywordToken(str: String, UUID: Int) : Token(str, UUID) {
         class ProgramKeywordToken : KeywordToken("prog", 10)
         class MainKeywordToken : KeywordToken("main", 11)
         class FunctionKeywordToken : KeywordToken("fcn", 12)
@@ -47,52 +78,11 @@ sealed class Token constructor(val str: String, val tokenID: Int, var lineNumber
         class ReturnKeywordToken : KeywordToken("return", 25)
         class VarKeywordToken : KeywordToken("var", 2)
 
-        sealed class TypeToken constructor(str: String, UUID: Int) : KeywordToken(str, UUID) {
+        sealed class TypeToken(str: String, UUID: Int) : KeywordToken(str, UUID) {
             class VoidToken : TypeToken("void", -20)
             class FloatKeywordToken : TypeToken("float", 13)
             class IntegerKeywordToken : TypeToken("int", 16)
             class StringKeywordToken : TypeToken("string", 17)
-        }
-    }
-
-    sealed class SymbolToken(str: String, UUID: Int) : Token(str, UUID) {
-        class Comma : SymbolToken(",", 6)
-        class SemiColon : SymbolToken(";", 7)
-        class LeftBrace : SymbolToken("{", 33)
-        class RightBrace : SymbolToken("}", 34)
-        class LeftBracket : SymbolToken("[", 35)
-        class RightBracket : SymbolToken("]", 36)
-        class LeftParen : SymbolToken("(", 37)
-        class RightParen : SymbolToken(")", 38)
-        class Colon : SymbolToken(":", 43)
-        class Period : SymbolToken(".", 44)
-    }
-
-
-    sealed class TypedToken<Value> constructor(str: String, tokenID: Int, val value: Value) : Token(str, tokenID) {
-
-        class FloatToken(str: String) : TypedToken<Float>(str, 4, str.toFloat()) {
-            companion object {
-                val sentinel = FloatToken("0")
-            }
-        }
-
-        class IdentifierToken(str: String) : TypedToken<String>(str, 2, str) {
-            companion object {
-                val sentinel = IdentifierToken("Sentinel")
-            }
-        }
-
-        class IntegerToken(str: String) : TypedToken<Int>(str, 3, str.toInt()) {
-            companion object {
-                val sentinel = IntegerToken("0")
-            }
-        }
-
-        class StringToken(str: String) : TypedToken<String>(str.replace("\"", ""), 5, str) {
-            companion object {
-                val sentinel = StringToken("")
-            }
         }
     }
 

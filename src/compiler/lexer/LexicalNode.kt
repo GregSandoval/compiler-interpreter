@@ -1,9 +1,12 @@
 package compiler.lexer
 
 import compiler.graph.Node
-import compiler.lexer.NonFinalState.Companion.END_OF_TERMINAL
-import java.util.*
-import java.util.function.Function
+import compiler.lexer.token.Token
+import compiler.lexer.token.Token.IgnoredTokens.CommentToken
+import compiler.lexer.token.Token.IgnoredTokens.WhitespaceToken
+import compiler.lexer.token.Token.OperatorToken.*
+import compiler.lexer.token.Token.SymbolToken.*
+import compiler.lexer.token.Token.TypedToken.*
 
 /**
  * An adapter between a lexer DFA and the undlerying graph.
@@ -11,18 +14,62 @@ import java.util.function.Function
  * Stop the default error handling, instead reroutes all
  * missing edges to error state (if not final state)
  */
-open class LexicalNode constructor(name: String) : Node<LexicalNode>(name, Function(::routeErrorToCustomStates)) {
+typealias NoArgConstructor = () -> Token
+
+typealias SingleArgConstructor = (String) -> Token
+
+sealed class LexicalNode : Node<LexicalNode>() {
+    sealed class NonFinalState : LexicalNode() {
+        object START : NonFinalState()
+        object MAYBE_FLOAT : NonFinalState()
+        object OPENING_STRING : NonFinalState()
+        object STRING_CONTENTS : NonFinalState()
+        object EXCLAMATION_MARK : NonFinalState()
+        object END_OF_TERMINAL : NonFinalState()
+        object FATAL_ERROR : NonFinalState()
+    }
+
+    sealed class FinalState(val constructor: SingleArgConstructor) : LexicalNode() {
+        sealed class FinalStateNoArg(constructor: NoArgConstructor) : FinalState({ constructor() }) {
+            object COMMA : FinalStateNoArg(::Comma)
+            object SEMI_COLON : FinalStateNoArg(::SemiColon)
+            object LESS_THAN : FinalStateNoArg(::LessThan)
+            object GREATER_THAN : FinalStateNoArg(::GreaterThan)
+            object LEFT_BRACE : FinalStateNoArg(::LeftBrace)
+            object RIGHT_BRACE : FinalStateNoArg(::RightBrace)
+            object LEFT_BRACKET : FinalStateNoArg(::LeftBracket)
+            object RIGHT_BRACKET : FinalStateNoArg(::RightBracket)
+            object LEFT_PAREN : FinalStateNoArg(::LeftParen)
+            object RIGHT_PAREN : FinalStateNoArg(::RightParen)
+            object ASTERISK : FinalStateNoArg(::Asterisk)
+            object CARET : FinalStateNoArg(::Caret)
+            object COLON : FinalStateNoArg(::Colon)
+            object PERIOD : FinalStateNoArg(::Period)
+            object EQUAL : FinalStateNoArg(::Equal)
+            object MINUS : FinalStateNoArg(::Minus)
+            object PLUS : FinalStateNoArg(::Plus)
+            object FORWARD_SLASH : FinalStateNoArg(::ForwardSlash)
+            object AND : FinalStateNoArg(::Ampersand)
+            object OP_ARROW : FinalStateNoArg(::Arrow)
+            object OP_EQUAL : FinalStateNoArg(::EqualEqual)
+            object OP_NEGATE : FinalStateNoArg(::NotEqual)
+            object OP_LESS_THAN : FinalStateNoArg(::LessThanOrEqual)
+            object OP_GREATER_THAN : FinalStateNoArg(::GreaterThanOrEqual)
+            object OP_SHIFT_LEFT : FinalStateNoArg(::BitShiftLeft)
+            object OP_SHIFT_RIGHT : FinalStateNoArg(::BitShiftRight)
+        }
+
+        sealed class FinalStateSingleArg(constructor: SingleArgConstructor) : FinalState(constructor) {
+            object IDENTIFIER : FinalStateSingleArg(::IdentifierToken)
+            object INTEGER : FinalStateSingleArg(::IntegerToken)
+            object FLOAT : FinalStateSingleArg(::FloatToken)
+            object WHITESPACE : FinalStateSingleArg(::WhitespaceToken)
+            object COMMENT : FinalStateSingleArg(::CommentToken)
+            object CLOSING_STRING : FinalStateSingleArg(::StringToken)
+        }
+    }
 
     override fun me(): LexicalNode {
         return this
-    }
-
-    companion object {
-        private fun routeErrorToCustomStates(from: LexicalNode): Optional<LexicalNode> {
-            return when (from) {
-                is FinalState -> Optional.of(END_OF_TERMINAL)
-                else -> Optional.of(NonFinalState.FATAL_ERROR)
-            }
-        }
     }
 }
