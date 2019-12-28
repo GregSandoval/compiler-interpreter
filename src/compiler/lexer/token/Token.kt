@@ -6,20 +6,7 @@ import compiler.parser.AbstractGrammarNode
  * The base class for all token classes.
  * All tokens should extend this class.
  */
-sealed class Token constructor(val str: String, private val tokenID: Int) : AbstractGrammarNode() {
-    var lineNumber = 0
-    var linePosition = 0
-
-    override fun toString(): String {
-        val format = "(Tok: %s lin= %s,%s str = \"%s\"%s)"
-        return String.format(format, tokenID, lineNumber, linePosition, str, toStringExtra())
-    }
-
-    protected open fun toStringExtra(): String? {
-        return ""
-    }
-
-
+sealed class Token constructor(val str: String, val tokenID: Int, var lineNumber: Int = 0, var linePosition: Int = 0) : AbstractGrammarNode() {
     sealed class IgnoredTokens constructor(str: String, UUID: Int) : Token(str, UUID) {
         class CommentToken(str: String) : IgnoredTokens(str, 1)
         class EOFToken : IgnoredTokens("", 0)
@@ -82,54 +69,27 @@ sealed class Token constructor(val str: String, private val tokenID: Int) : Abst
     }
 
 
-    sealed class TypedToken<Value> constructor(str: String, tokenID: Int) : Token(str, tokenID) {
-        val value = parse(str)
+    sealed class TypedToken<Value> constructor(str: String, tokenID: Int, val value: Value) : Token(str, tokenID) {
 
-        abstract fun parse(str: String): Value
-
-        class FloatToken(str: String) : TypedToken<Float>(str, 4) {
-            override fun parse(str: String): Float {
-                return str.toFloat()
-            }
-
-            public override fun toStringExtra(): String? {
-                return " flo= $value"
-            }
-
+        class FloatToken(str: String) : TypedToken<Float>(str, 4, str.toFloat()) {
             companion object {
                 val sentinel = FloatToken("0")
             }
         }
 
-        class IdentifierToken(s: String) : TypedToken<String>(s, 2) {
-            override fun parse(str: String): String {
-                return str
-            }
-
+        class IdentifierToken(str: String) : TypedToken<String>(str, 2, str) {
             companion object {
                 val sentinel = IdentifierToken("Sentinel")
             }
         }
 
-        class IntegerToken(str: String) : TypedToken<Int>(str, 3) {
-            override fun parse(str: String): Int {
-                return str.toInt()
-            }
-
-            public override fun toStringExtra(): String? {
-                return " int= $value"
-            }
-
+        class IntegerToken(str: String) : TypedToken<Int>(str, 3, str.toInt()) {
             companion object {
                 val sentinel = IntegerToken("0")
             }
         }
 
-        class StringToken(str: String) : TypedToken<String>(str.replace("\"", ""), 5) {
-            override fun parse(str: String): String {
-                return str;
-            }
-
+        class StringToken(str: String) : TypedToken<String>(str.replace("\"", ""), 5, str) {
             companion object {
                 val sentinel = StringToken("")
             }
