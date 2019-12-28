@@ -1,11 +1,10 @@
 package visualization.dotfile
 
-import compiler.a5.grammar.GrammarNodeVisitor
 import compiler.lexer.token.EOFToken
 import compiler.lexer.token.StringToken
 import compiler.lexer.token.Token
 import compiler.parser.AbstractGrammarNode
-import compiler.parser.GrammarNode
+import compiler.parser.GrammarNode.NULL_NODE
 import java.io.IOException
 import java.io.PrintWriter
 import java.util.*
@@ -95,9 +94,5 @@ object TreeDotFileSerializer {
             is Token -> rule.str
             else -> rule.toString()
         }
-    }
-
-    private class NULL_NODE : GrammarNode() {
-        override fun accept(visitor: GrammarNodeVisitor) {}
     }
 }

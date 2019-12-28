@@ -1,8 +1,8 @@
 package compiler.parser
 
-import compiler.a5.grammar.GrammarNodeVisitor
 import compiler.lexer.token.EOFToken
 import compiler.lexer.token.Token
+import compiler.parser.GrammarNode.ParseTreeSentinel
 import java.util.function.Consumer
 
 class ParseTreeBuilder {
@@ -56,7 +56,4 @@ class ParseTreeBuilder {
         fun build(tokens: List<Token>): AbstractGrammarNode
     }
 
-    class ParseTreeSentinel : GrammarNode() {
-        override fun accept(visitor: GrammarNodeVisitor) {}
-    }
 }

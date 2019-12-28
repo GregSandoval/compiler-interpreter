@@ -1,6 +1,5 @@
 package compiler
 
-import compiler.a5.grammar.A5GrammarNonTerminals
 import compiler.a5.grammar.A5GrammarRules
 import compiler.a5.lexicon.A5LexiconDFA
 import compiler.interpreter.Interpreter
@@ -11,6 +10,8 @@ import compiler.lexer.token.Token
 import compiler.parser.AbstractGrammarNode
 import compiler.parser.AbstractSyntaxTreeBuilder
 import compiler.parser.GrammarNode
+import compiler.parser.GrammarNode.ParseTreeSentinel
+import compiler.parser.GrammarNode.Pgm
 import compiler.parser.ParseTreeBuilder
 import compiler.utils.TextCursor
 import visualization.TreeVisualizer
@@ -53,7 +54,7 @@ object EntryPoint {
         inputName = settings.inputName
         // Parse token stream
         var tree = ParseTreeBuilder()
-                .setStartSymbol(A5GrammarNonTerminals.Pgm())
+                .setStartSymbol(Pgm())
                 .setInputSourceName(settings.inputName)
                 .build(tokens)
 
@@ -120,7 +121,7 @@ object EntryPoint {
             return
         }
 
-        if (unhandledNodes.size == 1 && unhandledNodes[0] !is ParseTreeBuilder.ParseTreeSentinel)
+        if (unhandledNodes.size == 1 && unhandledNodes[0] !is ParseTreeSentinel)
             println("Uh-oh; AST contains grammar nodes! Need to add more logic to these nodes:$unhandledNodes")
     }
 

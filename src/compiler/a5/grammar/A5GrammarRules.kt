@@ -1,6 +1,5 @@
 package compiler.a5.grammar
 
-import compiler.a5.grammar.A5GrammarNonTerminals.*
 import compiler.lexer.token.FloatToken
 import compiler.lexer.token.IdentifierToken
 import compiler.lexer.token.IntegerToken
@@ -9,6 +8,7 @@ import compiler.lexer.token.OperatorToken.*
 import compiler.lexer.token.StringToken
 import compiler.lexer.token.SymbolToken.*
 import compiler.lexer.token.TypeToken.*
+import compiler.parser.GrammarNode.*
 
 object A5GrammarRules {
     fun build() {

@@ -23,7 +23,7 @@ object AbstractSyntaxTreeBuilder {
         trim(tree)
         contract(tree)
         if (tree is GrammarNode) {
-            tree.accept(grammarVisitor)
+            grammarVisitor.accept(tree)
         }
         if (tree is Token) {
             tree.accept(tokenVisitor)

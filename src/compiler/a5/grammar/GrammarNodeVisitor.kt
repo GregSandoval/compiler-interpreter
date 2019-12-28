@@ -1,330 +1,174 @@
 package compiler.a5.grammar
 
-import compiler.a5.grammar.A5GrammarNonTerminals.*
 import compiler.parser.GrammarNode
+import compiler.parser.GrammarNode.*
 
 interface GrammarNodeVisitor {
-    fun visit(node: GrammarNode) {
-        throw RuntimeException("Not implemented: visit(Pgm node); this: $this")
-    }
-
-    fun visit(node: Pgm) {
-        throw RuntimeException("Not implemented: visit(Pgm node); this: $this")
-    }
-
-    fun visit(node: Main) {
-        throw RuntimeException("Not implemented: visit(Main node); this: $this")
-    }
-
-    fun visit(node: BBlock) {
-        throw RuntimeException("Not implemented: visit(BBlock node); this: $this")
-    }
-
-    fun visit(node: Vargroup) {
-        throw RuntimeException("Not implemented: visit(Vargroup node); this: $this")
-    }
-
-    fun visit(node: PPvarlist) {
-        throw RuntimeException("Not implemented: visit(PPvarlist node); this: $this")
-    }
-
-    fun visit(node: Varlist) {
-        throw RuntimeException("Not implemented: visit(Varlist node); this: $this")
-    }
-
-    fun visit(node: Varitem) {
-        throw RuntimeException("Not implemented: visit(Varitem node); this: $this")
-    }
-
-    fun visit(node: Varitem_Suffix) {
-        throw RuntimeException("Not implemented: visit(Varitem node); this: $this")
-    }
-
-    fun visit(node: Vardecl) {
-        throw RuntimeException("Not implemented: visit(Vardecl node); this: $this")
-    }
-
-    fun visit(node: Simplekind) {
-        throw RuntimeException("Not implemented: visit(Simplekind node); this: $this")
-    }
-
-    fun visit(node: BaseKind) {
-        throw RuntimeException("Not implemented: visit(BaseKind node); this: $this")
-    }
-
-    fun visit(node: Classid) {
-        throw RuntimeException("Not implemented: visit(Classid node); this: $this")
-    }
-
-    fun visit(node: Varspec) {
-        throw RuntimeException("Not implemented: visit(Varspec node); this: $this")
-    }
-
-    fun visit(node: Varid) {
-        throw RuntimeException("Not implemented: visit(Varid node); this: $this")
-    }
-
-    fun visit(node: Arrspec) {
-        throw RuntimeException("Not implemented: visit(Arrspec node); this: $this")
-    }
-
-    fun visit(node: KKint) {
-        throw RuntimeException("Not implemented: visit(KKint node); this: $this")
-    }
-
-    fun visit(node: Deref_id) {
-        throw RuntimeException("Not implemented: visit(Deref_id node); this: $this")
-    }
-
-    fun visit(node: Deref) {
-        throw RuntimeException("Not implemented: visit(Deref node); this: $this")
-    }
-
-    fun visit(node: Varinit) {
-        throw RuntimeException("Not implemented: visit(Varinit node); this: $this")
-    }
-
-    fun visit(node: BBexprs) {
-        throw RuntimeException("Not implemented: visit(BBexprs node); this: $this")
-    }
-
-    fun visit(node: Exprlist) {
-        throw RuntimeException("Not implemented: visit(Exprlist node); this: $this")
-    }
-
-    fun visit(node: Moreexprs) {
-        throw RuntimeException("Not implemented: visit(Moreexprs node); this: $this")
-    }
-
-    fun visit(node: Classdecl) {
-        throw RuntimeException("Not implemented: visit(Classdecl node); this: $this")
-    }
-
-    fun visit(node: Classdef) {
-        throw RuntimeException("Not implemented: visit(Classdef node); this: $this")
-    }
-
-    fun visit(node: Classdef_Suffix) {
-        throw RuntimeException("Not implemented: visit(Classdef node); this: $this")
-    }
-
-    fun visit(node: BBClassitems) {
-        throw RuntimeException("Not implemented: visit(BBClassitems node); this: $this")
-    }
-
-    fun visit(node: Classheader) {
-        throw RuntimeException("Not implemented: visit(Classheader node); this: $this")
-    }
-
-    fun visit(node: Classmom) {
-        throw RuntimeException("Not implemented: visit(Classmom node); this: $this")
-    }
-
-    fun visit(node: Classitems) {
-        throw RuntimeException("Not implemented: visit(Classitems node); this: $this")
-    }
-
-    fun visit(node: Classgroup) {
-        throw RuntimeException("Not implemented: visit(Classgroup node); this: $this")
-    }
-
-    fun visit(node: Class_ctrl) {
-        throw RuntimeException("Not implemented: visit(Class_ctrl node); this: $this")
-    }
-
-    fun visit(node: Interfaces) {
-        throw RuntimeException("Not implemented: visit(Interfaces node); this: $this")
-    }
-
-    fun visit(node: Mddecls) {
-        throw RuntimeException("Not implemented: visit(Mddecls node); this: $this")
-    }
-
-    fun visit(node: Mdheader) {
-        throw RuntimeException("Not implemented: visit(Mdheader node); this: $this")
-    }
-
-    fun visit(node: Md_id) {
-        throw RuntimeException("Not implemented: visit(Md_id node); this: $this")
-    }
-
-    fun visit(node: Fcndefs) {
-        throw RuntimeException("Not implemented: visit(Fcndefs node); this: $this")
-    }
-
-    fun visit(node: Fcndef) {
-        throw RuntimeException("Not implemented: visit(Fcndef node); this: $this")
-    }
-
-    fun visit(node: Fcnheader) {
-        throw RuntimeException("Not implemented: visit(Fcnheader node); this: $this")
-    }
-
-    fun visit(node: Fcnid) {
-        throw RuntimeException("Not implemented: visit(Fcnid node); this: $this")
-    }
-
-    fun visit(node: Retkind) {
-        throw RuntimeException("Not implemented: visit(Retkind node); this: $this")
-    }
-
-    fun visit(node: PParmlist) {
-        throw RuntimeException("Not implemented: visit(PParmlist node); this: $this")
-    }
-
-    fun visit(node: Varspecs) {
-        throw RuntimeException("Not implemented: visit(Varspecs node); this: $this")
-    }
-
-    fun visit(node: More_varspecs) {
-        throw RuntimeException("Not implemented: visit(More_varspecs node); this: $this")
-    }
-
-    fun visit(node: PPonly) {
-        throw RuntimeException("Not implemented: visit(PPonly node); this: $this")
-    }
-
-    fun visit(node: Stmts) {
-        throw RuntimeException("Not implemented: visit(Stmts node); this: $this")
-    }
-
-    fun visit(node: Stmt) {
-        throw RuntimeException("Not implemented: visit(Stmt node); this: $this")
-    }
-
-    fun visit(node: StasgnOrFcall) {
-        throw RuntimeException("Not implemented: visit(Stasgn node); this: $this")
-    }
-
-    fun visit(node: StasgnOrFcall_Suffix) {
-        throw RuntimeException("Not implemented: visit(Stasgn node); this: $this")
-    }
-
-    fun visit(node: Stasgn_Suffix) {
-        throw RuntimeException("Not implemented: visit(Stasgn node); this: $this")
-    }
-
-    fun visit(node: Lval_Suffix) {
-        throw RuntimeException("Not implemented: visit(Stasgn node); this: $this")
-    }
-
-    fun visit(node: Lval) {
-        throw RuntimeException("Not implemented: visit(Lval node); this: $this")
-    }
-
-    fun visit(node: LvalOrFcall) {
-        throw RuntimeException("Not implemented: visit(Lval node); this: $this")
-    }
-
-    fun visit(node: LvalOrFcall_Suffix) {
-        throw RuntimeException("Not implemented: visit(Lval node); this: $this")
-    }
-
-    fun visit(node: Lval_Tail) {
-        throw RuntimeException("Not implemented: visit(Aref node); this: $this")
-    }
-
-    fun visit(node: KKexpr) {
-        throw RuntimeException("Not implemented: visit(KKexpr node); this: $this")
-    }
-
-    fun visit(node: Fcall) {
-        throw RuntimeException("Not implemented: visit(Fcall node); this: $this")
-    }
-
-    fun visit(node: PPexprs) {
-        throw RuntimeException("Not implemented: visit(PPexprs node); this: $this")
-    }
-
-    fun visit(node: Stif) {
-        throw RuntimeException("Not implemented: visit(Stif node); this: $this")
-    }
-
-    fun visit(node: Elsepart) {
-        throw RuntimeException("Not implemented: visit(Elsepart node); this: $this")
-    }
-
-    fun visit(node: Stwhile) {
-        throw RuntimeException("Not implemented: visit(Stwhile node); this: $this")
-    }
-
-    fun visit(node: Stprint) {
-        throw RuntimeException("Not implemented: visit(Stprint node); this: $this")
-    }
-
-    fun visit(node: Stinput) {
-        throw RuntimeException("Not implemented: visit(Stinput node); this: $this")
-    }
-
-    fun visit(node: Strtn) {
-        throw RuntimeException("Not implemented: visit(Strtn node); this: $this")
-    }
-
-    fun visit(node: Strtn_Suffix) {
-        throw RuntimeException("Not implemented: visit(Strtn node); this: $this")
-    }
-
-    fun visit(node: PPexpr) {
-        throw RuntimeException("Not implemented: visit(PPexpr node); this: $this")
-    }
-
-    fun visit(node: Expr) {
-        throw RuntimeException("Not implemented: visit(Expr node); this: $this")
-    }
-
-    fun visit(node: Expr_Tail) {
-        throw RuntimeException("Not implemented: visit(Expr_Tail node); this: $this")
-    }
-
-    fun visit(node: Rterm) {
-        throw RuntimeException("Not implemented: visit(Rterm node); this: $this")
-    }
-
-    fun visit(node: Rterm_Tail) {
-        throw RuntimeException("Not implemented: visit(Rterm_Tail node); this: $this")
-    }
-
-    fun visit(node: Term) {
-        throw RuntimeException("Not implemented: visit(Term node); this: $this")
-    }
-
-    fun visit(node: Term_Tail) {
-        throw RuntimeException("Not implemented: visit(Term_Tail node); this: $this")
-    }
-
-    fun visit(node: Fact) {
-        throw RuntimeException("Not implemented: visit(Fact node); this: $this")
-    }
-
-    fun visit(node: BaseLiteral) {
-        throw RuntimeException("Not implemented: visit(BaseLiteral node); this: $this")
-    }
-
-    fun visit(node: Addrof_id) {
-        throw RuntimeException("Not implemented: visit(Addrof_id node); this: $this")
-    }
-
-    fun visit(node: Oprel) {
-        throw RuntimeException("Not implemented: visit(Oprel node); this: $this")
-    }
-
-    fun visit(node: Lthan) {
-        throw RuntimeException("Not implemented: visit(Lthan node); this: $this")
-    }
-
-    fun visit(node: Gthan) {
-        throw RuntimeException("Not implemented: visit(Gthan node); this: $this")
-    }
-
-    fun visit(node: Opadd) {
-        throw RuntimeException("Not implemented: visit(Opadd node); this: $this")
-    }
-
-    fun visit(node: Opmul) {
-        throw RuntimeException("Not implemented: visit(Opmul node); this: $this")
-    }
-
-    fun visit(node: Epsilon) {
-        throw RuntimeException("Not implemented: visit(Epsilon node); this: $this")
-    }
+    fun accept(node: GrammarNode) = when (node) {
+        is Pgm -> visit(node)
+        is Main -> visit(node)
+        is BBlock -> visit(node)
+        is Vargroup -> visit(node)
+        is PPvarlist -> visit(node)
+        is Varlist -> visit(node)
+        is Varitem -> visit(node)
+        is Varitem_Suffix -> visit(node)
+        is Vardecl -> visit(node)
+        is Simplekind -> visit(node)
+        is BaseKind -> visit(node)
+        is Classid -> visit(node)
+        is Varspec -> visit(node)
+        is Varid -> visit(node)
+        is Arrspec -> visit(node)
+        is KKint -> visit(node)
+        is Deref_id -> visit(node)
+        is Deref -> visit(node)
+        is Varinit -> visit(node)
+        is BBexprs -> visit(node)
+        is Exprlist -> visit(node)
+        is Moreexprs -> visit(node)
+        is Classdecl -> visit(node)
+        is Classdef -> visit(node)
+        is Classdef_Suffix -> visit(node)
+        is BBClassitems -> visit(node)
+        is Classheader -> visit(node)
+        is Classmom -> visit(node)
+        is Classitems -> visit(node)
+        is Classgroup -> visit(node)
+        is Class_ctrl -> visit(node)
+        is Interfaces -> visit(node)
+        is Mddecls -> visit(node)
+        is Mdheader -> visit(node)
+        is Md_id -> visit(node)
+        is Fcndefs -> visit(node)
+        is Fcndef -> visit(node)
+        is Fcnheader -> visit(node)
+        is Fcnid -> visit(node)
+        is Retkind -> visit(node)
+        is PParmlist -> visit(node)
+        is Varspecs -> visit(node)
+        is More_varspecs -> visit(node)
+        is PPonly -> visit(node)
+        is Stmts -> visit(node)
+        is Stmt -> visit(node)
+        is StasgnOrFcall -> visit(node)
+        is StasgnOrFcall_Suffix -> visit(node)
+        is Stasgn_Suffix -> visit(node)
+        is Lval_Suffix -> visit(node)
+        is Lval -> visit(node)
+        is LvalOrFcall -> visit(node)
+        is LvalOrFcall_Suffix -> visit(node)
+        is Lval_Tail -> visit(node)
+        is KKexpr -> visit(node)
+        is Fcall -> visit(node)
+        is PPexprs -> visit(node)
+        is Stif -> visit(node)
+        is Elsepart -> visit(node)
+        is Stwhile -> visit(node)
+        is Stprint -> visit(node)
+        is Stinput -> visit(node)
+        is Strtn -> visit(node)
+        is Strtn_Suffix -> visit(node)
+        is PPexpr -> visit(node)
+        is Expr -> visit(node)
+        is Expr_Tail -> visit(node)
+        is Rterm -> visit(node)
+        is Rterm_Tail -> visit(node)
+        is Term -> visit(node)
+        is Term_Tail -> visit(node)
+        is Fact -> visit(node)
+        is BaseLiteral -> visit(node)
+        is Addrof_id -> visit(node)
+        is Oprel -> visit(node)
+        is Lthan -> visit(node)
+        is Gthan -> visit(node)
+        is Opadd -> visit(node)
+        is Opmul -> visit(node)
+        is Epsilon -> visit(node)
+        is NULL_NODE -> visit(node)
+        is ParseTreeSentinel -> visit(node)
+    }
+
+    fun visit(node: ParseTreeSentinel)
+    fun visit(node: NULL_NODE)
+    fun visit(node: Pgm)
+    fun visit(node: Main)
+    fun visit(node: BBlock)
+    fun visit(node: Vargroup)
+    fun visit(node: PPvarlist)
+    fun visit(node: Varlist)
+    fun visit(node: Varitem)
+    fun visit(node: Varitem_Suffix)
+    fun visit(node: Vardecl)
+    fun visit(node: Simplekind)
+    fun visit(node: BaseKind)
+    fun visit(node: Classid)
+    fun visit(node: Varspec)
+    fun visit(node: Varid)
+    fun visit(node: Arrspec)
+    fun visit(node: KKint)
+    fun visit(node: Deref_id)
+    fun visit(node: Deref)
+    fun visit(node: Varinit)
+    fun visit(node: BBexprs)
+    fun visit(node: Exprlist)
+    fun visit(node: Moreexprs)
+    fun visit(node: Classdecl)
+    fun visit(node: Classdef)
+    fun visit(node: Classdef_Suffix)
+    fun visit(node: BBClassitems)
+    fun visit(node: Classheader)
+    fun visit(node: Classmom)
+    fun visit(node: Classitems)
+    fun visit(node: Classgroup)
+    fun visit(node: Class_ctrl)
+    fun visit(node: Interfaces)
+    fun visit(node: Mddecls)
+    fun visit(node: Mdheader)
+    fun visit(node: Md_id)
+    fun visit(node: Fcndefs)
+    fun visit(node: Fcndef)
+    fun visit(node: Fcnheader)
+    fun visit(node: Fcnid)
+    fun visit(node: Retkind)
+    fun visit(node: PParmlist)
+    fun visit(node: Varspecs)
+    fun visit(node: More_varspecs)
+    fun visit(node: PPonly)
+    fun visit(node: Stmts)
+    fun visit(node: Stmt)
+    fun visit(node: StasgnOrFcall)
+    fun visit(node: StasgnOrFcall_Suffix)
+    fun visit(node: Stasgn_Suffix)
+    fun visit(node: Lval_Suffix)
+    fun visit(node: Lval)
+    fun visit(node: LvalOrFcall)
+    fun visit(node: LvalOrFcall_Suffix)
+    fun visit(node: Lval_Tail)
+    fun visit(node: KKexpr)
+    fun visit(node: Fcall)
+    fun visit(node: PPexprs)
+    fun visit(node: Stif)
+    fun visit(node: Elsepart)
+    fun visit(node: Stwhile)
+    fun visit(node: Stprint)
+    fun visit(node: Stinput)
+    fun visit(node: Strtn)
+    fun visit(node: Strtn_Suffix)
+    fun visit(node: PPexpr)
+    fun visit(node: Expr)
+    fun visit(node: Expr_Tail)
+    fun visit(node: Rterm)
+    fun visit(node: Rterm_Tail)
+    fun visit(node: Term)
+    fun visit(node: Term_Tail)
+    fun visit(node: Fact)
+    fun visit(node: BaseLiteral)
+    fun visit(node: Addrof_id)
+    fun visit(node: Oprel)
+    fun visit(node: Lthan)
+    fun visit(node: Gthan)
+    fun visit(node: Opadd)
+    fun visit(node: Opmul)
+    fun visit(node: Epsilon)
 }

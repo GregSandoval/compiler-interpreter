@@ -1,12 +1,11 @@
 package compiler.a5.grammar
 
-import compiler.a5.grammar.A5GrammarNonTerminals.*
 import compiler.lexer.token.KeywordToken.VarKeywordToken
 import compiler.lexer.token.OperatorToken
 import compiler.lexer.token.OperatorToken.Equal
 import compiler.lexer.token.SymbolToken.*
 import compiler.parser.AbstractGrammarNode
-import compiler.parser.GrammarNode
+import compiler.parser.GrammarNode.*
 import compiler.parser.PstToAstHelpers
 import java.util.*
 
@@ -78,7 +77,11 @@ class PstToAstGrammarVisitor : GrammarNodeVisitor {
         PstToAstHelpers.hoist(node)
     }
 
-    override fun visit(node: GrammarNode) {}
+    override fun visit(node: ParseTreeSentinel) {
+    }
+
+    override fun visit(node: NULL_NODE) {
+    }
 
     override fun visit(node: Pgm) {
         var fcndefsIndex = -1
