@@ -39,8 +39,7 @@ object EntryPoint {
         } else {
             // Tokenize file
             tokens = LexerBuilder()
-                    .setDFA(A5LexiconDFA().dfa)
-                    .setStartState(START)
+                    .setDFA(A5LexiconDFA())
                     .onUnknownTokenFound(BiConsumer(this::logUnknownToken))
                     .createLexer()
                     .analyze(settings.inputText!!)
@@ -81,8 +80,7 @@ object EntryPoint {
                 val scanner = Scanner(System.`in`).useDelimiter(Pattern.compile("$"))
                 val serializedTokens = if (scanner.hasNext()) scanner.next() else ""
                 val lexer = LexerBuilder()
-                        .setDFA(A5LexiconDFA().dfa)
-                        .setStartState(START)
+                        .setDFA(A5LexiconDFA())
                         .createLexer()
 
                 settings.tokens = AlexHydrator(lexer).hydrate(serializedTokens)

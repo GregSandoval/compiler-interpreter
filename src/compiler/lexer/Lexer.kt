@@ -14,19 +14,19 @@ import java.util.function.BiConsumer
 import java.util.stream.Collectors
 
 class Lexer(
-        private val START_STATE: LexicalNode,
         private val dfa: DFA,
         private val transitionListeners: TriConsumer<LexicalNode, Char, LexicalNode>,
         private val tokenCreatedListeners: TriConsumer<LexicalNode, LexicalNode, Token>,
         private val unknownTokenListener: BiConsumer<String, TextCursor>
 ) {
     fun analyze(text: String): List<Token> {
+        val START_STATE = dfa.startState
         var CURRENT_STATE = START_STATE
         val tokens = ArrayList<Token>()
         val currentToken = StringBuilder()
         val cursor = TextCursor(text)
         for (letter in cursor) {
-            val GOTO = CURRENT_STATE.on(letter)
+            val GOTO = CURRENT_STATE on letter
             transitionListeners.accept(CURRENT_STATE, letter, GOTO)
             if (GOTO === END_OF_TERMINAL) {
                 val token = (CURRENT_STATE as FinalState).constructor(currentToken.toString())
@@ -60,21 +60,6 @@ class Lexer(
     }
 
     private infix fun LexicalNode.on(character: Char): LexicalNode {
-        val transitions = this@Lexer.dfa.getOrElse(this@on, ::mutableListOf)
-        return transitions
-                .stream()
-                .map { it(character) }
-                .filter { it.isPresent }
-                .findFirst()
-                .orElseGet { routeErrorToCustomStates(this) }
-                .get()
-
-    }
-
-    private fun routeErrorToCustomStates(from: LexicalNode): Optional<LexicalNode> {
-        return when (from) {
-            is FinalState -> Optional.of(END_OF_TERMINAL as LexicalNode)
-            else -> Optional.of(FATAL_ERROR as LexicalNode)
-        }
+        return this@Lexer.dfa[this@on, character]
     }
 }

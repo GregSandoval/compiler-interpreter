@@ -16,8 +16,6 @@ class LexerBuilder {
         }
     }
     private var onUnknownTokenFound = BiConsumer<String, TextCursor> { _, _ -> }
-    private var startState: LexicalNode? = null
-    private var dfa: DFA? = null
 
     fun onTransition(onTransition: TriConsumer<LexicalNode, Char, LexicalNode>): LexerBuilder {
         this.onTransition = this.onTransition.andThen(onTransition)
@@ -34,17 +32,11 @@ class LexerBuilder {
         return this
     }
 
-    fun setDFA(dfa: DFA): LexerBuilder {
-        this.dfa = dfa
-        return this
+    fun <T : DFA> setDFA(dfa: T): LexerBuilderReady {
+        return LexerBuilderReady(dfa)
     }
 
-    fun setStartState(startState: LexicalNode): LexerBuilderReady {
-        this.startState = startState
-        return LexerBuilderReady()
-    }
-
-    inner class LexerBuilderReady {
+    inner class LexerBuilderReady(private var dfa: DFA) {
         fun onTransition(onTransition: TriConsumer<LexicalNode, Char, LexicalNode>): LexerBuilderReady {
             this@LexerBuilder.onTransition(onTransition)
             return this
@@ -61,7 +53,7 @@ class LexerBuilder {
         }
 
         fun createLexer(): Lexer {
-            return Lexer(startState!!, dfa!!, onTransition, onTokenCreated, onUnknownTokenFound)
+            return Lexer(dfa, onTransition, onTokenCreated, onUnknownTokenFound)
         }
     }
 }

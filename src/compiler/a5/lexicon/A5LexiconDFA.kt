@@ -1,23 +1,14 @@
 package compiler.a5.lexicon
 
-import compiler.lexer.LexicalNode
 import compiler.lexer.LexicalNode.FinalState.FinalStateNoArg.*
 import compiler.lexer.LexicalNode.FinalState.FinalStateSingleArg.*
 import compiler.lexer.LexicalNode.NonFinalState.*
-import java.util.*
-import java.util.function.Predicate
-import kotlin.collections.HashMap
-
-typealias EdgeFunction = (Char) -> Optional<LexicalNode>
-
-typealias Transitions = MutableList<EdgeFunction>
-typealias DFA = MutableMap<LexicalNode, Transitions>
 
 /**
  * This file creates the DFA nodes and edges
  */
 
-data class A5LexiconDFA(val dfa: DFA = HashMap()) {
+class A5LexiconDFA : DFA(START) {
     init {
         // WHITESPACE STATE
         START to WHITESPACE on (AWhitespace or ALineSeparator)
@@ -83,18 +74,5 @@ data class A5LexiconDFA(val dfa: DFA = HashMap()) {
         GREATER_THAN to OP_GREATER_THAN on AEqual
         LESS_THAN to OP_SHIFT_LEFT on ALessThan
         GREATER_THAN to OP_SHIFT_RIGHT on AGreaterThan
-    }
-
-    private infix fun LexicalNode.to(end: LexicalNode): EdgeBuilderAlt {
-        return object : EdgeBuilderAlt {
-            override fun on(predicate: Predicate<Char>) {
-                val edges = dfa.getOrPut(this@to, ::mutableListOf)
-                edges += { if (predicate.test(it)) Optional.of(end) else Optional.empty() }
-            }
-        }
-    }
-
-    private interface EdgeBuilderAlt {
-        infix fun on(predicate: Predicate<Char>)
     }
 }
