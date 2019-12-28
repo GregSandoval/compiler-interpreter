@@ -1,5 +1,6 @@
 package compiler.lexer
 
+import compiler.a5.lexicon.DFA
 import compiler.lexer.LexicalNode.FinalState
 import compiler.lexer.LexicalNode.NonFinalState.END_OF_TERMINAL
 import compiler.lexer.LexicalNode.NonFinalState.FATAL_ERROR
@@ -14,6 +15,7 @@ import java.util.stream.Collectors
 
 class Lexer(
         private val START_STATE: LexicalNode,
+        private val dfa: DFA,
         private val transitionListeners: TriConsumer<LexicalNode, Char, LexicalNode>,
         private val tokenCreatedListeners: TriConsumer<LexicalNode, LexicalNode, Token>,
         private val unknownTokenListener: BiConsumer<String, TextCursor>
@@ -24,7 +26,7 @@ class Lexer(
         val currentToken = StringBuilder()
         val cursor = TextCursor(text)
         for (letter in cursor) {
-            val GOTO = CURRENT_STATE.ON(letter)
+            val GOTO = CURRENT_STATE.on(letter)
             transitionListeners.accept(CURRENT_STATE, letter, GOTO)
             if (GOTO === END_OF_TERMINAL) {
                 val token = (CURRENT_STATE as FinalState).constructor(currentToken.toString())
@@ -57,4 +59,22 @@ class Lexer(
                 .collect(Collectors.toList())
     }
 
+    private infix fun LexicalNode.on(character: Char): LexicalNode {
+        val transitions = this@Lexer.dfa.getOrElse(this@on, ::mutableListOf)
+        return transitions
+                .stream()
+                .map { it(character) }
+                .filter { it.isPresent }
+                .findFirst()
+                .orElseGet { routeErrorToCustomStates(this) }
+                .get()
+
+    }
+
+    private fun routeErrorToCustomStates(from: LexicalNode): Optional<LexicalNode> {
+        return when (from) {
+            is FinalState -> Optional.of(END_OF_TERMINAL as LexicalNode)
+            else -> Optional.of(FATAL_ERROR as LexicalNode)
+        }
+    }
 }

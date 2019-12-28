@@ -5,6 +5,7 @@ import compiler.a5.lexicon.A5LexiconDFA
 import compiler.interpreter.Interpreter
 import compiler.lexer.AlexHydrator
 import compiler.lexer.LexerBuilder
+import compiler.lexer.LexicalNode.NonFinalState.START
 import compiler.lexer.UnknownTokenException
 import compiler.lexer.token.Token
 import compiler.parser.AbstractGrammarNode
@@ -38,7 +39,8 @@ object EntryPoint {
         } else {
             // Tokenize file
             tokens = LexerBuilder()
-                    .setStartState(A5LexiconDFA().build())
+                    .setDFA(A5LexiconDFA().dfa)
+                    .setStartState(START)
                     .onUnknownTokenFound(BiConsumer(this::logUnknownToken))
                     .createLexer()
                     .analyze(settings.inputText!!)
@@ -79,7 +81,8 @@ object EntryPoint {
                 val scanner = Scanner(System.`in`).useDelimiter(Pattern.compile("$"))
                 val serializedTokens = if (scanner.hasNext()) scanner.next() else ""
                 val lexer = LexerBuilder()
-                        .setStartState(A5LexiconDFA().build())
+                        .setDFA(A5LexiconDFA().dfa)
+                        .setStartState(START)
                         .createLexer()
 
                 settings.tokens = AlexHydrator(lexer).hydrate(serializedTokens)

@@ -4,8 +4,6 @@ import java.util.*
 
 abstract class AbstractGrammarNode {
     var parent: AbstractGrammarNode? = null
-    var left: AbstractGrammarNode? = null
-    var right: AbstractGrammarNode? = null
     var UUID: String
     var children = LinkedList<AbstractGrammarNode>()
 

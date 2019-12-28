@@ -1,6 +1,5 @@
 package compiler.lexer
 
-import compiler.graph.Node
 import compiler.lexer.token.Token
 import compiler.lexer.token.Token.IgnoredTokens.CommentToken
 import compiler.lexer.token.Token.IgnoredTokens.WhitespaceToken
@@ -8,17 +7,12 @@ import compiler.lexer.token.Token.OperatorToken.*
 import compiler.lexer.token.Token.SymbolToken.*
 import compiler.lexer.token.Token.TypedToken.*
 
-/**
- * An adapter between a lexer DFA and the undlerying graph.
- * The classes overrides the default behavior for errors
- * Stop the default error handling, instead reroutes all
- * missing edges to error state (if not final state)
- */
 typealias NoArgConstructor = () -> Token
 
 typealias SingleArgConstructor = (String) -> Token
 
-sealed class LexicalNode : Node<LexicalNode>() {
+sealed class LexicalNode {
+
     sealed class NonFinalState : LexicalNode() {
         object START : NonFinalState()
         object MAYBE_FLOAT : NonFinalState()
@@ -69,7 +63,7 @@ sealed class LexicalNode : Node<LexicalNode>() {
         }
     }
 
-    override fun me(): LexicalNode {
-        return this
+    override fun toString(): String {
+        return this.javaClass.simpleName
     }
 }

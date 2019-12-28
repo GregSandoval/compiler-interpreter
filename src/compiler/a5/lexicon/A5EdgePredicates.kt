@@ -55,3 +55,16 @@ val AExclamationMark = isSymbol('!')
 
 // EVERYTHING EXCEPT LINE FEED
 val ANotNewline = ALineSeparator.negate()
+
+infix fun <T> Predicate<T>.or(other: Predicate<in T>): Predicate<T> {
+    return Predicate { t: T -> test(t) || other.test(t) }
+}
+
+infix fun <T> Predicate<T>.and(other: Predicate<in T>): Predicate<T> {
+    return Predicate { t: T -> test(t) && other.test(t) }
+}
+
+operator fun <T> Predicate<T>.not(): Predicate<T> {
+    return Predicate { t: T -> !test(t) }
+}
+

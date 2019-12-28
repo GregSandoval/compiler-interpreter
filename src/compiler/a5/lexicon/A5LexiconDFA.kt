@@ -4,76 +4,97 @@ import compiler.lexer.LexicalNode
 import compiler.lexer.LexicalNode.FinalState.FinalStateNoArg.*
 import compiler.lexer.LexicalNode.FinalState.FinalStateSingleArg.*
 import compiler.lexer.LexicalNode.NonFinalState.*
+import java.util.*
+import java.util.function.Predicate
+import kotlin.collections.HashMap
+
+typealias EdgeFunction = (Char) -> Optional<LexicalNode>
+
+typealias Transitions = MutableList<EdgeFunction>
+typealias DFA = MutableMap<LexicalNode, Transitions>
 
 /**
- * This file creates the DFA nodes and edges.
+ * This file creates the DFA nodes and edges
  */
-class A5LexiconDFA {
-    fun build(): LexicalNode {
+
+data class A5LexiconDFA(val dfa: DFA = HashMap()) {
+    init {
         // WHITESPACE STATE
-        START.ON(AWhitespace).OR(ALineSeparator).GOTO(WHITESPACE)
-        WHITESPACE.ON(AWhitespace).OR(ANewline).GOTO(WHITESPACE)
+        START to WHITESPACE on (AWhitespace or ALineSeparator)
+        WHITESPACE to WHITESPACE on (AWhitespace or ANewline)
 
         // IDENTIFIER
-        START.ON(ALetter).OR(AUnderscore).GOTO(IDENTIFIER)
-        IDENTIFIER.ON(AUnderscore).OR(ADigit.or(ALetter)).GOTO(IDENTIFIER)
+        START to IDENTIFIER on (ALetter or AUnderscore)
+        IDENTIFIER to IDENTIFIER on (AUnderscore or ADigit or ALetter)
 
         // INTEGER
-        START.ON(ADigit).GOTO(INTEGER)
-        INTEGER.ON(ADigit).GOTO(INTEGER)
-        PLUS.ON(ADigit).GOTO(INTEGER)
-        MINUS.ON(ADigit).GOTO(INTEGER)
+        START to INTEGER on ADigit
+        INTEGER to INTEGER on ADigit
+        PLUS to INTEGER on ADigit
+        MINUS to INTEGER on ADigit
 
         // FLOAT
-        INTEGER.ON(APeriod).GOTO(MAYBE_FLOAT)
-        MAYBE_FLOAT.ON(ADigit).GOTO(FLOAT)
-        FLOAT.ON(ADigit).GOTO(FLOAT)
+        INTEGER to MAYBE_FLOAT on APeriod
+        MAYBE_FLOAT to FLOAT on ADigit
+        FLOAT to FLOAT on ADigit
 
         // STRING
-        START.ON(AQuote).GOTO(OPENING_STRING)
-        OPENING_STRING.ON(ANotNewline).AND(AQuote.negate()).GOTO(STRING_CONTENTS)
-        OPENING_STRING.ON(AQuote).GOTO(CLOSING_STRING)
-        STRING_CONTENTS.ON(ANotNewline).AND(AQuote.negate()).GOTO(STRING_CONTENTS)
-        STRING_CONTENTS.ON(AQuote).GOTO(CLOSING_STRING)
+        START to OPENING_STRING on AQuote
+        OPENING_STRING to STRING_CONTENTS on (ANotNewline and !AQuote)
+        OPENING_STRING to CLOSING_STRING on AQuote
+        STRING_CONTENTS to STRING_CONTENTS on (ANotNewline and !AQuote)
+        STRING_CONTENTS to CLOSING_STRING on AQuote
 
         // COMMENT
-        FORWARD_SLASH.ON(AForwardSlash).GOTO(COMMENT)
-        COMMENT.ON(ANotNewline).GOTO(COMMENT)
+        FORWARD_SLASH to COMMENT on AForwardSlash
+        COMMENT to COMMENT on ANotNewline
 
         // UNPAIRED DELIMITERS
-        START.ON(AComma).GOTO(COMMA)
-        START.ON(ASemiColon).GOTO(SEMI_COLON)
+        START to COMMA on AComma
+        START to SEMI_COLON on ASemiColon
 
         // PAIRED DELIMITERS
-        START.ON(ALessThan).GOTO(LESS_THAN)
-        START.ON(AGreaterThan).GOTO(GREATER_THAN)
-        START.ON(ALeftBrace).GOTO(LEFT_BRACE)
-        START.ON(ARightBrace).GOTO(RIGHT_BRACE)
-        START.ON(ALeftBracket).GOTO(LEFT_BRACKET)
-        START.ON(ARightBracket).GOTO(RIGHT_BRACKET)
-        START.ON(ALeftParen).GOTO(LEFT_PAREN)
-        START.ON(ARightParen).GOTO(RIGHT_PAREN)
+        START to LESS_THAN on ALessThan
+        START to GREATER_THAN on AGreaterThan
+        START to LEFT_BRACE on ALeftBrace
+        START to RIGHT_BRACE on ARightBrace
+        START to LEFT_BRACKET on ALeftBracket
+        START to RIGHT_BRACKET on ARightBracket
+        START to LEFT_PAREN on ALeftParen
+        START to RIGHT_PAREN on ARightParen
 
         // OTHER PUNCTUATION
-        START.ON(AAsterisk).GOTO(ASTERISK)
-        START.ON(ACaret).GOTO(CARET)
-        START.ON(AColon).GOTO(COLON)
-        START.ON(APeriod).GOTO(PERIOD)
-        START.ON(AEqual).GOTO(EQUAL)
-        START.ON(AMinus).GOTO(MINUS)
-        START.ON(APlus).GOTO(PLUS)
-        START.ON(AForwardSlash).GOTO(FORWARD_SLASH)
-        START.ON(AAnd).GOTO(AND)
-        START.ON(AExclamationMark).GOTO(EXCLAMATION_MARK)
+        START to ASTERISK on AAsterisk
+        START to CARET on ACaret
+        START to COLON on AColon
+        START to PERIOD on APeriod
+        START to EQUAL on AEqual
+        START to MINUS on AMinus
+        START to PLUS on APlus
+        START to FORWARD_SLASH on AForwardSlash
+        START to AND on AAnd
+        START to EXCLAMATION_MARK on AExclamationMark
 
         // MULTI CHARACTER OPERATORS
-        MINUS.ON(AGreaterThan).GOTO(OP_ARROW)
-        EQUAL.ON(AEqual).GOTO(OP_EQUAL)
-        EXCLAMATION_MARK.ON(AEqual).GOTO(OP_NEGATE)
-        LESS_THAN.ON(AEqual).GOTO(OP_LESS_THAN)
-        GREATER_THAN.ON(AEqual).GOTO(OP_GREATER_THAN)
-        LESS_THAN.ON(ALessThan).GOTO(OP_SHIFT_LEFT)
-        GREATER_THAN.ON(AGreaterThan).GOTO(OP_SHIFT_RIGHT)
-        return START
+        MINUS to OP_ARROW on AGreaterThan
+        EQUAL to OP_EQUAL on AEqual
+        EXCLAMATION_MARK to OP_NEGATE on AEqual
+        LESS_THAN to OP_LESS_THAN on AEqual
+        GREATER_THAN to OP_GREATER_THAN on AEqual
+        LESS_THAN to OP_SHIFT_LEFT on ALessThan
+        GREATER_THAN to OP_SHIFT_RIGHT on AGreaterThan
+    }
+
+    private infix fun LexicalNode.to(end: LexicalNode): EdgeBuilderAlt {
+        return object : EdgeBuilderAlt {
+            override fun on(predicate: Predicate<Char>) {
+                val edges = dfa.getOrPut(this@to, ::mutableListOf)
+                edges += { if (predicate.test(it)) Optional.of(end) else Optional.empty() }
+            }
+        }
+    }
+
+    private interface EdgeBuilderAlt {
+        infix fun on(predicate: Predicate<Char>)
     }
 }
