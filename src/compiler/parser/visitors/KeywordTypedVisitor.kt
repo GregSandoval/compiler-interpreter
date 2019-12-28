@@ -1,9 +1,31 @@
 package compiler.parser.visitors
 
-import compiler.lexer.token.KeywordToken.*
-import compiler.lexer.token.TypeToken.*
+import compiler.lexer.token.Token.KeywordToken
+import compiler.lexer.token.Token.KeywordToken.*
+import compiler.lexer.token.Token.KeywordToken.TypeToken.*
+
 
 interface KeywordTypedVisitor<T> {
+    fun accept(token: KeywordToken) = when (token) {
+        is ProgramKeywordToken -> visit(token)
+        is MainKeywordToken -> visit(token)
+        is FunctionKeywordToken -> visit(token)
+        is ClassKeywordToken -> visit(token)
+        is IfKeywordToken -> visit(token)
+        is ElseIfKeywordToken -> visit(token)
+        is ElseKeywordToken -> visit(token)
+        is WhileKeywordToken -> visit(token)
+        is InputKeywordToken -> visit(token)
+        is PrintKeywordToken -> visit(token)
+        is NewKeywordToken -> visit(token)
+        is ReturnKeywordToken -> visit(token)
+        is VarKeywordToken -> visit(token)
+        is VoidToken -> visit(token)
+        is FloatKeywordToken -> visit(token)
+        is IntegerKeywordToken -> visit(token)
+        is StringKeywordToken -> visit(token)
+    }
+
     fun visit(token: ProgramKeywordToken): T
     fun visit(token: MainKeywordToken): T
     fun visit(token: FunctionKeywordToken): T
@@ -20,4 +42,5 @@ interface KeywordTypedVisitor<T> {
     fun visit(token: NewKeywordToken): T
     fun visit(token: ReturnKeywordToken): T
     fun visit(token: VarKeywordToken): T
+    fun visit(token: VoidToken): T
 }

@@ -1,13 +1,16 @@
 package compiler.parser.visitors
 
-import compiler.lexer.token.*
-import compiler.lexer.token.KeywordToken.*
-import compiler.lexer.token.OperatorToken.*
-import compiler.lexer.token.SymbolToken.*
-import compiler.lexer.token.TypeToken.*
+import compiler.lexer.token.Token
+import compiler.lexer.token.Token.IgnoredTokens.*
+import compiler.lexer.token.Token.KeywordToken.*
+import compiler.lexer.token.Token.KeywordToken.TypeToken.*
+import compiler.lexer.token.Token.OperatorToken.*
+import compiler.lexer.token.Token.SymbolToken.*
+import compiler.lexer.token.Token.TypedToken.*
 
 interface TokenTypedAdapterVisitor<T> : TokenVisitor<T> {
     fun defaultValue(): T
+
     override fun visit(token: CommentToken): T {
         return visitChildren(token)
     }
@@ -210,7 +213,7 @@ interface TokenTypedAdapterVisitor<T> : TokenVisitor<T> {
 
     fun visitChildren(token: Token): T {
         for (child in token.children) {
-            (child as Token).accept(this)
+            this.accept(child as Token)
         }
         return defaultValue()
     }

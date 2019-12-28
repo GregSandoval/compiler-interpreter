@@ -1,11 +1,12 @@
 package compiler.interpreter
 
-import compiler.lexer.token.*
-import compiler.lexer.token.KeywordToken.InputKeywordToken
-import compiler.lexer.token.KeywordToken.VarKeywordToken
-import compiler.lexer.token.OperatorToken.*
-import compiler.lexer.token.SymbolToken.LeftParen
-import compiler.lexer.token.TypeToken.*
+import compiler.lexer.token.Token
+import compiler.lexer.token.Token.KeywordToken.*
+import compiler.lexer.token.Token.KeywordToken.TypeToken.*
+import compiler.lexer.token.Token.OperatorToken
+import compiler.lexer.token.Token.OperatorToken.*
+import compiler.lexer.token.Token.SymbolToken.LeftParen
+import compiler.lexer.token.Token.TypedToken.*
 import compiler.parser.visitors.TokenTypedAdapterVisitor
 
 class TypeChecker private constructor(private val symtab: SymbolTable) : TokenTypedAdapterVisitor<TypeToken> {
@@ -15,21 +16,21 @@ class TypeChecker private constructor(private val symtab: SymbolTable) : TokenTy
     private val integerType = IntegerKeywordToken()
     override fun visit(token: Asterisk): TypeToken {
         return if (token.children.size == 1) {
-            (token.children[0] as Token).accept(this)
+            this.accept(token.children[0] as Token)
         } else checkBinaryOperator(token)
     }
 
     override fun visit(token: Ampersand): TypeToken {
         return if (token.children.size == 1) {
-            (token.children[0] as Token).accept(this)
+            this.accept(token.children[0] as Token)
         } else voidType
     }
 
     override fun visit(token: Equal): TypeToken {
         var lval = token.children[0] as Token
         val rval = token.children[1] as Token
-        val lvalType = lval.accept(this)
-        val rvalType = rval.accept(this)
+        val lvalType = this.accept(lval)
+        val rvalType = this.accept(rval)
         when {
             lvalType is FloatKeywordToken && rvalType is FloatKeywordToken -> return lvalType
             lvalType is IntegerKeywordToken && rvalType is IntegerKeywordToken -> return lvalType
@@ -61,12 +62,12 @@ class TypeChecker private constructor(private val symtab: SymbolTable) : TokenTy
     override fun visit(token: LeftParen): TypeToken {
         if (token.parent is VarKeywordToken) {
             for (child in token.children) {
-                (child as Token).accept(this)
+                this.accept(child as Token)
             }
             return voidType
         }
         if (token.parent is OperatorToken || token.parent is LeftParen) {
-            val type: TypeToken = (token.children[0] as Token).accept(this)
+            val type: TypeToken = this.accept(token.children[0] as Token)
             if (type.javaClass == voidType.javaClass) {
                 throw RuntimeException("Operator returned void type?")
             }
@@ -108,8 +109,8 @@ class TypeChecker private constructor(private val symtab: SymbolTable) : TokenTy
     }
 
     private fun checkBinaryOperator(operator: OperatorToken): TypeToken {
-        val left: TypeToken = (operator.children[0] as Token).accept(this)
-        val right: TypeToken = (operator.children[1] as Token).accept(this)
+        val left: TypeToken = this.accept(operator.children[0] as Token)
+        val right: TypeToken = this.accept(operator.children[1] as Token)
         when {
             left is FloatKeywordToken && right is FloatKeywordToken -> {
                 return left
@@ -136,7 +137,7 @@ class TypeChecker private constructor(private val symtab: SymbolTable) : TokenTy
 
     companion object {
         fun check(tree: Token, symtab: SymbolTable) {
-            tree.accept(TypeChecker(symtab))
+            TypeChecker(symtab).accept(tree)
         }
 
         private fun copyLineInfo(from: Token, to: TypeToken): TypeToken {

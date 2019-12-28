@@ -1,13 +1,10 @@
 package compiler.a5.grammar
 
-import compiler.lexer.token.FloatToken
-import compiler.lexer.token.IdentifierToken
-import compiler.lexer.token.IntegerToken
-import compiler.lexer.token.KeywordToken.*
-import compiler.lexer.token.OperatorToken.*
-import compiler.lexer.token.StringToken
-import compiler.lexer.token.SymbolToken.*
-import compiler.lexer.token.TypeToken.*
+import compiler.lexer.token.Token.KeywordToken.*
+import compiler.lexer.token.Token.KeywordToken.TypeToken.*
+import compiler.lexer.token.Token.OperatorToken.*
+import compiler.lexer.token.Token.SymbolToken.*
+import compiler.lexer.token.Token.TypedToken.*
 import compiler.parser.GrammarNode.*
 
 object A5GrammarRules {

@@ -1,7 +1,7 @@
 package compiler.parser
 
-import compiler.lexer.token.EOFToken
 import compiler.lexer.token.Token
+import compiler.lexer.token.Token.IgnoredTokens.EOFToken
 import compiler.parser.ParserListeners.BeforeRuleApplicationListenerIdentity
 import compiler.parser.ParserListeners.GeneralListenerIdentity
 import compiler.parser.ParserListeners.GrammarRuleApplicationIdentity

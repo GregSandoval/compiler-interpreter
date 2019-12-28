@@ -1,7 +1,7 @@
 package compiler.interpreter
 
-import compiler.lexer.token.OperatorToken
 import compiler.lexer.token.Token
+import compiler.lexer.token.Token.OperatorToken
 import compiler.parser.UserException
 
 class OperatorTypeException(op: OperatorToken, left: Token, right: Token) :

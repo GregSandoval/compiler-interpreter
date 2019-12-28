@@ -1,9 +1,9 @@
 package compiler.a5.grammar
 
-import compiler.lexer.token.KeywordToken.VarKeywordToken
-import compiler.lexer.token.OperatorToken
-import compiler.lexer.token.OperatorToken.Equal
-import compiler.lexer.token.SymbolToken.*
+import compiler.lexer.token.Token.KeywordToken.VarKeywordToken
+import compiler.lexer.token.Token.OperatorToken
+import compiler.lexer.token.Token.OperatorToken.Equal
+import compiler.lexer.token.Token.SymbolToken.*
 import compiler.parser.AbstractGrammarNode
 import compiler.parser.GrammarNode.*
 import compiler.parser.PstToAstHelpers

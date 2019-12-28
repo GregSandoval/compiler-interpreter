@@ -1,10 +1,11 @@
 package compiler.a5.grammar
 
-import compiler.lexer.token.*
-import compiler.lexer.token.KeywordToken.*
-import compiler.lexer.token.OperatorToken.*
-import compiler.lexer.token.SymbolToken.*
-import compiler.lexer.token.TypeToken.*
+import compiler.lexer.token.Token.IgnoredTokens.*
+import compiler.lexer.token.Token.KeywordToken.*
+import compiler.lexer.token.Token.KeywordToken.TypeToken.*
+import compiler.lexer.token.Token.OperatorToken.*
+import compiler.lexer.token.Token.SymbolToken.*
+import compiler.lexer.token.Token.TypedToken.*
 import compiler.parser.PstToAstHelpers
 import compiler.parser.visitors.TokenVisitor
 
@@ -149,9 +150,6 @@ class PstToAstTokenVisitor : TokenVisitor<Unit> {
     override fun visit(token: WhitespaceToken) {
     }
 
-    override fun visit(token: VoidToken) {
-    }
-
     override fun visit(token: ClassKeywordToken) {
     }
 
@@ -159,6 +157,10 @@ class PstToAstTokenVisitor : TokenVisitor<Unit> {
     }
 
     override fun visit(token: VarKeywordToken) {
+    }
+
+    override fun visit(token: VoidToken) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
 }

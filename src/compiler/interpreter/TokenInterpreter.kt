@@ -1,10 +1,12 @@
 package compiler.interpreter
 
-import compiler.lexer.token.*
-import compiler.lexer.token.KeywordToken.*
-import compiler.lexer.token.OperatorToken.*
-import compiler.lexer.token.SymbolToken.LeftBrace
-import compiler.lexer.token.SymbolToken.LeftParen
+import compiler.lexer.token.Token
+import compiler.lexer.token.Token.KeywordToken
+import compiler.lexer.token.Token.KeywordToken.*
+import compiler.lexer.token.Token.OperatorToken.*
+import compiler.lexer.token.Token.SymbolToken.LeftBrace
+import compiler.lexer.token.Token.SymbolToken.LeftParen
+import compiler.lexer.token.Token.TypedToken.*
 import compiler.parser.AbstractGrammarNode
 import compiler.parser.TokenEvaluator
 import java.util.*
@@ -22,8 +24,8 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
     override fun visit(token: WhileKeywordToken) {
         val paren = token.children[0] as LeftParen
         val body = token.children[1] as LeftBrace
-        while (paren.accept(this)[0] as Boolean) {
-            body.accept(this)
+        while ((this.accept(paren) as List<Boolean>)[0]) {
+            this.accept(body)
         }
     }
 
@@ -31,34 +33,34 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
     override fun visit(token: IfKeywordToken) {
         val paren = token.children[0] as LeftParen
         val body = token.children[1] as LeftBrace
-        if (paren.accept(this)[0] as Boolean) {
-            body.accept(this)
+        if ((this.accept(paren) as List<Boolean>)[0]) {
+            this.accept(body)
             return
         }
         if (token.children.size < 3) {
             return
         }
-        (token.children[2] as Token).accept(this)
+        this.accept(token.children[2] as Token)
     }
 
     @Throws(Exception::class)
     override fun visit(token: ElseIfKeywordToken) {
         val paren = token.children[0] as LeftParen
         val body = token.children[1] as LeftBrace
-        if (paren.accept(this)[0] as Boolean) {
-            body.accept(this)
+        if ((this.accept(paren) as List<Boolean>)[0]) {
+            this.accept(body)
             return
         }
         if (token.children.size < 3) {
             return
         }
-        (token.children[2] as Token).accept(this)
+        this.accept(token.children[2] as Token)
     }
 
     @Throws(Exception::class)
     override fun visit(token: ElseKeywordToken) {
         val body = token.children[0] as LeftBrace
-        body.accept(this)
+        this.accept(body)
         return
     }
 
@@ -83,7 +85,7 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
         } else {
             token.children[0] as Token
         }
-        val value = (token.children[1] as Token).accept(this)
+        val value = this.accept(token.children[1] as Token)
         if (!symtab.hasSymbol(identifier)) {
             throw Exception(identifier.str + " is not defined")
         }
@@ -94,7 +96,7 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
     override fun visit(token: LeftParen): List<Any> {
         val result: MutableList<Any> = ArrayList()
         for (child in token.children) {
-            result.add((child as Token).accept(this))
+            result.add(this.accept(child as Token))
         }
         return result
     }
@@ -102,8 +104,7 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
     @Throws(Exception::class)
     override fun visit(token: PrintKeywordToken) {
         print(
-                (token.children[0] as LeftParen)
-                        .accept(this)
+                (this.accept(token.children[0] as LeftParen) as List<Any>)
                         .stream()
                         .map { obj: Any -> obj.toString() }
                         .collect(Collectors.joining(""))
@@ -377,7 +378,7 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
     @Throws(Exception::class)
     fun <T> evaluate(valueType: Class<T>, node: AbstractGrammarNode): T {
         val token = assertClass(Token::class.java, node)
-        return assertClass(valueType, token.accept(this))
+        return assertClass(valueType, this.accept(token))
     }
 
     @Throws(Exception::class)
@@ -391,7 +392,7 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
     companion object {
         @Throws(Exception::class)
         fun interpret(tree: Token, symtab: SymbolTable) {
-            tree.accept(TokenInterpreter(symtab))
+            TokenInterpreter(symtab).accept(tree)
         }
 
         fun classNotCompatibleException(left: Any, right: Any): Exception {

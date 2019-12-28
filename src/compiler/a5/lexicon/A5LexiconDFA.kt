@@ -3,9 +3,11 @@ package compiler.a5.lexicon
 import compiler.lexer.FinalState
 import compiler.lexer.LexicalNode
 import compiler.lexer.NonFinalState
-import compiler.lexer.token.*
-import compiler.lexer.token.OperatorToken.*
-import compiler.lexer.token.SymbolToken.*
+import compiler.lexer.token.Token.IgnoredTokens.CommentToken
+import compiler.lexer.token.Token.IgnoredTokens.WhitespaceToken
+import compiler.lexer.token.Token.OperatorToken.*
+import compiler.lexer.token.Token.SymbolToken.*
+import compiler.lexer.token.Token.TypedToken.*
 
 /**
  * This file creates the DFA nodes and edges.

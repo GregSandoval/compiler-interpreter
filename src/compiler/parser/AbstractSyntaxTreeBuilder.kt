@@ -26,7 +26,7 @@ object AbstractSyntaxTreeBuilder {
             grammarVisitor.accept(tree)
         }
         if (tree is Token) {
-            tree.accept(tokenVisitor)
+            tokenVisitor.accept(tree)
         }
     }
 

@@ -1,12 +1,67 @@
 package compiler.parser
 
-import compiler.lexer.token.*
-import compiler.lexer.token.KeywordToken.*
-import compiler.lexer.token.OperatorToken.*
-import compiler.lexer.token.SymbolToken.*
-import compiler.lexer.token.TypeToken.*
+import compiler.lexer.token.Token
+import compiler.lexer.token.Token.IgnoredTokens.*
+import compiler.lexer.token.Token.KeywordToken.*
+import compiler.lexer.token.Token.KeywordToken.TypeToken.*
+import compiler.lexer.token.Token.OperatorToken.*
+import compiler.lexer.token.Token.SymbolToken.*
+import compiler.lexer.token.Token.TypedToken.*
 
 interface TokenEvaluator {
+    fun accept(token: Token): Any = when (token) {
+        is StringToken -> visit(token)
+        is CommentToken -> visit(token)
+        is EOFToken -> visit(token)
+        is WhitespaceToken -> visit(token)
+        is LessThan -> visit(token)
+        is GreaterThan -> visit(token)
+        is Asterisk -> visit(token)
+        is Equal -> visit(token)
+        is Minus -> visit(token)
+        is Plus -> visit(token)
+        is Ampersand -> visit(token)
+        is Arrow -> visit(token)
+        is EqualEqual -> visit(token)
+        is NotEqual -> visit(token)
+        is LessThanOrEqual -> visit(token)
+        is GreaterThanOrEqual -> visit(token)
+        is BitShiftLeft -> visit(token)
+        is BitShiftRight -> visit(token)
+        is Caret -> visit(token)
+        is ForwardSlash -> visit(token)
+        is ProgramKeywordToken -> visit(token)
+        is MainKeywordToken -> visit(token)
+        is FunctionKeywordToken -> visit(token)
+        is ClassKeywordToken -> visit(token)
+        is IfKeywordToken -> visit(token)
+        is ElseIfKeywordToken -> visit(token)
+        is ElseKeywordToken -> visit(token)
+        is WhileKeywordToken -> visit(token)
+        is InputKeywordToken -> visit(token)
+        is PrintKeywordToken -> visit(token)
+        is NewKeywordToken -> visit(token)
+        is ReturnKeywordToken -> visit(token)
+        is VarKeywordToken -> visit(token)
+        is VoidToken -> visit(token)
+        is FloatKeywordToken -> visit(token)
+        is IntegerKeywordToken -> visit(token)
+        is StringKeywordToken -> visit(token)
+        is Comma -> visit(token)
+        is SemiColon -> visit(token)
+        is LeftBrace -> visit(token)
+        is RightBrace -> visit(token)
+        is LeftBracket -> visit(token)
+        is RightBracket -> visit(token)
+        is LeftParen -> visit(token)
+        is RightParen -> visit(token)
+        is Colon -> visit(token)
+        is Period -> visit(token)
+        is FloatToken -> visit(token)
+        is IdentifierToken -> visit(token)
+        is IntegerToken -> visit(token)
+    }
+
     // Primitives
     @Throws(Exception::class)
     fun visit(token: FloatToken): Float
@@ -220,12 +275,17 @@ interface TokenEvaluator {
     }
 
     @Throws(Exception::class)
+    fun visit(token: VoidToken) {
+        visitChildren(token)
+    }
+
+    @Throws(Exception::class)
     fun visitChildren(token: Token) {
         for (child in token.children) {
             if (child !is Token) {
                 throw Exception("Non token in ast")
             }
-            child.accept(this)
+            this.accept(child)
         }
     }
 }

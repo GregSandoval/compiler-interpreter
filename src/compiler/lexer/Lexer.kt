@@ -1,6 +1,8 @@
 package compiler.lexer
 
-import compiler.lexer.token.*
+import compiler.lexer.token.KeywordTokenRecognizer
+import compiler.lexer.token.Token
+import compiler.lexer.token.Token.IgnoredTokens.*
 import compiler.utils.TextCursor
 import compiler.utils.TriConsumer
 import java.util.*

@@ -1,11 +1,11 @@
 package compiler.interpreter
 
-import compiler.lexer.token.IdentifierToken
-import compiler.lexer.token.KeywordToken.VarKeywordToken
-import compiler.lexer.token.OperatorToken.Equal
 import compiler.lexer.token.Token
-import compiler.lexer.token.TypeToken
-import compiler.lexer.token.TypeToken.*
+import compiler.lexer.token.Token.KeywordToken.TypeToken
+import compiler.lexer.token.Token.KeywordToken.TypeToken.*
+import compiler.lexer.token.Token.KeywordToken.VarKeywordToken
+import compiler.lexer.token.Token.OperatorToken.Equal
+import compiler.lexer.token.Token.TypedToken.IdentifierToken
 import compiler.parser.visitors.TokenTypedAdapterVisitor
 
 class SymbolTableBuilder private constructor(private val symtab: SymbolTable) : TokenTypedAdapterVisitor<TypeToken?> {
@@ -53,7 +53,7 @@ class SymbolTableBuilder private constructor(private val symtab: SymbolTable) : 
         val undefined = Undefined()
         fun build(node: Token, symtab: SymbolTable) {
             val visitor = SymbolTableBuilder(symtab)
-            node.accept(visitor)
+            visitor.accept(node)
         }
     }
 
