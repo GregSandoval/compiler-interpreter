@@ -1,41 +1,42 @@
 package compiler.lexer
 
 import compiler.a5.lexicon.DFA
-import compiler.lexer.LexicalNode.FinalState
-import compiler.lexer.LexicalNode.NonFinalState
 import compiler.lexer.token.KeywordTokenRecognizer
 import compiler.lexer.token.Token
 import compiler.lexer.token.Token.IgnorableTokens
 import compiler.utils.TextCursor
-import compiler.utils.TriConsumer
 import java.util.*
 import java.util.function.BiConsumer
 import java.util.stream.Collectors
 
+typealias TokenCreatedListener = BiConsumer<Token, TextCursor>
+
 class Lexer(
-        private val dfa: DFA,
-        private var transitionListeners: TriConsumer<LexicalNode, Char, LexicalNode>,
-        private val tokenCreatedListeners: BiConsumer<LexicalNode, Token>,
-        private val unknownTokenListener: BiConsumer<String, TextCursor>
+        private var dfa: DFA,
+        private var transitionListeners: TransitionListener,
+        private var finalStateListeners: FinalStateListener,
+        private var nonFinalStateListeners: NonFinalStateListener,
+        private var tokenCreatedListeners: TokenCreatedListener
 ) {
 
     fun lex(text: String): List<Token> {
         val tokens = ArrayList<Token>()
         val cursor = TextCursor(text)
-        val executor = DFAExecutor(dfa, transitionListeners)
-        loop@ while (cursor.hasNext()) {
-            when (val state = executor.execute(cursor)) {
-                is FinalState -> {
-                    val token = state.getToken(cursor)
-                    tokens.add(token)
-                    tokenCreatedListeners.accept(state, token)
-                }
-                is NonFinalState -> {
-                    unknownTokenListener.accept(cursor.getCurrentSentence(), cursor)
-                    break@loop
-                }
-            }
+
+        finalStateListeners = finalStateListeners.andThen {
+            val token = it.getToken(cursor)
+            tokens.add(token)
+            tokenCreatedListeners.accept(token, cursor)
         }
+
+        val executor = DFARepeatingExecutor(
+                dfa,
+                transitionListeners,
+                finalStateListeners,
+                nonFinalStateListeners
+        )
+
+        executor.execute(cursor)
 
         return tokens
                 .stream()

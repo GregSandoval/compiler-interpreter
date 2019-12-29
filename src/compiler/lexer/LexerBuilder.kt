@@ -1,31 +1,33 @@
 package compiler.lexer
 
 import compiler.a5.lexicon.DFA
-import compiler.lexer.token.Token
-import compiler.utils.TextCursor
-import compiler.utils.TriConsumer
-import java.util.function.BiConsumer
 
 class LexerBuilder {
-    private var onTransition: TriConsumer<LexicalNode, Char, LexicalNode> = object : TriConsumer<LexicalNode, Char, LexicalNode> {
+    private var onTransition: TransitionListener = object : TransitionListener {
         override fun accept(p1: LexicalNode, p2: Char, p3: LexicalNode) {
         }
     }
-    private var onTokenCreated: BiConsumer<LexicalNode, Token> = BiConsumer { _, _ -> }
-    private var onUnknownTokenFound = BiConsumer<String, TextCursor> { _, _ -> }
+    private var onFinalState: FinalStateListener = FinalStateListener { }
+    private var onTokenCreated: TokenCreatedListener = TokenCreatedListener { _, _ -> }
+    private var onNonFinalState = NonFinalStateListener {_, _ -> }
 
-    fun onTransition(onTransition: TriConsumer<LexicalNode, Char, LexicalNode>): LexerBuilder {
+    fun onTransition(onTransition: TransitionListener): LexerBuilder {
         this.onTransition = this.onTransition.andThen(onTransition)
         return this
     }
 
-    fun onTokenCreated(onTokenCreated: BiConsumer<LexicalNode, Token>): LexerBuilder {
+    fun onTokenCreated(onTokenCreated: TokenCreatedListener): LexerBuilder {
         this.onTokenCreated = this.onTokenCreated.andThen(onTokenCreated)
         return this
     }
 
-    fun onUnknownTokenFound(onUnknownTokenFound: BiConsumer<String, TextCursor>): LexerBuilder {
-        this.onUnknownTokenFound = this.onUnknownTokenFound.andThen(onUnknownTokenFound)
+    fun onFinalState(onFinalState: FinalStateListener): LexerBuilder {
+        this.onFinalState = this.onFinalState.andThen(onFinalState)
+        return this
+    }
+
+    fun onUnknownTokenFound(onUnknownTokenFound: NonFinalStateListener): LexerBuilder {
+        this.onNonFinalState = this.onNonFinalState.andThen(onUnknownTokenFound)
         return this
     }
 
@@ -34,23 +36,23 @@ class LexerBuilder {
     }
 
     inner class LexerBuilderReady(private var dfa: DFA) {
-        fun onTransition(onTransition: TriConsumer<LexicalNode, Char, LexicalNode>): LexerBuilderReady {
+        fun onTransition(onTransition: TransitionListener): LexerBuilderReady {
             this@LexerBuilder.onTransition(onTransition)
             return this
         }
 
-        fun onTokenCreated(onTokenCreated: BiConsumer<LexicalNode, Token>): LexerBuilderReady {
+        fun onTokenCreated(onTokenCreated: TokenCreatedListener): LexerBuilderReady {
             this@LexerBuilder.onTokenCreated(onTokenCreated)
             return this
         }
 
-        fun onUnknownTokenFound(onUnknownTokenFound: BiConsumer<String, TextCursor>): LexerBuilderReady {
+        fun onUnknownTokenFound(onUnknownTokenFound: NonFinalStateListener): LexerBuilderReady {
             this@LexerBuilder.onUnknownTokenFound(onUnknownTokenFound)
             return this
         }
 
         fun createLexer(): Lexer {
-            return Lexer(dfa, onTransition, onTokenCreated, onUnknownTokenFound)
+            return Lexer(dfa, onTransition, onFinalState, onNonFinalState, onTokenCreated)
         }
     }
 }

@@ -4,6 +4,7 @@ import compiler.a5.grammar.A5GrammarRules
 import compiler.a5.lexicon.A5LexiconDFA
 import compiler.interpreter.Interpreter
 import compiler.lexer.LexerBuilder
+import compiler.lexer.NonFinalStateListener
 import compiler.lexer.UnknownTokenException
 import compiler.lexer.token.Token
 import compiler.parser.AbstractGrammarNode
@@ -18,7 +19,6 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
-import java.util.function.BiConsumer
 import java.util.regex.Pattern
 
 object EntryPoint {
@@ -39,7 +39,7 @@ object EntryPoint {
             // Tokenize file
             tokens = LexerBuilder()
                     .setDFA(A5LexiconDFA())
-                    .onUnknownTokenFound(BiConsumer(this::logUnknownToken))
+                    .onUnknownTokenFound(NonFinalStateListener{ cursor, _ -> logUnknownToken(cursor)})
                     .createLexer()
                     .lex(settings.inputText!!)
         }
@@ -125,8 +125,8 @@ object EntryPoint {
         }
     }
 
-    private fun logUnknownToken(unknownToken: String, cursor: TextCursor) {
-        throw UnknownTokenException(unknownToken, cursor)
+    private fun logUnknownToken(cursor: TextCursor) {
+        throw UnknownTokenException(cursor.getCurrentSentence(), cursor)
     }
 
     private class ParserSettings {
