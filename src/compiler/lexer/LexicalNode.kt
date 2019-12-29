@@ -6,6 +6,7 @@ import compiler.lexer.token.Token.IgnorableTokens.WhitespaceToken
 import compiler.lexer.token.Token.OperatorToken.*
 import compiler.lexer.token.Token.SymbolToken.*
 import compiler.lexer.token.Token.TypedToken.*
+import compiler.utils.TextCursor
 
 typealias NoArgConstructor = () -> Token
 
@@ -20,8 +21,6 @@ sealed class LexicalNode {
         object OPENING_STRING : NonFinalState()
         object STRING_CONTENTS : NonFinalState()
         object EXCLAMATION_MARK : NonFinalState()
-        object END_OF_TERMINAL : NonFinalState()
-        object FATAL_ERROR : NonFinalState()
     }
 
     sealed class FinalState(val constructor: SingleArgConstructor) : LexicalNode() {
@@ -62,9 +61,18 @@ sealed class LexicalNode {
             object COMMENT : FinalStateSingleArg(::CommentToken)
             object CLOSING_STRING : FinalStateSingleArg(::StringToken)
         }
+
+        fun getToken(cursor: TextCursor): Token {
+            val text = cursor.getCurrentSentence()
+            val token = constructor(text)
+            token.lineNumber = cursor.getCursorLineNumber()
+            token.linePosition = cursor.getCursorLinePosition() - text.length
+            return token
+        }
     }
 
     override fun toString(): String {
         return this.javaClass.simpleName
     }
+
 }

@@ -1,6 +1,7 @@
 package compiler.utils
 
-import java.util.*
+import kotlin.math.abs
+import kotlin.math.min
 
 /**
  * A java compliant iterator over the given string.
@@ -16,6 +17,8 @@ class TextCursor(text: String) : PeekableIterator<Char> {
     private val lineNumbers: IntArray
     private val linePositions: IntArray
     private var cursor = -1
+    private var sentenceStart = 0
+    private var sentenceEnd = 0
 
     fun getCursorLineNumber() = lineNumbers[cursor]
 
@@ -46,6 +49,7 @@ class TextCursor(text: String) : PeekableIterator<Char> {
         if (cursor + 1 >= text.size) {
             throw NoSuchElementException()
         }
+        sentenceEnd = cursor + 1
         return text[++cursor]
     }
 
@@ -61,6 +65,18 @@ class TextCursor(text: String) : PeekableIterator<Char> {
             throw NoSuchElementException()
         }
         cursor--
+    }
+
+    fun getCurrentSentence(): String {
+        if (sentenceStart < 0 && sentenceEnd < 0) {
+            throw NoSuchElementException()
+        }
+
+        val offset = min(sentenceStart, sentenceEnd)
+        val length = abs(sentenceEnd - sentenceStart + 1)
+        sentenceStart = cursor + 1
+        sentenceEnd = sentenceStart
+        return String(text, offset, length)
     }
 
     private fun isNewLine(letter: Char): Boolean {

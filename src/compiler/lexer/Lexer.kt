@@ -21,23 +21,17 @@ class Lexer(
 
     fun lex(text: String): List<Token> {
         val tokens = ArrayList<Token>()
-        val currentToken = StringBuilder()
         val cursor = TextCursor(text)
-        transitionListeners = transitionListeners.andThen(append(currentToken))
         val executor = DFAExecutor(dfa, transitionListeners)
         loop@ while (cursor.hasNext()) {
             when (val state = executor.execute(cursor)) {
                 is FinalState -> {
-                    val token = state.constructor(currentToken.toString())
-                    token.lineNumber = cursor.getCursorLineNumber()
-                    token.linePosition = cursor.getCursorLinePosition() - currentToken.length
+                    val token = state.getToken(cursor)
                     tokens.add(token)
-
                     tokenCreatedListeners.accept(state, token)
-                    currentToken.setLength(0)
                 }
                 is NonFinalState -> {
-                    unknownTokenListener.accept(currentToken.toString(), cursor)
+                    unknownTokenListener.accept(cursor.getCurrentSentence(), cursor)
                     break@loop
                 }
             }
@@ -48,13 +42,5 @@ class Lexer(
                 .filter { terminal -> terminal !is IgnorableTokens }
                 .map(KeywordTokenRecognizer::get)
                 .collect(Collectors.toList())
-    }
-
-    private fun append(currentToken: StringBuilder): TriConsumer<LexicalNode, Char, LexicalNode> {
-        return object : TriConsumer<LexicalNode, Char, LexicalNode> {
-            override fun accept(p1: LexicalNode, p2: Char, p3: LexicalNode) {
-                currentToken.append(p2)
-            }
-        }
     }
 }
