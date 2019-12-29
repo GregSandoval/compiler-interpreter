@@ -2,11 +2,10 @@ package compiler.lexer
 
 import compiler.a5.lexicon.DFA
 import compiler.lexer.LexicalNode.FinalState
-import compiler.lexer.LexicalNode.NonFinalState.END_OF_TERMINAL
-import compiler.lexer.LexicalNode.NonFinalState.FATAL_ERROR
+import compiler.lexer.LexicalNode.NonFinalState
 import compiler.lexer.token.KeywordTokenRecognizer
 import compiler.lexer.token.Token
-import compiler.lexer.token.Token.IgnoredTokens.*
+import compiler.lexer.token.Token.IgnorableTokens
 import compiler.utils.TextCursor
 import compiler.utils.TriConsumer
 import java.util.*
@@ -15,51 +14,47 @@ import java.util.stream.Collectors
 
 class Lexer(
         private val dfa: DFA,
-        private val transitionListeners: TriConsumer<LexicalNode, Char, LexicalNode>,
-        private val tokenCreatedListeners: TriConsumer<LexicalNode, LexicalNode, Token>,
+        private var transitionListeners: TriConsumer<LexicalNode, Char, LexicalNode>,
+        private val tokenCreatedListeners: BiConsumer<LexicalNode, Token>,
         private val unknownTokenListener: BiConsumer<String, TextCursor>
 ) {
-    fun analyze(text: String): List<Token> {
-        val START_STATE = dfa.startState
-        var CURRENT_STATE = START_STATE
+
+    fun lex(text: String): List<Token> {
         val tokens = ArrayList<Token>()
         val currentToken = StringBuilder()
         val cursor = TextCursor(text)
-        for (letter in cursor) {
-            val GOTO = CURRENT_STATE on letter
-            transitionListeners.accept(CURRENT_STATE, letter, GOTO)
-            if (GOTO === END_OF_TERMINAL) {
-                val token = (CURRENT_STATE as FinalState).constructor(currentToken.toString())
-                token.lineNumber = cursor.getCursorLineNumber()
-                token.linePosition = cursor.getCursorLinePosition() - currentToken.length
-                tokens.add(token)
-                tokenCreatedListeners.accept(CURRENT_STATE, GOTO, token)
-                currentToken.setLength(0)
-                cursor.rewind()
-                CURRENT_STATE = START_STATE
-                continue
+        transitionListeners = transitionListeners.andThen(append(currentToken))
+        val executor = DFAExecutor(dfa, transitionListeners)
+        loop@ while (cursor.hasNext()) {
+            when (val state = executor.execute(cursor)) {
+                is FinalState -> {
+                    val token = state.constructor(currentToken.toString())
+                    token.lineNumber = cursor.getCursorLineNumber()
+                    token.linePosition = cursor.getCursorLinePosition() - currentToken.length
+                    tokens.add(token)
+
+                    tokenCreatedListeners.accept(state, token)
+                    currentToken.setLength(0)
+                }
+                is NonFinalState -> {
+                    unknownTokenListener.accept(currentToken.toString(), cursor)
+                    break@loop
+                }
             }
-            if (GOTO === FATAL_ERROR) {
-                unknownTokenListener.accept(currentToken.toString() + letter, cursor)
-                break
-            }
-            currentToken.append(letter)
-            CURRENT_STATE = GOTO
         }
-        // Add eof :)
-        val eof = EOFToken()
-        eof.linePosition = cursor.getCursorLinePosition()
-        eof.lineNumber = cursor.getCursorLineNumber()
-        tokens.add(eof)
+
         return tokens
                 .stream()
-                .filter { terminal -> terminal !is WhitespaceToken }
-                .filter { terminal -> terminal !is CommentToken }
+                .filter { terminal -> terminal !is IgnorableTokens }
                 .map(KeywordTokenRecognizer::get)
                 .collect(Collectors.toList())
     }
 
-    private infix fun LexicalNode.on(character: Char): LexicalNode {
-        return this@Lexer.dfa[this@on, character]
+    private fun append(currentToken: StringBuilder): TriConsumer<LexicalNode, Char, LexicalNode> {
+        return object : TriConsumer<LexicalNode, Char, LexicalNode> {
+            override fun accept(p1: LexicalNode, p2: Char, p3: LexicalNode) {
+                currentToken.append(p2)
+            }
+        }
     }
 }

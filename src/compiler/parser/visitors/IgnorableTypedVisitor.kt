@@ -1,12 +1,12 @@
 package compiler.parser.visitors
 
-import compiler.lexer.token.Token.IgnoredTokens
-import compiler.lexer.token.Token.IgnoredTokens.*
+import compiler.lexer.token.Token.IgnorableTokens
+import compiler.lexer.token.Token.IgnorableTokens.*
 import compiler.lexer.token.Token.KeywordToken.TypeToken.VoidToken
 
 
 interface IgnorableTypedVisitor<T> {
-    fun accept(token: IgnoredTokens) = when (token) {
+    fun accept(token: IgnorableTokens) = when (token) {
         is CommentToken -> visit(token)
         is EOFToken -> visit(token)
         is WhitespaceToken -> visit(token)

@@ -10,7 +10,7 @@ interface TokenVisitor<T> :
         SymbolTypedVisitor<T> {
     fun accept(token: Token) = when (token) {
         is Token.SymbolToken -> this.accept(token)
-        is Token.IgnoredTokens -> this.accept(token)
+        is Token.IgnorableTokens -> this.accept(token)
         is Token.OperatorToken -> this.accept(token)
         is Token.KeywordToken -> this.accept(token)
         is Token.TypedToken.FloatToken -> visit(token)

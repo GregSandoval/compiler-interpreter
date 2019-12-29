@@ -1,8 +1,7 @@
 package compiler.a5.lexicon
 
 import compiler.lexer.LexicalNode
-import compiler.lexer.LexicalNode.NonFinalState.END_OF_TERMINAL
-import compiler.lexer.LexicalNode.NonFinalState.FATAL_ERROR
+import compiler.lexer.LexicalNode.ERROR
 import java.util.*
 import java.util.function.Predicate
 
@@ -12,7 +11,7 @@ typealias Transitions = MutableList<EdgeFunction>
 typealias DFATable = MutableMap<LexicalNode, Transitions>
 
 abstract class DFA(
-        public val startState: LexicalNode,
+        val start: LexicalNode,
         private val dfa: DFATable = HashMap()
 ) {
 
@@ -24,16 +23,8 @@ abstract class DFA(
                 .map { it(character) }
                 .filter { it.isPresent }
                 .findFirst()
-                .orElseGet { routeErrorToCustomStates(start) }
+                .orElseGet { Optional.of(ERROR) }
                 .get()
-
-    }
-
-    private fun routeErrorToCustomStates(start: LexicalNode): Optional<LexicalNode> {
-        return when (start) {
-            is LexicalNode.FinalState -> Optional.of(END_OF_TERMINAL)
-            else -> Optional.of(FATAL_ERROR)
-        }
     }
 
     protected infix fun LexicalNode.to(end: LexicalNode): EdgeBuilderAlt {

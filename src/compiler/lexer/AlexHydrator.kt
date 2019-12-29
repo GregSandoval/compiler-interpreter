@@ -24,7 +24,7 @@ class AlexHydrator(private val lexer: Lexer) {
             lineNumbers.add(lineNumber)
             linePositions.add(linePosition)
         }
-        val tokens = lexer.analyze(java.lang.String.join(" ", program))
+        val tokens = lexer.lex(java.lang.String.join(" ", program))
         for (i in tokens.indices) {
             val token = tokens[i]
             token.lineNumber = lineNumbers[i]

@@ -24,7 +24,6 @@ class Parser(
     fun parse(inputName: String, tokensIn: List<Token>) {
         val stack = LinkedList<AbstractGrammarNode>()
         val tokens = LinkedList(tokensIn)
-        stack.push(eof)
         stack.push(startSymbol)
         while (!tokens.isEmpty() && !stack.isEmpty()) {
             beforeRuleApplication.accept(stack, tokens.peek())

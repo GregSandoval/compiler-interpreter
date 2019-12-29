@@ -1,7 +1,7 @@
 package compiler.parser
 
 import compiler.lexer.token.Token
-import compiler.lexer.token.Token.IgnoredTokens.EOFToken
+import compiler.lexer.token.Token.IgnorableTokens.EOFToken
 import compiler.parser.GrammarNode.ParseTreeSentinel
 
 class ParseTreeBuilder {

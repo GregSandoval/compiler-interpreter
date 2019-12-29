@@ -7,10 +7,11 @@ import compiler.parser.AbstractGrammarNode
  * All tokens should extend this class.
  */
 sealed class Token(val str: String, val tokenID: Int, var lineNumber: Int = 0, var linePosition: Int = 0) : AbstractGrammarNode() {
-    sealed class IgnoredTokens(str: String, UUID: Int) : Token(str, UUID) {
-        class CommentToken(str: String) : IgnoredTokens(str, 1)
-        class EOFToken : IgnoredTokens("", 0)
-        class WhitespaceToken(str: String) : IgnoredTokens(str, 100)
+
+    sealed class IgnorableTokens(str: String, UUID: Int) : Token(str, UUID) {
+        class CommentToken(str: String) : IgnorableTokens(str, 1)
+        class EOFToken : IgnorableTokens("", 0)
+        class WhitespaceToken(str: String) : IgnorableTokens(str, 100)
     }
 
     sealed class TypedToken<Value>(str: String, tokenID: Int, val value: Value) : Token(str, tokenID) {

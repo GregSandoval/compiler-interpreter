@@ -1,6 +1,6 @@
 package compiler.a5.grammar
 
-import compiler.lexer.token.Token.IgnoredTokens.*
+import compiler.lexer.token.Token.IgnorableTokens.*
 import compiler.lexer.token.Token.KeywordToken.*
 import compiler.lexer.token.Token.KeywordToken.TypeToken.*
 import compiler.lexer.token.Token.OperatorToken.*

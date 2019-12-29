@@ -1,8 +1,8 @@
 package compiler.lexer
 
 import compiler.lexer.token.Token
-import compiler.lexer.token.Token.IgnoredTokens.CommentToken
-import compiler.lexer.token.Token.IgnoredTokens.WhitespaceToken
+import compiler.lexer.token.Token.IgnorableTokens.CommentToken
+import compiler.lexer.token.Token.IgnorableTokens.WhitespaceToken
 import compiler.lexer.token.Token.OperatorToken.*
 import compiler.lexer.token.Token.SymbolToken.*
 import compiler.lexer.token.Token.TypedToken.*
@@ -13,6 +13,7 @@ typealias SingleArgConstructor = (String) -> Token
 
 sealed class LexicalNode {
 
+    object ERROR : LexicalNode()
     sealed class NonFinalState : LexicalNode() {
         object START : NonFinalState()
         object MAYBE_FLOAT : NonFinalState()

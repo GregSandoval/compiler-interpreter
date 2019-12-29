@@ -11,10 +11,7 @@ class LexerBuilder {
         override fun accept(p1: LexicalNode, p2: Char, p3: LexicalNode) {
         }
     }
-    private var onTokenCreated: TriConsumer<LexicalNode, LexicalNode, Token> = object : TriConsumer<LexicalNode, LexicalNode, Token> {
-        override fun accept(p1: LexicalNode, p2: LexicalNode, p3: Token) {
-        }
-    }
+    private var onTokenCreated: BiConsumer<LexicalNode, Token> = BiConsumer { _, _ -> }
     private var onUnknownTokenFound = BiConsumer<String, TextCursor> { _, _ -> }
 
     fun onTransition(onTransition: TriConsumer<LexicalNode, Char, LexicalNode>): LexerBuilder {
@@ -22,7 +19,7 @@ class LexerBuilder {
         return this
     }
 
-    fun onTokenCreated(onTokenCreated: TriConsumer<LexicalNode, LexicalNode, Token>): LexerBuilder {
+    fun onTokenCreated(onTokenCreated: BiConsumer<LexicalNode, Token>): LexerBuilder {
         this.onTokenCreated = this.onTokenCreated.andThen(onTokenCreated)
         return this
     }
@@ -42,7 +39,7 @@ class LexerBuilder {
             return this
         }
 
-        fun onTokenCreated(onTokenCreated: TriConsumer<LexicalNode, LexicalNode, Token>): LexerBuilderReady {
+        fun onTokenCreated(onTokenCreated: BiConsumer<LexicalNode, Token>): LexerBuilderReady {
             this@LexerBuilder.onTokenCreated(onTokenCreated)
             return this
         }

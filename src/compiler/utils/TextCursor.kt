@@ -7,28 +7,15 @@ import java.util.*
  * This iterator also knows which line/position number
  * it's on. Can also reverse.
  */
-class TextCursor(text: String) : Iterator<Char>, Iterable<Char>, MutableIterator<Char> {
-    private val text: CharArray = (text + "\n").toCharArray()
+interface PeekableIterator<T> : Iterator<T>, Iterable<T> {
+    fun peek(): T
+}
+
+class TextCursor(text: String) : PeekableIterator<Char> {
+    private val text: CharArray = text.toCharArray()
     private val lineNumbers: IntArray
     private val linePositions: IntArray
     private var cursor = -1
-    override fun hasNext(): Boolean {
-        return cursor + 1 < text.size
-    }
-
-    override fun next(): Char {
-        if (cursor + 1 >= text.size) {
-            throw NoSuchElementException()
-        }
-        return text[++cursor]
-    }
-
-    fun rewind() {
-        if (cursor - 1 < 0) {
-            throw NoSuchElementException()
-        }
-        cursor--
-    }
 
     fun getCursorLineNumber() = lineNumbers[cursor]
 
@@ -47,14 +34,37 @@ class TextCursor(text: String) : Iterator<Char>, Iterable<Char>, MutableIterator
         return lineBuilder.toString()
     }
 
-    override fun iterator(): MutableIterator<Char> {
+    override fun iterator(): Iterator<Char> {
         return this
     }
 
-    companion object {
-        private fun isNewLine(letter: Char): Boolean {
-            return letter == '\n' || letter == '\r'
+    override fun hasNext(): Boolean {
+        return cursor + 1 < text.size
+    }
+
+    override fun next(): Char {
+        if (cursor + 1 >= text.size) {
+            throw NoSuchElementException()
         }
+        return text[++cursor]
+    }
+
+    override fun peek(): Char {
+        if (cursor + 1 >= text.size) {
+            throw NoSuchElementException()
+        }
+        return text[cursor + 1]
+    }
+
+    fun previous() {
+        if (cursor - 1 < 0) {
+            throw NoSuchElementException()
+        }
+        cursor--
+    }
+
+    private fun isNewLine(letter: Char): Boolean {
+        return letter == '\n' || letter == '\r'
     }
 
     init {
@@ -73,7 +83,4 @@ class TextCursor(text: String) : Iterator<Char>, Iterable<Char>, MutableIterator
         }
     }
 
-    override fun remove() {
-        TODO("not implemented")
-    }
 }

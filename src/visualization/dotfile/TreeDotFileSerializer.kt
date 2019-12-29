@@ -1,7 +1,7 @@
 package visualization.dotfile
 
 import compiler.lexer.token.Token
-import compiler.lexer.token.Token.IgnoredTokens.EOFToken
+import compiler.lexer.token.Token.IgnorableTokens.EOFToken
 import compiler.lexer.token.Token.TypedToken.StringToken
 import compiler.parser.AbstractGrammarNode
 import compiler.parser.GrammarNode.NULL_NODE

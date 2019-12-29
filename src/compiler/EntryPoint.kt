@@ -3,9 +3,7 @@ package compiler
 import compiler.a5.grammar.A5GrammarRules
 import compiler.a5.lexicon.A5LexiconDFA
 import compiler.interpreter.Interpreter
-import compiler.lexer.AlexHydrator
 import compiler.lexer.LexerBuilder
-import compiler.lexer.LexicalNode.NonFinalState.START
 import compiler.lexer.UnknownTokenException
 import compiler.lexer.token.Token
 import compiler.parser.AbstractGrammarNode
@@ -33,6 +31,7 @@ object EntryPoint {
         val settings = processArgs(args)
         val tokens: List<Token>
 
+        inputName = settings.inputName
         if (settings.tokens != null) {
             // Passed in token stream
             tokens = settings.tokens!!
@@ -42,7 +41,7 @@ object EntryPoint {
                     .setDFA(A5LexiconDFA())
                     .onUnknownTokenFound(BiConsumer(this::logUnknownToken))
                     .createLexer()
-                    .analyze(settings.inputText!!)
+                    .lex(settings.inputText!!)
         }
 
         if (exception != null) {
@@ -52,7 +51,6 @@ object EntryPoint {
         // Prepare grammar rules
         A5GrammarRules.build()
 
-        inputName = settings.inputName
         // Parse token stream
         var tree = ParseTreeBuilder()
                 .setStartSymbol(Pgm())
@@ -76,17 +74,6 @@ object EntryPoint {
     private fun processArgs(args: Array<String>): ParserSettings {
         val settings = ParserSettings()
         for (arg in args) {
-            if (arg == "--alex") {
-                val scanner = Scanner(System.`in`).useDelimiter(Pattern.compile("$"))
-                val serializedTokens = if (scanner.hasNext()) scanner.next() else ""
-                val lexer = LexerBuilder()
-                        .setDFA(A5LexiconDFA())
-                        .createLexer()
-
-                settings.tokens = AlexHydrator(lexer).hydrate(serializedTokens)
-                scanner.close()
-                continue
-            }
             val split = arg.split("=".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
             if (split.size != 2)
