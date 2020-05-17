@@ -17,6 +17,7 @@ class DFARepeatingExecutor(
         private val finalStateListeners: FinalStateListener,
         private val nonFinalStateListener: NonFinalStateListener
 ) : DFAExecutor(dfa, transitionListeners) {
+
     override fun execute(input: TextCursor): LexicalNode {
         while (input.hasNext()) {
             when (val state = super.execute(input)) {
@@ -26,4 +27,5 @@ class DFARepeatingExecutor(
         }
         return START
     }
+
 }
