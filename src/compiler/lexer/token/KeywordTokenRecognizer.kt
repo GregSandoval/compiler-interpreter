@@ -6,6 +6,7 @@ import java.util.*
 
 object KeywordTokenRecognizer {
     private val keywords: MutableMap<String, () -> KeywordToken> = HashMap()
+
     @JvmStatic
     operator fun get(identifier: Token): Token {
         val tokenValue = identifier.str
@@ -21,9 +22,9 @@ object KeywordTokenRecognizer {
         keywords["main"] = ::MainKeywordToken
         keywords["fcn"] = ::FunctionKeywordToken
         keywords["class"] = ::ClassKeywordToken
-        keywords["float"] = { TypeToken.FloatKeywordToken() }
-        keywords["int"] = { TypeToken.IntegerKeywordToken() }
-        keywords["string"] = { TypeToken.StringKeywordToken() }
+        keywords["float"] = TypeToken::FloatKeywordToken
+        keywords["int"] = TypeToken::IntegerKeywordToken
+        keywords["string"] = TypeToken::StringKeywordToken
         keywords["if"] = ::IfKeywordToken
         keywords["elseif"] = ::ElseIfKeywordToken
         keywords["else"] = ::ElseKeywordToken

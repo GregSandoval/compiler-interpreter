@@ -29,14 +29,12 @@ class Lexer(
             tokenCreatedListeners.accept(token, cursor)
         }
 
-        val executor = DFARepeatingExecutor(
+        DFARepeatingExecutor(
                 dfa,
                 transitionListeners,
                 finalStateListeners,
                 nonFinalStateListeners
-        )
-
-        executor.execute(cursor)
+        ).execute(cursor)
 
         return tokens
                 .stream()
