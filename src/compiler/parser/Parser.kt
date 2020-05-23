@@ -20,6 +20,7 @@ class Parser(
     private val onUnknownGrammarRule: GeneralListener
     private val onPredictionNotFoundError: GeneralListener
     private val onGrammarRuleApplication: GrammarRuleApplicationListener
+
     @Throws(Exception::class)
     fun parse(inputName: String, tokensIn: List<Token>) {
         val stack = LinkedList<AbstractGrammarNode>()

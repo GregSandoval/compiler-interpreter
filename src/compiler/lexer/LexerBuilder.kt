@@ -9,7 +9,7 @@ class LexerBuilder {
     }
     private var onFinalState: FinalStateListener = FinalStateListener { }
     private var onTokenCreated: TokenCreatedListener = TokenCreatedListener { _, _ -> }
-    private var onNonFinalState = NonFinalStateListener {_, _ -> }
+    private var onNonFinalState = NonFinalStateListener { _, _ -> }
 
     fun onTransition(onTransition: TransitionListener): LexerBuilder {
         this.onTransition = this.onTransition.andThen(onTransition)

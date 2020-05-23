@@ -6,84 +6,84 @@ import compiler.parser.AbstractGrammarNode
  * The base class for all token classes.
  * All tokens should extend this class.
  */
-sealed class Token(val str: String, val tokenID: Int, var lineNumber: Int = 0, var linePosition: Int = 0) : AbstractGrammarNode() {
+sealed class Token(val str: String, var lineNumber: Int = 0, var linePosition: Int = 0) : AbstractGrammarNode() {
 
-    sealed class IgnorableTokens(str: String, UUID: Int) : Token(str, UUID) {
-        class CommentToken(str: String) : IgnorableTokens(str, 1)
-        class EOFToken : IgnorableTokens("", 0)
-        class WhitespaceToken(str: String) : IgnorableTokens(str, 100)
+    sealed class IgnorableTokens(str: String) : Token(str) {
+        class CommentToken(str: String) : IgnorableTokens(str)
+        class EOFToken : IgnorableTokens("")
+        class WhitespaceToken(str: String) : IgnorableTokens(str)
     }
 
-    sealed class TypedToken<Value>(str: String, tokenID: Int, val value: Value) : Token(str, tokenID) {
-        class IdentifierToken(str: String) : TypedToken<String>(str, 2, str) {
+    sealed class TypedToken<Value>(str: String, val value: Value) : Token(str) {
+        class IdentifierToken(str: String) : TypedToken<String>(str, str) {
             constructor() : this("Sentinel")
         }
 
-        class FloatToken(str: String) : TypedToken<Float>(str, 4, str.toFloat()) {
+        class FloatToken(str: String) : TypedToken<Float>(str, str.toFloat()) {
             constructor() : this("-0")
         }
 
-        class IntegerToken(str: String) : TypedToken<Int>(str, 3, str.toInt()) {
+        class IntegerToken(str: String) : TypedToken<Int>(str, str.toInt()) {
             constructor() : this("-0")
         }
 
-        class StringToken(str: String) : TypedToken<String>(str.replace("\"", ""), 5, str) {
+        class StringToken(str: String) : TypedToken<String>(str.replace("\"", ""), str) {
             constructor() : this("Sentinel")
         }
     }
 
-    sealed class OperatorToken(str: String, UUID: Int) : Token(str, UUID) {
-        class LessThan : OperatorToken("<", 31)
-        class GreaterThan : OperatorToken(">", 32)
-        class Asterisk : OperatorToken("*", 41)
-        class Equal : OperatorToken("=", 45)
-        class Minus : OperatorToken("-", 46)
-        class Plus : OperatorToken("+", 47)
-        class Ampersand : OperatorToken("&", 49)
-        class Arrow : OperatorToken("->", 51)
-        class EqualEqual : OperatorToken("==", 52)
-        class NotEqual : OperatorToken("!=", 53)
-        class LessThanOrEqual : OperatorToken("<=", 54)
-        class GreaterThanOrEqual : OperatorToken(">=", 55)
-        class BitShiftLeft : OperatorToken("<<", 56)
-        class BitShiftRight : OperatorToken(">>", 57)
-        class Caret : OperatorToken("^", 42)
-        class ForwardSlash : OperatorToken("/", 48)
+    sealed class OperatorToken(str: String) : Token(str) {
+        class LessThan : OperatorToken("<")
+        class GreaterThan : OperatorToken(">")
+        class Asterisk : OperatorToken("*")
+        class Equal : OperatorToken("=")
+        class Minus : OperatorToken("-")
+        class Plus : OperatorToken("+")
+        class Ampersand : OperatorToken("&")
+        class Arrow : OperatorToken("->")
+        class EqualEqual : OperatorToken("==")
+        class NotEqual : OperatorToken("!=")
+        class LessThanOrEqual : OperatorToken("<=")
+        class GreaterThanOrEqual : OperatorToken(">=")
+        class BitShiftLeft : OperatorToken("<<")
+        class BitShiftRight : OperatorToken(">>")
+        class Caret : OperatorToken("^")
+        class ForwardSlash : OperatorToken("/")
     }
 
-    sealed class SymbolToken(str: String, UUID: Int) : Token(str, UUID) {
-        class Comma : SymbolToken(",", 6)
-        class SemiColon : SymbolToken(";", 7)
-        class LeftBrace : SymbolToken("{", 33)
-        class RightBrace : SymbolToken("}", 34)
-        class LeftBracket : SymbolToken("[", 35)
-        class RightBracket : SymbolToken("]", 36)
-        class LeftParen : SymbolToken("(", 37)
-        class RightParen : SymbolToken(")", 38)
-        class Colon : SymbolToken(":", 43)
-        class Period : SymbolToken(".", 44)
+    sealed class SymbolToken(str: String) : Token(str) {
+        class Comma : SymbolToken(",")
+        class SemiColon : SymbolToken(";")
+        class LeftBrace : SymbolToken("{")
+        class RightBrace : SymbolToken("}")
+        class LeftBracket : SymbolToken("[")
+        class RightBracket : SymbolToken("]")
+        class LeftParen : SymbolToken("(")
+        class RightParen : SymbolToken(")")
+        class Colon : SymbolToken(":")
+        class Period : SymbolToken(".")
     }
 
-    sealed class KeywordToken(str: String, UUID: Int) : Token(str, UUID) {
-        class ProgramKeywordToken : KeywordToken("prog", 10)
-        class MainKeywordToken : KeywordToken("main", 11)
-        class FunctionKeywordToken : KeywordToken("fcn", 12)
-        class ClassKeywordToken : KeywordToken("class", 13)
-        class IfKeywordToken : KeywordToken("if", 18)
-        class ElseIfKeywordToken : KeywordToken("elseif", 19)
-        class ElseKeywordToken : KeywordToken("else", 20)
-        class WhileKeywordToken : KeywordToken("while", 21)
-        class InputKeywordToken : KeywordToken("input", 22)
-        class PrintKeywordToken : KeywordToken("print", 23)
-        class NewKeywordToken : KeywordToken("new", 24)
-        class ReturnKeywordToken : KeywordToken("return", 25)
-        class VarKeywordToken : KeywordToken("var", 2)
+    sealed class KeywordToken(str: String) : Token(str) {
+        class ProgramKeywordToken : KeywordToken("prog")
+        class MainKeywordToken : KeywordToken("main")
+        class FunctionKeywordToken : KeywordToken("fcn")
+        class ClassKeywordToken : KeywordToken("class")
+        class IfKeywordToken : KeywordToken("if")
+        class ElseIfKeywordToken : KeywordToken("elseif")
+        class ElseKeywordToken : KeywordToken("else")
+        class WhileKeywordToken : KeywordToken("while")
+        class InputKeywordToken : KeywordToken("input")
+        class PrintKeywordToken : KeywordToken("print")
+        class NewKeywordToken : KeywordToken("new")
+        class ReturnKeywordToken : KeywordToken("return")
+        class VarKeywordToken : KeywordToken("var")
 
-        sealed class TypeToken(str: String, UUID: Int) : KeywordToken(str, UUID) {
-            class VoidToken : TypeToken("void", -20)
-            class FloatKeywordToken : TypeToken("float", 13)
-            class IntegerKeywordToken : TypeToken("int", 16)
-            class StringKeywordToken : TypeToken("string", 17)
+        sealed class TypeToken(str: String) : KeywordToken(str) {
+            class VoidToken : TypeToken("void")
+            class FloatKeywordToken : TypeToken("float")
+            class IntegerKeywordToken : TypeToken("int")
+            class StringKeywordToken : TypeToken("string")
         }
     }
 

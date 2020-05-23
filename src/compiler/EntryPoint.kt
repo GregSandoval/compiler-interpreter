@@ -39,7 +39,7 @@ object EntryPoint {
             // Tokenize file
             tokens = LexerBuilder()
                     .setDFA(A5LexiconDFA())
-                    .onUnknownTokenFound(NonFinalStateListener{ cursor, _ -> logUnknownToken(cursor)})
+                    .onUnknownTokenFound(NonFinalStateListener { cursor, _ -> logUnknownToken(cursor) })
                     .createLexer()
                     .lex(settings.inputText!!)
         }

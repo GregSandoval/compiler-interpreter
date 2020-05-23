@@ -15,6 +15,7 @@ import kotlin.math.pow
 
 class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
     private val scanner = Scanner(System.`in`)
+
     @Throws(Exception::class)
     override fun visit(token: InputKeywordToken): String {
         return scanner.nextLine()
