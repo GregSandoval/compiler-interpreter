@@ -10,7 +10,7 @@ open class UserException : RuntimeException {
 
     companion object {
         private fun renderLineNumber(token: Token, inputName: String?): String {
-            return "\tat " + inputName + "(" + inputName + ":" + token.lineNumber + ")"
+            return "\tat " + inputName + "(" + inputName + ":" + token.lineInfo.number + ")"
         }
 
         private fun renderLineNumber(cursor: TextCursor, inputName: String?): String {

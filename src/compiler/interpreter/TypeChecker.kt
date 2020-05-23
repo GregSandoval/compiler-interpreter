@@ -141,8 +141,7 @@ class TypeChecker private constructor(private val symtab: SymbolTable) : TokenTy
         }
 
         private fun copyLineInfo(from: Token, to: TypeToken): TypeToken {
-            to.lineNumber = from.lineNumber
-            to.linePosition = from.linePosition
+            to.lineInfo = from.lineInfo.copy()
             return to
         }
     }

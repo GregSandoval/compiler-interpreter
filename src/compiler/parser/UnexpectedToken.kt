@@ -7,7 +7,7 @@ class UnexpectedToken(top: AbstractGrammarNode, token: Token, inputName: String)
         private fun formatError(top: AbstractGrammarNode, token: Token, inputName: String): String {
             val grammarClassName = top.javaClass.simpleName
             val tokenClassName = token.javaClass.simpleName
-            val tokenLineNumber = token.lineNumber
+            val tokenLineNumber = token.lineInfo.number
             return "\nUnexpected token; Expected a $grammarClassName but found a $tokenClassName\n\tat $inputName($inputName:$tokenLineNumber)"
         }
     }

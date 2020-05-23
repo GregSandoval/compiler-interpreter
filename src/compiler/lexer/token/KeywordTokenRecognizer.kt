@@ -12,8 +12,7 @@ object KeywordTokenRecognizer {
         val tokenValue = identifier.str
         val supplier = keywords[tokenValue] ?: return identifier
         val keyword = supplier()
-        keyword.lineNumber = identifier.lineNumber
-        keyword.linePosition = identifier.linePosition
+        keyword.lineInfo = identifier.lineInfo.copy()
         return keyword
     }
 

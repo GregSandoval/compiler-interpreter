@@ -6,7 +6,7 @@ import compiler.parser.AbstractGrammarNode
  * The base class for all token classes.
  * All tokens should extend this class.
  */
-sealed class Token(val str: String, var lineNumber: Int = 0, var linePosition: Int = 0) : AbstractGrammarNode() {
+sealed class Token(val str: String, var lineInfo: LineInfo = LineInfo(0, 0)) : AbstractGrammarNode() {
 
     sealed class IgnorableTokens(str: String) : Token(str) {
         class CommentToken(str: String) : IgnorableTokens(str)

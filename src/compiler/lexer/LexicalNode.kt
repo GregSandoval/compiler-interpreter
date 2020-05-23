@@ -1,5 +1,6 @@
 package compiler.lexer
 
+import compiler.lexer.token.LineInfo
 import compiler.lexer.token.Token
 import compiler.lexer.token.Token.IgnorableTokens.CommentToken
 import compiler.lexer.token.Token.IgnorableTokens.WhitespaceToken
@@ -65,8 +66,7 @@ sealed class LexicalNode {
         fun getToken(cursor: TextCursor): Token {
             val text = cursor.getCurrentSentence()
             val token = constructor(text)
-            token.lineNumber = cursor.getCursorLineNumber()
-            token.linePosition = cursor.getCursorLinePosition() - text.length
+            token.lineInfo = LineInfo(cursor.getCursorLineNumber(), cursor.getCursorLinePosition())
             return token
         }
     }
