@@ -1,6 +1,6 @@
 package compiler.parser.visitors
 
-import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbol.Terminal
 
 interface TokenVisitor<T> :
         IgnorableTypedVisitor<T>,

@@ -1,7 +1,7 @@
 package compiler.interpreter
 
-import compiler.parser.Symbols.Terminal
-import compiler.parser.Symbols.Terminal.Keyword.Type
+import compiler.parser.Symbol.Terminal
+import compiler.parser.Symbol.Terminal.Keyword.Type
 import compiler.parser.UserException
 
 class AssignmentTypeException(lval: Terminal, rval: Terminal, lvalType: Type, rvalType: Type) :

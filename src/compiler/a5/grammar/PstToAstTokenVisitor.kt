@@ -1,12 +1,12 @@
 package compiler.a5.grammar
 
 import compiler.parser.PstToAstHelpers
-import compiler.parser.Symbols.Terminal.Ignorable.*
-import compiler.parser.Symbols.Terminal.Keyword.*
-import compiler.parser.Symbols.Terminal.Keyword.Type.*
-import compiler.parser.Symbols.Terminal.Operator.*
-import compiler.parser.Symbols.Terminal.Punctuation.*
-import compiler.parser.Symbols.Terminal.TypedTerminal.*
+import compiler.parser.Symbol.Terminal.Ignorable.*
+import compiler.parser.Symbol.Terminal.Keyword.*
+import compiler.parser.Symbol.Terminal.Keyword.Type.*
+import compiler.parser.Symbol.Terminal.Operator.*
+import compiler.parser.Symbol.Terminal.Punctuation.*
+import compiler.parser.Symbol.Terminal.TypedTerminal.*
 import compiler.parser.visitors.TokenVisitor
 
 class PstToAstTokenVisitor : TokenVisitor<Unit> {

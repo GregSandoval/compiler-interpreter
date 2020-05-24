@@ -3,8 +3,8 @@ package compiler.parser
 import compiler.a5.grammar.GrammarNodeVisitor
 import compiler.a5.grammar.PstToAstGrammarVisitor
 import compiler.a5.grammar.PstToAstTokenVisitor
-import compiler.parser.Symbols.NonTerminal
-import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbol.NonTerminal
+import compiler.parser.Symbol.Terminal
 import compiler.parser.visitors.TokenVisitor
 
 object AbstractSyntaxTreeBuilder {

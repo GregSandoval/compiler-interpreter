@@ -1,9 +1,9 @@
 package compiler.parser
 
-import compiler.parser.Symbols.NonTerminal
-import compiler.parser.Symbols.NonTerminal.ParseTreeSentinel
-import compiler.parser.Symbols.Terminal
-import compiler.parser.Symbols.Terminal.Ignorable.EOFTerminal
+import compiler.parser.Symbol.NonTerminal
+import compiler.parser.Symbol.NonTerminal.ParseTreeSentinel
+import compiler.parser.Symbol.Terminal
+import compiler.parser.Symbol.Terminal.Ignorable.EOFTerminal
 
 class ParseTreeBuilder {
     private var root: TreeNode? = null

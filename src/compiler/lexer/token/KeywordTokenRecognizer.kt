@@ -1,8 +1,8 @@
 package compiler.lexer.token
 
-import compiler.parser.Symbols.Terminal
-import compiler.parser.Symbols.Terminal.Keyword
-import compiler.parser.Symbols.Terminal.Keyword.*
+import compiler.parser.Symbol.Terminal
+import compiler.parser.Symbol.Terminal.Keyword
+import compiler.parser.Symbol.Terminal.Keyword.*
 import java.util.*
 
 object KeywordTokenRecognizer {

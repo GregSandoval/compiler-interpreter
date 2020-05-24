@@ -1,12 +1,12 @@
 package compiler.lexer
 
 import compiler.lexer.token.LineInfo
-import compiler.parser.Symbols.Terminal
-import compiler.parser.Symbols.Terminal.Ignorable.CommentTerminal
-import compiler.parser.Symbols.Terminal.Ignorable.WhitespaceTerminal
-import compiler.parser.Symbols.Terminal.Operator.*
-import compiler.parser.Symbols.Terminal.Punctuation.*
-import compiler.parser.Symbols.Terminal.TypedTerminal.*
+import compiler.parser.Symbol.Terminal
+import compiler.parser.Symbol.Terminal.Ignorable.CommentTerminal
+import compiler.parser.Symbol.Terminal.Ignorable.WhitespaceTerminal
+import compiler.parser.Symbol.Terminal.Operator.*
+import compiler.parser.Symbol.Terminal.Punctuation.*
+import compiler.parser.Symbol.Terminal.TypedTerminal.*
 import compiler.utils.TextCursor
 
 typealias NoArgConstructor = () -> Terminal

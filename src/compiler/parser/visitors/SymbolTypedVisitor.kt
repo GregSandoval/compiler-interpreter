@@ -1,7 +1,7 @@
 package compiler.parser.visitors
 
-import compiler.parser.Symbols.Terminal
-import compiler.parser.Symbols.Terminal.Punctuation.*
+import compiler.parser.Symbol.Terminal
+import compiler.parser.Symbol.Terminal.Punctuation.*
 
 interface SymbolTypedVisitor<T> {
     fun accept(terminal: Terminal.Punctuation) = when (terminal) {

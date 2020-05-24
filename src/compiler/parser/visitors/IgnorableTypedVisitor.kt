@@ -1,8 +1,8 @@
 package compiler.parser.visitors
 
-import compiler.parser.Symbols.Terminal.Ignorable
-import compiler.parser.Symbols.Terminal.Ignorable.*
-import compiler.parser.Symbols.Terminal.Keyword.Type.Void
+import compiler.parser.Symbol.Terminal.Ignorable
+import compiler.parser.Symbol.Terminal.Ignorable.*
+import compiler.parser.Symbol.Terminal.Keyword.Type.Void
 
 
 interface IgnorableTypedVisitor<T> {

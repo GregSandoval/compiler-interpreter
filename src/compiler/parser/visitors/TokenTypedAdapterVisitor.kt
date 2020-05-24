@@ -1,12 +1,12 @@
 package compiler.parser.visitors
 
-import compiler.parser.Symbols.Terminal
-import compiler.parser.Symbols.Terminal.Ignorable.*
-import compiler.parser.Symbols.Terminal.Keyword.*
-import compiler.parser.Symbols.Terminal.Keyword.Type.*
-import compiler.parser.Symbols.Terminal.Operator.*
-import compiler.parser.Symbols.Terminal.Punctuation.*
-import compiler.parser.Symbols.Terminal.TypedTerminal.*
+import compiler.parser.Symbol.Terminal
+import compiler.parser.Symbol.Terminal.Ignorable.*
+import compiler.parser.Symbol.Terminal.Keyword.*
+import compiler.parser.Symbol.Terminal.Keyword.Type.*
+import compiler.parser.Symbol.Terminal.Operator.*
+import compiler.parser.Symbol.Terminal.Punctuation.*
+import compiler.parser.Symbol.Terminal.TypedTerminal.*
 
 interface TokenTypedAdapterVisitor<T> : TokenVisitor<T> {
     fun defaultValue(): T

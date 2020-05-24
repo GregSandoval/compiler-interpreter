@@ -1,8 +1,8 @@
 package compiler.parser.visitors
 
-import compiler.parser.Symbols.Terminal.Keyword
-import compiler.parser.Symbols.Terminal.Keyword.*
-import compiler.parser.Symbols.Terminal.Keyword.Type.*
+import compiler.parser.Symbol.Terminal.Keyword
+import compiler.parser.Symbol.Terminal.Keyword.*
+import compiler.parser.Symbol.Terminal.Keyword.Type.*
 
 
 interface KeywordTypedVisitor<T> {

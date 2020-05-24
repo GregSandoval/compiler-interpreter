@@ -8,10 +8,10 @@ import compiler.lexer.NonFinalStateListener
 import compiler.lexer.UnknownTokenException
 import compiler.parser.AbstractSyntaxTreeBuilder
 import compiler.parser.ParseTreeBuilder
-import compiler.parser.Symbols.NonTerminal
-import compiler.parser.Symbols.NonTerminal.ParseTreeSentinel
-import compiler.parser.Symbols.NonTerminal.Pgm
-import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbol.NonTerminal
+import compiler.parser.Symbol.NonTerminal.ParseTreeSentinel
+import compiler.parser.Symbol.NonTerminal.Pgm
+import compiler.parser.Symbol.Terminal
 import compiler.parser.TreeNode
 import compiler.utils.TextCursor
 import visualization.TreeVisualizer

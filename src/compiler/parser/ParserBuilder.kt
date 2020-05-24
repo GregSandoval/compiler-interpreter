@@ -3,9 +3,9 @@ package compiler.parser
 import compiler.parser.ParserListeners.BeforeRuleApplicationListenerIdentity
 import compiler.parser.ParserListeners.GeneralListenerIdentity
 import compiler.parser.ParserListeners.GrammarRuleApplicationIdentity
-import compiler.parser.Symbols.NonTerminal
-import compiler.parser.Symbols.Terminal
-import compiler.parser.Symbols.Terminal.Ignorable.EOFTerminal
+import compiler.parser.Symbol.NonTerminal
+import compiler.parser.Symbol.Terminal
+import compiler.parser.Symbol.Terminal.Ignorable.EOFTerminal
 
 class ParserBuilder {
     fun setStartSymbol(startSymbol: NonTerminal): ParserBuilderLastStep {

@@ -1,11 +1,11 @@
 package compiler.a5.grammar
 
 import compiler.parser.PstToAstHelpers
-import compiler.parser.Symbols.NonTerminal.*
-import compiler.parser.Symbols.Terminal.Keyword.VarKeyword
-import compiler.parser.Symbols.Terminal.Operator.Equal
-import compiler.parser.Symbols.Terminal.Operator.Plus
-import compiler.parser.Symbols.Terminal.Punctuation.*
+import compiler.parser.Symbol.NonTerminal.*
+import compiler.parser.Symbol.Terminal.Keyword.VarKeyword
+import compiler.parser.Symbol.Terminal.Operator.Equal
+import compiler.parser.Symbol.Terminal.Operator.Plus
+import compiler.parser.Symbol.Terminal.Punctuation.*
 import compiler.parser.TreeNode
 import java.util.*
 

@@ -1,7 +1,7 @@
 package compiler.parser
 
 import compiler.EntryPoint
-import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbol.Terminal
 import compiler.utils.TextCursor
 
 open class UserException : RuntimeException {

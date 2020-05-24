@@ -1,6 +1,6 @@
 package compiler.parser
 
-import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbol.Terminal
 import compiler.utils.TriConsumer
 import java.util.*
 import java.util.function.BiConsumer

@@ -1,16 +1,16 @@
 package compiler.parser
 
 import compiler.lexer.token.LineInfo
-import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbol.Terminal
 import java.util.*
 import java.util.stream.Collectors.toUnmodifiableList
 
 typealias NodeSupplier = () -> TreeNode
 typealias TokenClass = Class<out Terminal>
 
-sealed class Symbols : TreeNode() {
+sealed class Symbol : TreeNode() {
 
-    sealed class NonTerminal : Symbols() {
+    sealed class NonTerminal : Symbol() {
         class NULL_NODE : NonTerminal()
         class ParseTreeSentinel : NonTerminal()
         class Pgm : NonTerminal()
@@ -137,7 +137,7 @@ sealed class Symbols : TreeNode() {
         }
 
         companion object {
-            private val LLTable: MutableMap<Class<out Symbols>, MutableMap<TokenClass, List<NodeSupplier>>> =
+            private val LLTable: MutableMap<Class<out Symbol>, MutableMap<TokenClass, List<NodeSupplier>>> =
                     HashMap()
         }
 
@@ -148,7 +148,7 @@ sealed class Symbols : TreeNode() {
 
     }
 
-    sealed class Terminal(val str: String, var lineInfo: LineInfo = LineInfo(0, 0)) : Symbols() {
+    sealed class Terminal(val str: String, var lineInfo: LineInfo = LineInfo(0, 0)) : Symbol() {
 
         sealed class Ignorable(str: String) : Terminal(str) {
             class CommentTerminal(str: String) : Ignorable(str)

@@ -1,7 +1,7 @@
 package compiler.parser.visitors
 
-import compiler.parser.Symbols.Terminal.Operator
-import compiler.parser.Symbols.Terminal.Operator.*
+import compiler.parser.Symbol.Terminal.Operator
+import compiler.parser.Symbol.Terminal.Operator.*
 
 interface OperatorTypedVisitor<T> {
     fun accept(token: Operator) = when (token) {

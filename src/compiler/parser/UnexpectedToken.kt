@@ -1,6 +1,6 @@
 package compiler.parser
 
-import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbol.Terminal
 
 class UnexpectedToken(top: TreeNode, terminal: Terminal, inputName: String) : Exception(formatError(top, terminal, inputName)) {
     companion object {

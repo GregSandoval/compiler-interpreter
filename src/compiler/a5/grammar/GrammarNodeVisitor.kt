@@ -1,7 +1,7 @@
 package compiler.a5.grammar
 
-import compiler.parser.Symbols.NonTerminal
-import compiler.parser.Symbols.NonTerminal.*
+import compiler.parser.Symbol.NonTerminal
+import compiler.parser.Symbol.NonTerminal.*
 
 
 interface GrammarNodeVisitor {

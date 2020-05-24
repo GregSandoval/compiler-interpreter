@@ -1,6 +1,6 @@
 package compiler.interpreter
 
-import compiler.parser.Symbols.Terminal.TypedTerminal.IdentifierTerminal
+import compiler.parser.Symbol.Terminal.TypedTerminal.IdentifierTerminal
 import compiler.parser.UserException
 
 class IdentifierUsedBeforeInitializationException(token: IdentifierTerminal) :

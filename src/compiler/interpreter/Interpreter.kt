@@ -1,6 +1,6 @@
 package compiler.interpreter
 
-import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbol.Terminal
 import compiler.parser.TreeNode
 
 object Interpreter {

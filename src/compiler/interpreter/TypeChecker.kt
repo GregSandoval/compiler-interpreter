@@ -1,12 +1,12 @@
 package compiler.interpreter
 
-import compiler.parser.Symbols.Terminal
-import compiler.parser.Symbols.Terminal.Keyword.*
-import compiler.parser.Symbols.Terminal.Keyword.Type.*
-import compiler.parser.Symbols.Terminal.Operator
-import compiler.parser.Symbols.Terminal.Operator.*
-import compiler.parser.Symbols.Terminal.Punctuation.LeftParen
-import compiler.parser.Symbols.Terminal.TypedTerminal.*
+import compiler.parser.Symbol.Terminal
+import compiler.parser.Symbol.Terminal.Keyword.*
+import compiler.parser.Symbol.Terminal.Keyword.Type.*
+import compiler.parser.Symbol.Terminal.Operator
+import compiler.parser.Symbol.Terminal.Operator.*
+import compiler.parser.Symbol.Terminal.Punctuation.LeftParen
+import compiler.parser.Symbol.Terminal.TypedTerminal.*
 import compiler.parser.visitors.TokenTypedAdapterVisitor
 
 class TypeChecker private constructor(private val symtab: SymbolTable) : TokenTypedAdapterVisitor<Type> {

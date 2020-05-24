@@ -1,7 +1,7 @@
 package compiler.parser
 
-import compiler.parser.Symbols.NonTerminal
-import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbol.NonTerminal
+import compiler.parser.Symbol.Terminal
 import java.util.function.Consumer
 
 object PstToAstHelpers {

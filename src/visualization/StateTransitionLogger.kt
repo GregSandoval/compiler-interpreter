@@ -1,6 +1,6 @@
 package visualization
 
-import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbol.Terminal
 import compiler.parser.TreeNode
 import java.util.*
 import java.util.stream.Collectors

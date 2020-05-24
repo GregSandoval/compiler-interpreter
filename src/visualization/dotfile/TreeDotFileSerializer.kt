@@ -1,9 +1,9 @@
 package visualization.dotfile
 
-import compiler.parser.Symbols.NonTerminal.NULL_NODE
-import compiler.parser.Symbols.Terminal
-import compiler.parser.Symbols.Terminal.Ignorable.EOFTerminal
-import compiler.parser.Symbols.Terminal.TypedTerminal.StringTerminal
+import compiler.parser.Symbol.NonTerminal.NULL_NODE
+import compiler.parser.Symbol.Terminal
+import compiler.parser.Symbol.Terminal.Ignorable.EOFTerminal
+import compiler.parser.Symbol.Terminal.TypedTerminal.StringTerminal
 import compiler.parser.TreeNode
 import java.io.IOException
 import java.io.PrintWriter

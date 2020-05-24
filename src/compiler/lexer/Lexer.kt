@@ -2,8 +2,8 @@ package compiler.lexer
 
 import compiler.a5.lexicon.DFA
 import compiler.lexer.token.KeywordTokenRecognizer
-import compiler.parser.Symbols.Terminal
-import compiler.parser.Symbols.Terminal.Ignorable
+import compiler.parser.Symbol.Terminal
+import compiler.parser.Symbol.Terminal.Ignorable
 import compiler.utils.TextCursor
 import java.util.*
 import java.util.function.BiConsumer

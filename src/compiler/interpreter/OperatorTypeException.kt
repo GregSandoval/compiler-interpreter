@@ -1,7 +1,7 @@
 package compiler.interpreter
 
-import compiler.parser.Symbols.Terminal
-import compiler.parser.Symbols.Terminal.Operator
+import compiler.parser.Symbol.Terminal
+import compiler.parser.Symbol.Terminal.Operator
 import compiler.parser.UserException
 
 class OperatorTypeException(op: Operator, left: Terminal, right: Terminal) :

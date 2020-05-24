@@ -1,11 +1,11 @@
 package compiler.a5.grammar
 
-import compiler.parser.Symbols.NonTerminal.*
-import compiler.parser.Symbols.Terminal.Keyword.*
-import compiler.parser.Symbols.Terminal.Keyword.Type.*
-import compiler.parser.Symbols.Terminal.Operator.*
-import compiler.parser.Symbols.Terminal.Punctuation.*
-import compiler.parser.Symbols.Terminal.TypedTerminal.*
+import compiler.parser.Symbol.NonTerminal.*
+import compiler.parser.Symbol.Terminal.Keyword.*
+import compiler.parser.Symbol.Terminal.Keyword.Type.*
+import compiler.parser.Symbol.Terminal.Operator.*
+import compiler.parser.Symbol.Terminal.Punctuation.*
+import compiler.parser.Symbol.Terminal.TypedTerminal.*
 
 object A5GrammarRules {
     fun build() {

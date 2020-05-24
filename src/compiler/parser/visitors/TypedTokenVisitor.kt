@@ -1,7 +1,7 @@
 package compiler.parser.visitors
 
-import compiler.parser.Symbols.Terminal.TypedTerminal
-import compiler.parser.Symbols.Terminal.TypedTerminal.*
+import compiler.parser.Symbol.Terminal.TypedTerminal
+import compiler.parser.Symbol.Terminal.TypedTerminal.*
 
 interface TypedTokenVisitor<T> {
     fun accept(token: TypedTerminal<T>) = when (token) {
