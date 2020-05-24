@@ -55,7 +55,8 @@ object EntryPoint {
         var tree = ParseTreeBuilder()
                 .setStartSymbol(Pgm(), llTable)
                 .setInputSourceName(settings.inputName)
-                .build(terminals)
+                .setTerminals(terminals)
+                .build()
 
         // Serialize current PST
         TreeVisualizer.toImage(tree, settings.pstOut)
