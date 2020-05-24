@@ -19,19 +19,25 @@ class Parser(
         val stack = LinkedList<TreeNode>()
         val tokens = LinkedList(tokensIn)
         stack.push(startSymbol)
+
         while (!tokens.isEmpty() && !stack.isEmpty()) {
-            beforeRuleApplication.accept(stack, tokens.peek())
             val token = tokens.peek()
+
+            beforeRuleApplication.accept(stack, token)
+
             val top = stack.pop()
+
             if (top is Terminal && isEqual(token, top)) {
                 tokens.pop()
                 onGrammarRuleApplication.accept(top, token, emptyList())
                 continue
             }
+
             if (top is Terminal) {
                 onUnexpectedToken.accept(top, token)
                 throw UnexpectedToken(top, token, inputName)
             }
+
             if (top !is NonTerminal) {
                 onUnknownGrammarRule.accept(top, token)
                 throw RuntimeException("Node is neither Token nor Grammar rule: $top")
@@ -45,16 +51,20 @@ class Parser(
             }
 
             onGrammarRuleApplication.accept(top, token, rhs)
+
             for (i in rhs.indices.reversed()) {
                 stack.push(rhs[i])
             }
         }
+
         if (tokens.isEmpty() && stack.isEmpty()) {
             println("Parsing successful")
         }
+
         if (!stack.isEmpty()) {
             throw Exception("Failed to parse input; Expected tokens but received EOF;")
         }
+
         if (!tokens.isEmpty()) {
             throw Exception(
                     "Failed to parse input; Expected grammar rule but found none.\n" +
