@@ -1,7 +1,8 @@
 package compiler.lexer.token
 
-import compiler.lexer.token.Token.KeywordToken
-import compiler.lexer.token.Token.KeywordToken.*
+import compiler.parser.Language.Token
+import compiler.parser.Language.Token.KeywordToken
+import compiler.parser.Language.Token.KeywordToken.*
 import java.util.*
 
 object KeywordTokenRecognizer {

@@ -1,8 +1,8 @@
 package compiler.parser.visitors
 
-import compiler.lexer.token.Token.KeywordToken
-import compiler.lexer.token.Token.KeywordToken.*
-import compiler.lexer.token.Token.KeywordToken.TypeToken.*
+import compiler.parser.Language.Token.KeywordToken
+import compiler.parser.Language.Token.KeywordToken.*
+import compiler.parser.Language.Token.KeywordToken.TypeToken.*
 
 
 interface KeywordTypedVisitor<T> {

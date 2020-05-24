@@ -2,10 +2,10 @@ package compiler.parser
 
 import java.util.*
 
-abstract class AbstractGrammarNode {
-    var parent: AbstractGrammarNode? = null
+abstract class TreeNode {
+    var parent: TreeNode? = null
     var UUID: String
-    var children = LinkedList<AbstractGrammarNode>()
+    var children = LinkedList<TreeNode>()
 
     companion object {
         private var UUID_COUNTER = 0

@@ -1,11 +1,11 @@
 package compiler.a5.grammar
 
-import compiler.lexer.token.Token.IgnorableTokens.*
-import compiler.lexer.token.Token.KeywordToken.*
-import compiler.lexer.token.Token.KeywordToken.TypeToken.*
-import compiler.lexer.token.Token.OperatorToken.*
-import compiler.lexer.token.Token.SymbolToken.*
-import compiler.lexer.token.Token.TypedToken.*
+import compiler.parser.Language.Token.IgnorableTokens.*
+import compiler.parser.Language.Token.KeywordToken.*
+import compiler.parser.Language.Token.KeywordToken.TypeToken.*
+import compiler.parser.Language.Token.OperatorToken.*
+import compiler.parser.Language.Token.SymbolToken.*
+import compiler.parser.Language.Token.TypedToken.*
 import compiler.parser.PstToAstHelpers
 import compiler.parser.visitors.TokenVisitor
 

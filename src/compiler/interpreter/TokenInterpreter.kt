@@ -1,14 +1,14 @@
 package compiler.interpreter
 
-import compiler.lexer.token.Token
-import compiler.lexer.token.Token.KeywordToken
-import compiler.lexer.token.Token.KeywordToken.*
-import compiler.lexer.token.Token.OperatorToken.*
-import compiler.lexer.token.Token.SymbolToken.LeftBrace
-import compiler.lexer.token.Token.SymbolToken.LeftParen
-import compiler.lexer.token.Token.TypedToken.*
-import compiler.parser.AbstractGrammarNode
+import compiler.parser.Language.Token
+import compiler.parser.Language.Token.KeywordToken
+import compiler.parser.Language.Token.KeywordToken.*
+import compiler.parser.Language.Token.OperatorToken.*
+import compiler.parser.Language.Token.SymbolToken.LeftBrace
+import compiler.parser.Language.Token.SymbolToken.LeftParen
+import compiler.parser.Language.Token.TypedToken.*
 import compiler.parser.TokenEvaluator
+import compiler.parser.TreeNode
 import java.util.*
 import java.util.stream.Collectors
 import kotlin.math.pow
@@ -287,14 +287,14 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
     }
 
     @Throws(Exception::class)
-    fun comparePrimitiveTokens(leftToken: AbstractGrammarNode, rightToken: AbstractGrammarNode, comparator: (Int) -> Boolean): Boolean {
+    fun comparePrimitiveTokens(leftToken: TreeNode, rightToken: TreeNode, comparator: (Int) -> Boolean): Boolean {
         return comparator(comparePrimitiveTokens(leftToken, rightToken))
     }
 
     @Throws(Exception::class)
     fun comparePrimitiveTokens(
-            leftToken: AbstractGrammarNode,
-            rightToken: AbstractGrammarNode
+            leftToken: TreeNode,
+            rightToken: TreeNode
     ): Int {
         return primitiveBiFunction(
                 leftToken,
@@ -308,8 +308,8 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
 
     @Throws(Exception::class)
     fun <T> primitiveBiFunction(
-            leftToken: AbstractGrammarNode,
-            rightToken: AbstractGrammarNode,
+            leftToken: TreeNode,
+            rightToken: TreeNode,
             onFloat: (Float, Float) -> T,
             onInt: (Int, Int) -> T,
             onString: (String, String) -> T,
@@ -347,8 +347,8 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
 
     @Throws(Exception::class)
     fun <T> numberBiFunction(
-            leftToken: AbstractGrammarNode,
-            rightToken: AbstractGrammarNode,
+            leftToken: TreeNode,
+            rightToken: TreeNode,
             onFloat: (Float, Float) -> T,
             onInt: (Int, Int) -> T,
             onError: (Any, Any) -> Exception?
@@ -377,7 +377,7 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
     }
 
     @Throws(Exception::class)
-    fun <T> evaluate(valueType: Class<T>, node: AbstractGrammarNode): T {
+    fun <T> evaluate(valueType: Class<T>, node: TreeNode): T {
         val token = assertClass(Token::class.java, node)
         return assertClass(valueType, this.accept(token))
     }

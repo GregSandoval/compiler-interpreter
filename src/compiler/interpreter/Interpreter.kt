@@ -1,10 +1,10 @@
 package compiler.interpreter
 
-import compiler.lexer.token.Token
-import compiler.parser.AbstractGrammarNode
+import compiler.parser.Language.Token
+import compiler.parser.TreeNode
 
 object Interpreter {
-    fun execute(tree: AbstractGrammarNode?) {
+    fun execute(tree: TreeNode?) {
         if (tree !is Token) {
             throw Exception("Grammar node in AST?")
         }

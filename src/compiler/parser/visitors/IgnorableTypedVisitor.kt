@@ -1,8 +1,8 @@
 package compiler.parser.visitors
 
-import compiler.lexer.token.Token.IgnorableTokens
-import compiler.lexer.token.Token.IgnorableTokens.*
-import compiler.lexer.token.Token.KeywordToken.TypeToken.VoidToken
+import compiler.parser.Language.Token.IgnorableTokens
+import compiler.parser.Language.Token.IgnorableTokens.*
+import compiler.parser.Language.Token.KeywordToken.TypeToken.VoidToken
 
 
 interface IgnorableTypedVisitor<T> {

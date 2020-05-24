@@ -1,20 +1,21 @@
 package compiler.parser
 
-import compiler.lexer.token.Token
+import compiler.parser.Language.Grammar
+import compiler.parser.Language.Token
 import java.util.*
 import java.util.stream.Collectors
 
 class Parser(
         eof: Token,
-        startSymbol: GrammarNode,
+        startSymbol: Grammar,
         beforeRuleApplication: BeforeRuleApplicationListener,
         onUnexpectedToken: GeneralListener,
         onUnknownGrammarRule: GeneralListener,
         onPredictionNotFoundError: GeneralListener,
         onGrammarRuleApplication: GrammarRuleApplicationListener
 ) {
-    private val startSymbol: GrammarNode
-    private val eof: AbstractGrammarNode
+    private val startSymbol: Grammar
+    private val eof: TreeNode
     private val beforeRuleApplication: BeforeRuleApplicationListener
     private val onUnexpectedToken: GeneralListener
     private val onUnknownGrammarRule: GeneralListener
@@ -23,7 +24,7 @@ class Parser(
 
     @Throws(Exception::class)
     fun parse(inputName: String, tokensIn: List<Token>) {
-        val stack = LinkedList<AbstractGrammarNode>()
+        val stack = LinkedList<TreeNode>()
         val tokens = LinkedList(tokensIn)
         stack.push(startSymbol)
         while (!tokens.isEmpty() && !stack.isEmpty()) {
@@ -39,7 +40,7 @@ class Parser(
                 onUnexpectedToken.accept(top, token)
                 throw UnexpectedToken(top, token, inputName)
             }
-            if (top !is GrammarNode) {
+            if (top !is Grammar) {
                 onUnknownGrammarRule.accept(top, token)
                 throw RuntimeException("Node is neither Token nor Grammar rule: $top")
             }
@@ -71,7 +72,7 @@ class Parser(
         }
     }
 
-    fun isEqual(token: Token, top: AbstractGrammarNode): Boolean {
+    fun isEqual(token: Token, top: TreeNode): Boolean {
         return token.javaClass == top.javaClass
     }
 

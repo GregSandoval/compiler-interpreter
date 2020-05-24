@@ -1,12 +1,12 @@
 package compiler.parser.visitors
 
-import compiler.lexer.token.Token
-import compiler.lexer.token.Token.IgnorableTokens.*
-import compiler.lexer.token.Token.KeywordToken.*
-import compiler.lexer.token.Token.KeywordToken.TypeToken.*
-import compiler.lexer.token.Token.OperatorToken.*
-import compiler.lexer.token.Token.SymbolToken.*
-import compiler.lexer.token.Token.TypedToken.*
+import compiler.parser.Language.Token
+import compiler.parser.Language.Token.IgnorableTokens.*
+import compiler.parser.Language.Token.KeywordToken.*
+import compiler.parser.Language.Token.KeywordToken.TypeToken.*
+import compiler.parser.Language.Token.OperatorToken.*
+import compiler.parser.Language.Token.SymbolToken.*
+import compiler.parser.Language.Token.TypedToken.*
 
 interface TokenTypedAdapterVisitor<T> : TokenVisitor<T> {
     fun defaultValue(): T

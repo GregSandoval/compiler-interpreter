@@ -1,11 +1,12 @@
 package compiler.parser
 
-import compiler.lexer.token.Token
+import compiler.parser.Language.Grammar
+import compiler.parser.Language.Token
 import java.util.stream.Collectors
 
-class PredictiveParserException(grammarNode: GrammarNode, token: Token) : UserException(formatMessage(grammarNode, token), token) {
+class PredictiveParserException(grammarNode: Grammar, token: Token) : UserException(formatMessage(grammarNode, token), token) {
     companion object {
-        private fun formatMessage(grammarRule: GrammarNode, token: Token): String {
+        private fun formatMessage(grammarRule: Grammar, token: Token): String {
             val tokenClassName = token.javaClass.simpleName
             val grammarClassName = grammarRule.javaClass.simpleName
             val expectedTokens = grammarRule

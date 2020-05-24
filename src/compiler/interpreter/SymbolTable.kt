@@ -1,7 +1,7 @@
 package compiler.interpreter
 
-import compiler.lexer.token.Token
-import compiler.lexer.token.Token.KeywordToken.TypeToken
+import compiler.parser.Language.Token
+import compiler.parser.Language.Token.KeywordToken.TypeToken
 import java.util.*
 import java.util.stream.Collectors
 

@@ -1,7 +1,7 @@
 package compiler.parser.visitors
 
-import compiler.lexer.token.Token
-import compiler.lexer.token.Token.SymbolToken.*
+import compiler.parser.Language.Token
+import compiler.parser.Language.Token.SymbolToken.*
 
 interface SymbolTypedVisitor<T> {
     fun accept(token: Token.SymbolToken) = when (token) {

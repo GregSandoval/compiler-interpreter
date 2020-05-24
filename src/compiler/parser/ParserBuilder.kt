@@ -1,17 +1,18 @@
 package compiler.parser
 
-import compiler.lexer.token.Token
-import compiler.lexer.token.Token.IgnorableTokens.EOFToken
+import compiler.parser.Language.Grammar
+import compiler.parser.Language.Token
+import compiler.parser.Language.Token.IgnorableTokens.EOFToken
 import compiler.parser.ParserListeners.BeforeRuleApplicationListenerIdentity
 import compiler.parser.ParserListeners.GeneralListenerIdentity
 import compiler.parser.ParserListeners.GrammarRuleApplicationIdentity
 
 class ParserBuilder {
-    fun setStartSymbol(startSymbol: GrammarNode): ParserBuilderLastStep {
+    fun setStartSymbol(startSymbol: Grammar): ParserBuilderLastStep {
         return ParserBuilderLastStep(startSymbol)
     }
 
-    class ParserBuilderLastStep constructor(private val startSymbol: GrammarNode) {
+    class ParserBuilderLastStep constructor(private val startSymbol: Grammar) {
         private var beforeRuleApplication = BeforeRuleApplicationListenerIdentity()
         private var onGrammarRuleApplication = GrammarRuleApplicationIdentity()
         private var onPredictionNotFoundError = GeneralListenerIdentity()

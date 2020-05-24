@@ -1,12 +1,12 @@
 package compiler.a5.grammar
 
-import compiler.lexer.token.Token.KeywordToken.VarKeywordToken
-import compiler.lexer.token.Token.OperatorToken
-import compiler.lexer.token.Token.OperatorToken.Equal
-import compiler.lexer.token.Token.SymbolToken.*
-import compiler.parser.AbstractGrammarNode
-import compiler.parser.GrammarNode.*
+import compiler.parser.Language.Grammar.*
+import compiler.parser.Language.Token.KeywordToken.VarKeywordToken
+import compiler.parser.Language.Token.OperatorToken.Equal
+import compiler.parser.Language.Token.OperatorToken.Plus
+import compiler.parser.Language.Token.SymbolToken.*
 import compiler.parser.PstToAstHelpers
+import compiler.parser.TreeNode
 import java.util.*
 
 class PstToAstGrammarVisitor : GrammarNodeVisitor {
@@ -196,7 +196,7 @@ class PstToAstGrammarVisitor : GrammarNodeVisitor {
     override fun visit(node: BBClassitems) {
         node.children.removeIf { it is RightBrace }
         PstToAstHelpers.rightContraction(node)
-        val removables = ArrayList<AbstractGrammarNode>()
+        val removables = ArrayList<TreeNode>()
         for (i in 0 until node.children.size - 1) {
             val left = node.children[i]
             val right = node.children[i + 1]
@@ -230,7 +230,7 @@ class PstToAstGrammarVisitor : GrammarNodeVisitor {
         if (node.parent is Classheader) {
             PstToAstHelpers.hoist(node)
         }
-        node.children.removeIf { it is OperatorToken.Plus }
+        node.children.removeIf { it is Plus }
     }
 
     override fun visit(node: Mddecls) {

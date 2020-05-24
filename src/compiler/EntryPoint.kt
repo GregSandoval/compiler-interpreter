@@ -6,13 +6,13 @@ import compiler.interpreter.Interpreter
 import compiler.lexer.LexerBuilder
 import compiler.lexer.NonFinalStateListener
 import compiler.lexer.UnknownTokenException
-import compiler.lexer.token.Token
-import compiler.parser.AbstractGrammarNode
 import compiler.parser.AbstractSyntaxTreeBuilder
-import compiler.parser.GrammarNode
-import compiler.parser.GrammarNode.ParseTreeSentinel
-import compiler.parser.GrammarNode.Pgm
+import compiler.parser.Language.Grammar
+import compiler.parser.Language.Grammar.ParseTreeSentinel
+import compiler.parser.Language.Grammar.Pgm
+import compiler.parser.Language.Token
 import compiler.parser.ParseTreeBuilder
+import compiler.parser.TreeNode
 import compiler.utils.TextCursor
 import visualization.TreeVisualizer
 import java.io.IOException
@@ -99,9 +99,9 @@ object EntryPoint {
         return settings
     }
 
-    fun validateAST(tree: AbstractGrammarNode) {
+    fun validateAST(tree: TreeNode) {
         println("Validating AST contains only tokens...")
-        val unhandledNodes = ArrayList<GrammarNode>()
+        val unhandledNodes = ArrayList<Grammar>()
         validateAST(tree, unhandledNodes)
 
         if (unhandledNodes.isEmpty()) {
@@ -113,11 +113,11 @@ object EntryPoint {
             println("Uh-oh; AST contains grammar nodes! Need to add more logic to these nodes:$unhandledNodes")
     }
 
-    fun validateAST(tree: AbstractGrammarNode?, unhandledNodes: MutableList<GrammarNode>) {
+    fun validateAST(tree: TreeNode?, unhandledNodes: MutableList<Grammar>) {
         if (tree == null) {
             return
         }
-        if (tree is GrammarNode) {
+        if (tree is Grammar) {
             unhandledNodes.add(tree)
         }
         for (child in tree.children) {

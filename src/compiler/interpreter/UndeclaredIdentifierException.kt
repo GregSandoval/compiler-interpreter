@@ -1,6 +1,6 @@
 package compiler.interpreter
 
-import compiler.lexer.token.Token
+import compiler.parser.Language.Token
 import compiler.parser.UserException
 
 class UndeclaredIdentifierException(token: Token) :

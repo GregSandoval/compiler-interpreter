@@ -1,11 +1,11 @@
 package compiler.interpreter
 
-import compiler.lexer.token.Token
-import compiler.lexer.token.Token.KeywordToken.TypeToken
-import compiler.lexer.token.Token.KeywordToken.TypeToken.*
-import compiler.lexer.token.Token.KeywordToken.VarKeywordToken
-import compiler.lexer.token.Token.OperatorToken.Equal
-import compiler.lexer.token.Token.TypedToken.IdentifierToken
+import compiler.parser.Language.Token
+import compiler.parser.Language.Token.KeywordToken.TypeToken
+import compiler.parser.Language.Token.KeywordToken.TypeToken.*
+import compiler.parser.Language.Token.KeywordToken.VarKeywordToken
+import compiler.parser.Language.Token.OperatorToken.Equal
+import compiler.parser.Language.Token.TypedToken.IdentifierToken
 import compiler.parser.visitors.TokenTypedAdapterVisitor
 
 class SymbolTableBuilder private constructor(private val symtab: SymbolTable) : TokenTypedAdapterVisitor<TypeToken?> {

@@ -1,6 +1,6 @@
 package compiler.interpreter
 
-import compiler.lexer.token.Token.TypedToken.IdentifierToken
+import compiler.parser.Language.Token.TypedToken.IdentifierToken
 import compiler.parser.UserException
 
 class IdentifierUsedBeforeInitializationException(token: IdentifierToken) :

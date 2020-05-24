@@ -1,10 +1,10 @@
 package compiler.parser
 
-import compiler.lexer.token.Token
+import compiler.parser.Language.Token
 
-class UnexpectedToken(top: AbstractGrammarNode, token: Token, inputName: String) : Exception(formatError(top, token, inputName)) {
+class UnexpectedToken(top: TreeNode, token: Token, inputName: String) : Exception(formatError(top, token, inputName)) {
     companion object {
-        private fun formatError(top: AbstractGrammarNode, token: Token, inputName: String): String {
+        private fun formatError(top: TreeNode, token: Token, inputName: String): String {
             val grammarClassName = top.javaClass.simpleName
             val tokenClassName = token.javaClass.simpleName
             val tokenLineNumber = token.lineInfo.number

@@ -1,10 +1,11 @@
 package compiler.a5.grammar
 
-import compiler.parser.GrammarNode
-import compiler.parser.GrammarNode.*
+import compiler.parser.Language.Grammar
+import compiler.parser.Language.Grammar.*
+
 
 interface GrammarNodeVisitor {
-    fun accept(node: GrammarNode) = when (node) {
+    fun accept(node: Grammar) = when (node) {
         is Pgm -> visit(node)
         is Main -> visit(node)
         is BBlock -> visit(node)

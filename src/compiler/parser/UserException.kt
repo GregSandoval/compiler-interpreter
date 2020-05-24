@@ -1,7 +1,7 @@
 package compiler.parser
 
 import compiler.EntryPoint
-import compiler.lexer.token.Token
+import compiler.parser.Language.Token
 import compiler.utils.TextCursor
 
 open class UserException : RuntimeException {

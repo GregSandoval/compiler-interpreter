@@ -1,17 +1,18 @@
 package compiler.parser
 
-import compiler.lexer.token.Token
-import compiler.lexer.token.Token.IgnorableTokens.EOFToken
-import compiler.parser.GrammarNode.ParseTreeSentinel
+import compiler.parser.Language.Grammar
+import compiler.parser.Language.Grammar.ParseTreeSentinel
+import compiler.parser.Language.Token
+import compiler.parser.Language.Token.IgnorableTokens.EOFToken
 
 class ParseTreeBuilder {
-    private var root: AbstractGrammarNode? = null
+    private var root: TreeNode? = null
 
-    fun setStartSymbol(startSymbol: GrammarNode): ParseTreeBuilderFirstStep {
+    fun setStartSymbol(startSymbol: Grammar): ParseTreeBuilderFirstStep {
         return object : ParseTreeBuilderFirstStep {
             override fun setInputSourceName(inputName: String): ParseTreeBuilderLastStep {
                 return object : ParseTreeBuilderLastStep {
-                    override fun build(tokens: List<Token>): AbstractGrammarNode {
+                    override fun build(tokens: List<Token>): TreeNode {
                         val EOF = EOFToken()
                         val root = ParseTreeSentinel()
                         this@ParseTreeBuilder.root = root
@@ -22,7 +23,7 @@ class ParseTreeBuilder {
                                 .setStartSymbol(startSymbol)
                                 .setEOF(EOF)
                                 .onGrammarRuleApplication(object : GrammarRuleApplicationListener {
-                                    override fun accept(p1: AbstractGrammarNode, p2: Token, p3: List<AbstractGrammarNode>) {
+                                    override fun accept(p1: TreeNode, p2: Token, p3: List<TreeNode>) {
                                         this@ParseTreeBuilder.AttachToTree(p1, p2, p3)
                                     }
                                 })
@@ -35,7 +36,7 @@ class ParseTreeBuilder {
         }
     }
 
-    private fun AttachToTree(top: AbstractGrammarNode, token: Token, rhs: List<AbstractGrammarNode>) {
+    private fun AttachToTree(top: TreeNode, token: Token, rhs: List<TreeNode>) {
         if (top is Token && top !is EOFToken) {
             token.parent = top.parent
             val siblings = top.parent!!.children
@@ -54,7 +55,7 @@ class ParseTreeBuilder {
 
     interface ParseTreeBuilderLastStep {
         @Throws(Exception::class)
-        fun build(tokens: List<Token>): AbstractGrammarNode
+        fun build(tokens: List<Token>): TreeNode
     }
 
 }

@@ -1,17 +1,17 @@
 package visualization.dotfile
 
-import compiler.lexer.token.Token
-import compiler.lexer.token.Token.IgnorableTokens.EOFToken
-import compiler.lexer.token.Token.TypedToken.StringToken
-import compiler.parser.AbstractGrammarNode
-import compiler.parser.GrammarNode.NULL_NODE
+import compiler.parser.Language.Grammar.NULL_NODE
+import compiler.parser.Language.Token
+import compiler.parser.Language.Token.IgnorableTokens.EOFToken
+import compiler.parser.Language.Token.TypedToken.StringToken
+import compiler.parser.TreeNode
 import java.io.IOException
 import java.io.PrintWriter
 import java.util.*
 
 object TreeDotFileSerializer {
     @Throws(IOException::class)
-    fun serialize(tree: AbstractGrammarNode, filename: String) {
+    fun serialize(tree: TreeNode, filename: String) {
         val NullSentienal = NULL_NODE()
         NullSentienal.children.add(tree)
         tree.parent = NullSentienal
@@ -28,7 +28,7 @@ object TreeDotFileSerializer {
         tree.parent = null
     }
 
-    private fun addEdges(builder: StringBuilder, visitedNodes: MutableSet<String>, nullNode: NULL_NODE, tree: AbstractGrammarNode?) {
+    private fun addEdges(builder: StringBuilder, visitedNodes: MutableSet<String>, nullNode: NULL_NODE, tree: TreeNode?) {
         if (tree == null || visitedNodes.contains(tree.UUID)) {
             return
         }
@@ -58,7 +58,7 @@ object TreeDotFileSerializer {
         }
     }
 
-    private fun addNodes(builder: StringBuilder, visitedNodes: MutableSet<String>, tree: AbstractGrammarNode?) {
+    private fun addNodes(builder: StringBuilder, visitedNodes: MutableSet<String>, tree: TreeNode?) {
         if (tree == null) {
             return
         }
@@ -87,7 +87,7 @@ object TreeDotFileSerializer {
         }
     }
 
-    fun formatWithValue(rule: AbstractGrammarNode): String {
+    fun formatWithValue(rule: TreeNode): String {
         return when (rule) {
             is EOFToken -> "EOF"
             is StringToken -> "\'\'${rule.str}\'\'"

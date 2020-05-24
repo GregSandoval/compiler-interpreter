@@ -1,6 +1,6 @@
 package compiler.parser.visitors
 
-import compiler.lexer.token.Token
+import compiler.parser.Language.Token
 
 interface TokenVisitor<T> :
         IgnorableTypedVisitor<T>,

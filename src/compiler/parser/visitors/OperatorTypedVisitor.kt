@@ -1,7 +1,7 @@
 package compiler.parser.visitors
 
-import compiler.lexer.token.Token.OperatorToken
-import compiler.lexer.token.Token.OperatorToken.*
+import compiler.parser.Language.Token.OperatorToken
+import compiler.parser.Language.Token.OperatorToken.*
 
 interface OperatorTypedVisitor<T> {
     fun accept(token: OperatorToken) = when (token) {

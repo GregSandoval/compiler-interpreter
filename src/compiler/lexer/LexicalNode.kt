@@ -1,12 +1,12 @@
 package compiler.lexer
 
 import compiler.lexer.token.LineInfo
-import compiler.lexer.token.Token
-import compiler.lexer.token.Token.IgnorableTokens.CommentToken
-import compiler.lexer.token.Token.IgnorableTokens.WhitespaceToken
-import compiler.lexer.token.Token.OperatorToken.*
-import compiler.lexer.token.Token.SymbolToken.*
-import compiler.lexer.token.Token.TypedToken.*
+import compiler.parser.Language.Token
+import compiler.parser.Language.Token.IgnorableTokens.CommentToken
+import compiler.parser.Language.Token.IgnorableTokens.WhitespaceToken
+import compiler.parser.Language.Token.OperatorToken.*
+import compiler.parser.Language.Token.SymbolToken.*
+import compiler.parser.Language.Token.TypedToken.*
 import compiler.utils.TextCursor
 
 typealias NoArgConstructor = () -> Token

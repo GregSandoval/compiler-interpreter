@@ -1,6 +1,6 @@
 package compiler.interpreter
 
-import compiler.lexer.token.Token.OperatorToken
+import compiler.parser.Language.Token.OperatorToken
 import compiler.parser.UserException
 
 class OperatorUsageUndefined(operator: OperatorToken, lvalue: Any, rvalue: Any) :

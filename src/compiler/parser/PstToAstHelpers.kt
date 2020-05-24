@@ -1,10 +1,11 @@
 package compiler.parser
 
-import compiler.lexer.token.Token
+import compiler.parser.Language.Grammar
+import compiler.parser.Language.Token
 import java.util.function.Consumer
 
 object PstToAstHelpers {
-    fun hoist(tree: AbstractGrammarNode) {
+    fun hoist(tree: TreeNode) {
         for (token in tree.children) {
             if (token !is Token) {
                 continue
@@ -23,7 +24,7 @@ object PstToAstHelpers {
             tree.children.remove(token)
 
             // Set tree's children to point to token as new parent
-            tree.children.forEach(Consumer { child: AbstractGrammarNode -> child.parent = token })
+            tree.children.forEach(Consumer { child: TreeNode -> child.parent = token })
 
             // Add rule's children to the token;
             while (--tokenIndex != 0 && !tree.children.isEmpty())
@@ -34,7 +35,7 @@ object PstToAstHelpers {
         }
     }
 
-    fun reverseHoist(tree: AbstractGrammarNode) {
+    fun reverseHoist(tree: TreeNode) {
         val children = tree.children
         for (i in children.indices.reversed()) {
             if (children.isEmpty()) {
@@ -67,9 +68,9 @@ object PstToAstHelpers {
         }
     }
 
-    fun rightContraction(tree: AbstractGrammarNode) {
+    fun rightContraction(tree: TreeNode) {
         val rightMostNode = tree.children.last
-        if (rightMostNode is GrammarNode) {
+        if (rightMostNode is Grammar) {
             tree.children.remove(rightMostNode)
             rightMostNode.parent = null
             rightMostNode.children.forEach { tree.children.addLast(it) }
