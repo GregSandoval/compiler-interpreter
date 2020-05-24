@@ -91,16 +91,9 @@ sealed class Symbol : TreeNode() {
         class Opadd : NonTerminal()
         class Opmul : NonTerminal()
         class Epsilon : NonTerminal()
-
-        override fun toString(): String {
-            return this.javaClass.simpleName
-        }
-
-
     }
 
     sealed class Terminal(val str: String, var lineInfo: LineInfo = LineInfo(0, 0)) : Symbol() {
-
         sealed class Ignorable(str: String) : Terminal(str) {
             class CommentTerminal(str: String) : Ignorable(str)
             class EOFTerminal : Ignorable("")
@@ -180,6 +173,10 @@ sealed class Symbol : TreeNode() {
             }
         }
 
+    }
+
+    override fun toString(): String {
+        return this.javaClass.simpleName
     }
 }
 
