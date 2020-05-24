@@ -1,19 +1,19 @@
 package compiler.parser.visitors
 
-import compiler.parser.Language.Token.IgnorableTokens
-import compiler.parser.Language.Token.IgnorableTokens.*
-import compiler.parser.Language.Token.KeywordToken.TypeToken.VoidToken
+import compiler.parser.Symbols.Terminal.Ignorable
+import compiler.parser.Symbols.Terminal.Ignorable.*
+import compiler.parser.Symbols.Terminal.Keyword.Type.Void
 
 
 interface IgnorableTypedVisitor<T> {
-    fun accept(token: IgnorableTokens) = when (token) {
-        is CommentToken -> visit(token)
-        is EOFToken -> visit(token)
-        is WhitespaceToken -> visit(token)
+    fun accept(token: Ignorable) = when (token) {
+        is CommentTerminal -> visit(token)
+        is EOFTerminal -> visit(token)
+        is WhitespaceTerminal -> visit(token)
     }
 
-    fun visit(token: CommentToken): T
-    fun visit(token: EOFToken): T
-    fun visit(token: WhitespaceToken): T
-    fun visit(token: VoidToken): T
+    fun visit(token: CommentTerminal): T
+    fun visit(token: EOFTerminal): T
+    fun visit(token: WhitespaceTerminal): T
+    fun visit(token: Void): T
 }

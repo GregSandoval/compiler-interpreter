@@ -1,76 +1,76 @@
 package compiler.parser
 
-import compiler.parser.Language.Token
-import compiler.parser.Language.Token.IgnorableTokens.*
-import compiler.parser.Language.Token.KeywordToken.*
-import compiler.parser.Language.Token.KeywordToken.TypeToken.*
-import compiler.parser.Language.Token.OperatorToken.*
-import compiler.parser.Language.Token.SymbolToken.*
-import compiler.parser.Language.Token.TypedToken.*
+import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbols.Terminal.Ignorable.*
+import compiler.parser.Symbols.Terminal.Keyword.*
+import compiler.parser.Symbols.Terminal.Keyword.Type.*
+import compiler.parser.Symbols.Terminal.Operator.*
+import compiler.parser.Symbols.Terminal.Punctuation.*
+import compiler.parser.Symbols.Terminal.TypedTerminal.*
 
 interface TokenEvaluator {
-    fun accept(token: Token): Any = when (token) {
-        is StringToken -> visit(token)
-        is CommentToken -> visit(token)
-        is EOFToken -> visit(token)
-        is WhitespaceToken -> visit(token)
-        is LessThan -> visit(token)
-        is GreaterThan -> visit(token)
-        is Asterisk -> visit(token)
-        is Equal -> visit(token)
-        is Minus -> visit(token)
-        is Plus -> visit(token)
-        is Ampersand -> visit(token)
-        is Arrow -> visit(token)
-        is EqualEqual -> visit(token)
-        is NotEqual -> visit(token)
-        is LessThanOrEqual -> visit(token)
-        is GreaterThanOrEqual -> visit(token)
-        is BitShiftLeft -> visit(token)
-        is BitShiftRight -> visit(token)
-        is Caret -> visit(token)
-        is ForwardSlash -> visit(token)
-        is ProgramKeywordToken -> visit(token)
-        is MainKeywordToken -> visit(token)
-        is FunctionKeywordToken -> visit(token)
-        is ClassKeywordToken -> visit(token)
-        is IfKeywordToken -> visit(token)
-        is ElseIfKeywordToken -> visit(token)
-        is ElseKeywordToken -> visit(token)
-        is WhileKeywordToken -> visit(token)
-        is InputKeywordToken -> visit(token)
-        is PrintKeywordToken -> visit(token)
-        is NewKeywordToken -> visit(token)
-        is ReturnKeywordToken -> visit(token)
-        is VarKeywordToken -> visit(token)
-        is VoidToken -> visit(token)
-        is FloatKeywordToken -> visit(token)
-        is IntegerKeywordToken -> visit(token)
-        is StringKeywordToken -> visit(token)
-        is Comma -> visit(token)
-        is SemiColon -> visit(token)
-        is LeftBrace -> visit(token)
-        is RightBrace -> visit(token)
-        is LeftBracket -> visit(token)
-        is RightBracket -> visit(token)
-        is LeftParen -> visit(token)
-        is RightParen -> visit(token)
-        is Colon -> visit(token)
-        is Period -> visit(token)
-        is FloatToken -> visit(token)
-        is IdentifierToken -> visit(token)
-        is IntegerToken -> visit(token)
+    fun accept(terminal: Terminal): Any = when (terminal) {
+        is StringTerminal -> visit(terminal)
+        is CommentTerminal -> visit(terminal)
+        is EOFTerminal -> visit(terminal)
+        is WhitespaceTerminal -> visit(terminal)
+        is LessThan -> visit(terminal)
+        is GreaterThan -> visit(terminal)
+        is Asterisk -> visit(terminal)
+        is Equal -> visit(terminal)
+        is Minus -> visit(terminal)
+        is Plus -> visit(terminal)
+        is Ampersand -> visit(terminal)
+        is Arrow -> visit(terminal)
+        is EqualEqual -> visit(terminal)
+        is NotEqual -> visit(terminal)
+        is LessThanOrEqual -> visit(terminal)
+        is GreaterThanOrEqual -> visit(terminal)
+        is BitShiftLeft -> visit(terminal)
+        is BitShiftRight -> visit(terminal)
+        is Caret -> visit(terminal)
+        is ForwardSlash -> visit(terminal)
+        is ProgramKeyword -> visit(terminal)
+        is MainKeyword -> visit(terminal)
+        is FunctionKeyword -> visit(terminal)
+        is ClassKeyword -> visit(terminal)
+        is IfKeyword -> visit(terminal)
+        is ElseIfKeyword -> visit(terminal)
+        is ElseKeyword -> visit(terminal)
+        is WhileKeyword -> visit(terminal)
+        is InputKeyword -> visit(terminal)
+        is PrintKeyword -> visit(terminal)
+        is NewKeyword -> visit(terminal)
+        is ReturnKeyword -> visit(terminal)
+        is VarKeyword -> visit(terminal)
+        is Void -> visit(terminal)
+        is FloatKeyword -> visit(terminal)
+        is IntegerKeyword -> visit(terminal)
+        is StringKeyword -> visit(terminal)
+        is Comma -> visit(terminal)
+        is SemiColon -> visit(terminal)
+        is LeftBrace -> visit(terminal)
+        is RightBrace -> visit(terminal)
+        is LeftBracket -> visit(terminal)
+        is RightBracket -> visit(terminal)
+        is LeftParen -> visit(terminal)
+        is RightParen -> visit(terminal)
+        is Colon -> visit(terminal)
+        is Period -> visit(terminal)
+        is FloatTerminal -> visit(terminal)
+        is IdentifierTerminal -> visit(terminal)
+        is IntegerTerminal -> visit(terminal)
     }
 
     // Primitives
     @Throws(Exception::class)
-    fun visit(token: FloatToken): Float
+    fun visit(token: FloatTerminal): Float
 
     @Throws(Exception::class)
-    fun visit(token: IntegerToken): Int
+    fun visit(token: IntegerTerminal): Int
 
     @Throws(Exception::class)
-    fun visit(token: StringToken): String
+    fun visit(token: StringTerminal): String
 
     // Relational
     @Throws(Exception::class)
@@ -117,7 +117,7 @@ interface TokenEvaluator {
     fun visit(token: ForwardSlash): Number
 
     @Throws(Exception::class)
-    fun visit(token: StringKeywordToken) {
+    fun visit(token: StringKeyword) {
         visitChildren(token)
     }
 
@@ -126,88 +126,88 @@ interface TokenEvaluator {
     }
 
     @Throws(Exception::class)
-    fun visit(token: CommentToken) {
+    fun visit(token: CommentTerminal) {
         visitChildren(token)
     }
 
     @Throws(Exception::class)
-    fun visit(token: EOFToken) {
+    fun visit(token: EOFTerminal) {
         visitChildren(token)
     }
 
     @Throws(Exception::class)
-    fun visit(token: IdentifierToken): Any
+    fun visit(token: IdentifierTerminal): Any
 
     @Throws(Exception::class)
-    fun visit(token: ProgramKeywordToken) {
+    fun visit(token: ProgramKeyword) {
         visitChildren(token)
     }
 
     @Throws(Exception::class)
-    fun visit(token: MainKeywordToken) {
+    fun visit(token: MainKeyword) {
         visitChildren(token)
     }
 
     @Throws(Exception::class)
-    fun visit(token: FunctionKeywordToken) {
+    fun visit(token: FunctionKeyword) {
         visitChildren(token)
     }
 
     @Throws(Exception::class)
-    fun visit(token: ClassKeywordToken) {
+    fun visit(token: ClassKeyword) {
         visitChildren(token)
     }
 
     @Throws(Exception::class)
-    fun visit(token: FloatKeywordToken) {
+    fun visit(token: FloatKeyword) {
         visitChildren(token)
     }
 
     @Throws(Exception::class)
-    fun visit(token: IntegerKeywordToken) {
+    fun visit(token: IntegerKeyword) {
         visitChildren(token)
     }
 
     @Throws(Exception::class)
-    fun visit(token: IfKeywordToken) {
+    fun visit(token: IfKeyword) {
         visitChildren(token)
     }
 
     @Throws(Exception::class)
-    fun visit(token: ElseIfKeywordToken) {
+    fun visit(token: ElseIfKeyword) {
         visitChildren(token)
     }
 
     @Throws(Exception::class)
-    fun visit(token: ElseKeywordToken) {
+    fun visit(token: ElseKeyword) {
         visitChildren(token)
     }
 
     @Throws(Exception::class)
-    fun visit(token: WhileKeywordToken) {
+    fun visit(token: WhileKeyword) {
         visitChildren(token)
     }
 
     @Throws(Exception::class)
-    fun visit(token: InputKeywordToken): String
+    fun visit(token: InputKeyword): String
 
     @Throws(Exception::class)
-    fun visit(token: PrintKeywordToken) {
+    fun visit(token: PrintKeyword) {
         visitChildren(token)
     }
 
     @Throws(Exception::class)
-    fun visit(token: NewKeywordToken) {
+    fun visit(token: NewKeyword) {
         visitChildren(token)
     }
 
     @Throws(Exception::class)
-    fun visit(token: ReturnKeywordToken) {
+    fun visit(token: ReturnKeyword) {
         visitChildren(token)
     }
 
     @Throws(Exception::class)
-    fun visit(token: VarKeywordToken) {
+    fun visit(token: VarKeyword) {
         visitChildren(token)
     }
 
@@ -270,19 +270,19 @@ interface TokenEvaluator {
     }
 
     @Throws(Exception::class)
-    fun visit(token: WhitespaceToken) {
+    fun visit(token: WhitespaceTerminal) {
         visitChildren(token)
     }
 
     @Throws(Exception::class)
-    fun visit(token: VoidToken) {
+    fun visit(token: Void) {
         visitChildren(token)
     }
 
     @Throws(Exception::class)
-    fun visitChildren(token: Token) {
-        for (child in token.children) {
-            if (child !is Token) {
+    fun visitChildren(terminal: Terminal) {
+        for (child in terminal.children) {
+            if (child !is Terminal) {
                 throw Exception("Non token in ast")
             }
             this.accept(child)

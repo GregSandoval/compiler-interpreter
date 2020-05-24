@@ -1,51 +1,51 @@
 package compiler.interpreter
 
-import compiler.parser.Language.Token
-import compiler.parser.Language.Token.KeywordToken.TypeToken
+import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbols.Terminal.Keyword.Type
 import java.util.*
 import java.util.stream.Collectors
 
 class SymbolTable {
     private val symtab: MutableMap<String, Any?> = HashMap()
-    private val types: MutableMap<String, TypeToken> = HashMap()
+    private val types: MutableMap<String, Type> = HashMap()
 
-    fun getSymbolType(token: Token): TypeToken {
-        return types[hashcode(token)] ?: throw UndeclaredIdentifierException(token)
+    fun getSymbolType(terminal: Terminal): Type {
+        return types[hashcode(terminal)] ?: throw UndeclaredIdentifierException(terminal)
     }
 
-    fun setSymbolType(token: Token, type: TypeToken) {
-        val oldType = types.put(hashcode(token), type)
+    fun setSymbolType(terminal: Terminal, type: Type) {
+        val oldType = types.put(hashcode(terminal), type)
         if (oldType != null) {
-            throw RuntimeException(token.str + "'s datatype cannot be redefined")
+            throw RuntimeException(terminal.str + "'s datatype cannot be redefined")
         }
     }
 
-    fun setSymbolValue(token: Token, value: Any?) {
-        symtab[hashcode(token)] = value
+    fun setSymbolValue(terminal: Terminal, value: Any?) {
+        symtab[hashcode(terminal)] = value
     }
 
-    fun hasSymbol(token: Token): Boolean {
-        return symtab.containsKey(hashcode(token))
+    fun hasSymbol(terminal: Terminal): Boolean {
+        return symtab.containsKey(hashcode(terminal))
     }
 
-    fun getValue(token: Token): Any {
-        return symtab[hashcode(token)] ?: throw UndeclaredIdentifierException(token)
+    fun getValue(terminal: Terminal): Any {
+        return symtab[hashcode(terminal)] ?: throw UndeclaredIdentifierException(terminal)
     }
 
-    fun getAddress(token: Token): String {
-        return hashcode(token)
+    fun getAddress(terminal: Terminal): String {
+        return hashcode(terminal)
     }
 
     fun getValueAtAddress(address: String?): Any? {
         return symtab[address]
     }
 
-    fun removeSymbol(token: Token): Any? {
-        return symtab.remove(hashcode(token))
+    fun removeSymbol(terminal: Terminal): Any? {
+        return symtab.remove(hashcode(terminal))
     }
 
-    private fun hashcode(token: Token): String {
-        return token.str + ":" + token.javaClass.simpleName
+    private fun hashcode(terminal: Terminal): String {
+        return terminal.str + ":" + terminal.javaClass.simpleName
     }
 
     override fun toString(): String {

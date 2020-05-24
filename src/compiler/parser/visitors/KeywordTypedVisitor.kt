@@ -1,46 +1,46 @@
 package compiler.parser.visitors
 
-import compiler.parser.Language.Token.KeywordToken
-import compiler.parser.Language.Token.KeywordToken.*
-import compiler.parser.Language.Token.KeywordToken.TypeToken.*
+import compiler.parser.Symbols.Terminal.Keyword
+import compiler.parser.Symbols.Terminal.Keyword.*
+import compiler.parser.Symbols.Terminal.Keyword.Type.*
 
 
 interface KeywordTypedVisitor<T> {
-    fun accept(token: KeywordToken) = when (token) {
-        is ProgramKeywordToken -> visit(token)
-        is MainKeywordToken -> visit(token)
-        is FunctionKeywordToken -> visit(token)
-        is ClassKeywordToken -> visit(token)
-        is IfKeywordToken -> visit(token)
-        is ElseIfKeywordToken -> visit(token)
-        is ElseKeywordToken -> visit(token)
-        is WhileKeywordToken -> visit(token)
-        is InputKeywordToken -> visit(token)
-        is PrintKeywordToken -> visit(token)
-        is NewKeywordToken -> visit(token)
-        is ReturnKeywordToken -> visit(token)
-        is VarKeywordToken -> visit(token)
-        is VoidToken -> visit(token)
-        is FloatKeywordToken -> visit(token)
-        is IntegerKeywordToken -> visit(token)
-        is StringKeywordToken -> visit(token)
+    fun accept(token: Keyword) = when (token) {
+        is ProgramKeyword -> visit(token)
+        is MainKeyword -> visit(token)
+        is FunctionKeyword -> visit(token)
+        is ClassKeyword -> visit(token)
+        is IfKeyword -> visit(token)
+        is ElseIfKeyword -> visit(token)
+        is ElseKeyword -> visit(token)
+        is WhileKeyword -> visit(token)
+        is InputKeyword -> visit(token)
+        is PrintKeyword -> visit(token)
+        is NewKeyword -> visit(token)
+        is ReturnKeyword -> visit(token)
+        is VarKeyword -> visit(token)
+        is Void -> visit(token)
+        is FloatKeyword -> visit(token)
+        is IntegerKeyword -> visit(token)
+        is StringKeyword -> visit(token)
     }
 
-    fun visit(token: ProgramKeywordToken): T
-    fun visit(token: MainKeywordToken): T
-    fun visit(token: FunctionKeywordToken): T
-    fun visit(token: ClassKeywordToken): T
-    fun visit(token: FloatKeywordToken): T
-    fun visit(token: IntegerKeywordToken): T
-    fun visit(token: StringKeywordToken): T
-    fun visit(token: IfKeywordToken): T
-    fun visit(token: ElseIfKeywordToken): T
-    fun visit(token: ElseKeywordToken): T
-    fun visit(token: WhileKeywordToken): T
-    fun visit(token: InputKeywordToken): T
-    fun visit(token: PrintKeywordToken): T
-    fun visit(token: NewKeywordToken): T
-    fun visit(token: ReturnKeywordToken): T
-    fun visit(token: VarKeywordToken): T
-    fun visit(token: VoidToken): T
+    fun visit(token: ProgramKeyword): T
+    fun visit(token: MainKeyword): T
+    fun visit(token: FunctionKeyword): T
+    fun visit(token: ClassKeyword): T
+    fun visit(token: FloatKeyword): T
+    fun visit(token: IntegerKeyword): T
+    fun visit(token: StringKeyword): T
+    fun visit(token: IfKeyword): T
+    fun visit(token: ElseIfKeyword): T
+    fun visit(token: ElseKeyword): T
+    fun visit(token: WhileKeyword): T
+    fun visit(token: InputKeyword): T
+    fun visit(token: PrintKeyword): T
+    fun visit(token: NewKeyword): T
+    fun visit(token: ReturnKeyword): T
+    fun visit(token: VarKeyword): T
+    fun visit(token: Void): T
 }

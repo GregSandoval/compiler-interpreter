@@ -1,20 +1,20 @@
 package compiler.parser
 
-import compiler.parser.Language.Grammar
-import compiler.parser.Language.Token
+import compiler.parser.Symbols.NonTerminal
+import compiler.parser.Symbols.Terminal
 import java.util.*
 import java.util.stream.Collectors
 
 class Parser(
-        eof: Token,
-        startSymbol: Grammar,
+        eof: Terminal,
+        startSymbol: NonTerminal,
         beforeRuleApplication: BeforeRuleApplicationListener,
         onUnexpectedToken: GeneralListener,
         onUnknownGrammarRule: GeneralListener,
         onPredictionNotFoundError: GeneralListener,
         onGrammarRuleApplication: GrammarRuleApplicationListener
 ) {
-    private val startSymbol: Grammar
+    private val startSymbol: NonTerminal
     private val eof: TreeNode
     private val beforeRuleApplication: BeforeRuleApplicationListener
     private val onUnexpectedToken: GeneralListener
@@ -23,7 +23,7 @@ class Parser(
     private val onGrammarRuleApplication: GrammarRuleApplicationListener
 
     @Throws(Exception::class)
-    fun parse(inputName: String, tokensIn: List<Token>) {
+    fun parse(inputName: String, tokensIn: List<Terminal>) {
         val stack = LinkedList<TreeNode>()
         val tokens = LinkedList(tokensIn)
         stack.push(startSymbol)
@@ -31,16 +31,16 @@ class Parser(
             beforeRuleApplication.accept(stack, tokens.peek())
             val token = tokens.peek()
             val top = stack.pop()
-            if (top is Token && isEqual(token, top)) {
+            if (top is Terminal && isEqual(token, top)) {
                 tokens.pop()
                 onGrammarRuleApplication.accept(top, token, emptyList())
                 continue
             }
-            if (top is Token) {
+            if (top is Terminal) {
                 onUnexpectedToken.accept(top, token)
                 throw UnexpectedToken(top, token, inputName)
             }
-            if (top !is Grammar) {
+            if (top !is NonTerminal) {
                 onUnknownGrammarRule.accept(top, token)
                 throw RuntimeException("Node is neither Token nor Grammar rule: $top")
             }
@@ -72,8 +72,8 @@ class Parser(
         }
     }
 
-    fun isEqual(token: Token, top: TreeNode): Boolean {
-        return token.javaClass == top.javaClass
+    fun isEqual(terminal: Terminal, top: TreeNode): Boolean {
+        return terminal.javaClass == top.javaClass
     }
 
     init {

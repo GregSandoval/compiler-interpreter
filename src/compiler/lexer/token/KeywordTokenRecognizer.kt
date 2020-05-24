@@ -1,15 +1,15 @@
 package compiler.lexer.token
 
-import compiler.parser.Language.Token
-import compiler.parser.Language.Token.KeywordToken
-import compiler.parser.Language.Token.KeywordToken.*
+import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbols.Terminal.Keyword
+import compiler.parser.Symbols.Terminal.Keyword.*
 import java.util.*
 
 object KeywordTokenRecognizer {
-    private val keywords: MutableMap<String, () -> KeywordToken> = HashMap()
+    private val keywords: MutableMap<String, () -> Keyword> = HashMap()
 
     @JvmStatic
-    operator fun get(identifier: Token): Token {
+    operator fun get(identifier: Terminal): Terminal {
         val tokenValue = identifier.str
         val supplier = keywords[tokenValue] ?: return identifier
         val keyword = supplier()
@@ -18,21 +18,21 @@ object KeywordTokenRecognizer {
     }
 
     init {
-        keywords["prog"] = ::ProgramKeywordToken
-        keywords["main"] = ::MainKeywordToken
-        keywords["fcn"] = ::FunctionKeywordToken
-        keywords["class"] = ::ClassKeywordToken
-        keywords["float"] = TypeToken::FloatKeywordToken
-        keywords["int"] = TypeToken::IntegerKeywordToken
-        keywords["string"] = TypeToken::StringKeywordToken
-        keywords["if"] = ::IfKeywordToken
-        keywords["elseif"] = ::ElseIfKeywordToken
-        keywords["else"] = ::ElseKeywordToken
-        keywords["while"] = ::WhileKeywordToken
-        keywords["input"] = ::InputKeywordToken
-        keywords["print"] = ::PrintKeywordToken
-        keywords["new"] = ::NewKeywordToken
-        keywords["return"] = ::ReturnKeywordToken
-        keywords["var"] = ::VarKeywordToken
+        keywords["prog"] = ::ProgramKeyword
+        keywords["main"] = ::MainKeyword
+        keywords["fcn"] = ::FunctionKeyword
+        keywords["class"] = ::ClassKeyword
+        keywords["float"] = Type::FloatKeyword
+        keywords["int"] = Type::IntegerKeyword
+        keywords["string"] = Type::StringKeyword
+        keywords["if"] = ::IfKeyword
+        keywords["elseif"] = ::ElseIfKeyword
+        keywords["else"] = ::ElseKeyword
+        keywords["while"] = ::WhileKeyword
+        keywords["input"] = ::InputKeyword
+        keywords["print"] = ::PrintKeyword
+        keywords["new"] = ::NewKeyword
+        keywords["return"] = ::ReturnKeyword
+        keywords["var"] = ::VarKeyword
     }
 }

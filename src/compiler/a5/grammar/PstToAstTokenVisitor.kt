@@ -1,12 +1,12 @@
 package compiler.a5.grammar
 
-import compiler.parser.Language.Token.IgnorableTokens.*
-import compiler.parser.Language.Token.KeywordToken.*
-import compiler.parser.Language.Token.KeywordToken.TypeToken.*
-import compiler.parser.Language.Token.OperatorToken.*
-import compiler.parser.Language.Token.SymbolToken.*
-import compiler.parser.Language.Token.TypedToken.*
 import compiler.parser.PstToAstHelpers
+import compiler.parser.Symbols.Terminal.Ignorable.*
+import compiler.parser.Symbols.Terminal.Keyword.*
+import compiler.parser.Symbols.Terminal.Keyword.Type.*
+import compiler.parser.Symbols.Terminal.Operator.*
+import compiler.parser.Symbols.Terminal.Punctuation.*
+import compiler.parser.Symbols.Terminal.TypedTerminal.*
 import compiler.parser.visitors.TokenVisitor
 
 class PstToAstTokenVisitor : TokenVisitor<Unit> {
@@ -21,58 +21,58 @@ class PstToAstTokenVisitor : TokenVisitor<Unit> {
     override fun visit(token: LeftParen) {
     }
 
-    override fun visit(token: IdentifierToken) {
+    override fun visit(token: IdentifierTerminal) {
     }
 
-    override fun visit(token: CommentToken) {
+    override fun visit(token: CommentTerminal) {
     }
 
-    override fun visit(token: EOFToken) {
+    override fun visit(token: EOFTerminal) {
     }
 
-    override fun visit(token: FloatToken) {
+    override fun visit(token: FloatTerminal) {
     }
 
-    override fun visit(token: IntegerToken) {
+    override fun visit(token: IntegerTerminal) {
     }
 
-    override fun visit(token: MainKeywordToken) {
+    override fun visit(token: MainKeyword) {
     }
 
-    override fun visit(token: FunctionKeywordToken) {
+    override fun visit(token: FunctionKeyword) {
     }
 
-    override fun visit(token: FloatKeywordToken) {
+    override fun visit(token: FloatKeyword) {
     }
 
-    override fun visit(token: IntegerKeywordToken) {
+    override fun visit(token: IntegerKeyword) {
     }
 
-    override fun visit(token: StringKeywordToken) {
+    override fun visit(token: StringKeyword) {
     }
 
-    override fun visit(token: IfKeywordToken) {
+    override fun visit(token: IfKeyword) {
     }
 
-    override fun visit(token: ElseIfKeywordToken) {
+    override fun visit(token: ElseIfKeyword) {
     }
 
-    override fun visit(token: ElseKeywordToken) {
+    override fun visit(token: ElseKeyword) {
     }
 
-    override fun visit(token: WhileKeywordToken) {
+    override fun visit(token: WhileKeyword) {
     }
 
-    override fun visit(token: InputKeywordToken) {
+    override fun visit(token: InputKeyword) {
     }
 
-    override fun visit(token: PrintKeywordToken) {
+    override fun visit(token: PrintKeyword) {
     }
 
-    override fun visit(token: NewKeywordToken) {
+    override fun visit(token: NewKeyword) {
     }
 
-    override fun visit(token: ReturnKeywordToken) {
+    override fun visit(token: ReturnKeyword) {
     }
 
     override fun visit(token: LessThan) {
@@ -114,7 +114,7 @@ class PstToAstTokenVisitor : TokenVisitor<Unit> {
     override fun visit(token: BitShiftRight) {
     }
 
-    override fun visit(token: StringToken) {
+    override fun visit(token: StringTerminal) {
     }
 
     override fun visit(token: Comma) {
@@ -147,19 +147,19 @@ class PstToAstTokenVisitor : TokenVisitor<Unit> {
     override fun visit(token: Period) {
     }
 
-    override fun visit(token: WhitespaceToken) {
+    override fun visit(token: WhitespaceTerminal) {
     }
 
-    override fun visit(token: ClassKeywordToken) {
+    override fun visit(token: ClassKeyword) {
     }
 
-    override fun visit(token: ProgramKeywordToken) {
+    override fun visit(token: ProgramKeyword) {
     }
 
-    override fun visit(token: VarKeywordToken) {
+    override fun visit(token: VarKeyword) {
     }
 
-    override fun visit(token: VoidToken) {
+    override fun visit(token: Void) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

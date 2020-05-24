@@ -1,36 +1,36 @@
 package compiler.a5.grammar
 
-import compiler.parser.Language.Grammar.*
-import compiler.parser.Language.Token.KeywordToken.*
-import compiler.parser.Language.Token.KeywordToken.TypeToken.*
-import compiler.parser.Language.Token.OperatorToken.*
-import compiler.parser.Language.Token.SymbolToken.*
-import compiler.parser.Language.Token.TypedToken.*
+import compiler.parser.Symbols.NonTerminal.*
+import compiler.parser.Symbols.Terminal.Keyword.*
+import compiler.parser.Symbols.Terminal.Keyword.Type.*
+import compiler.parser.Symbols.Terminal.Operator.*
+import compiler.parser.Symbols.Terminal.Punctuation.*
+import compiler.parser.Symbols.Terminal.TypedTerminal.*
 
 object A5GrammarRules {
     fun build() {
         Pgm()
-                .on(ProgramKeywordToken::class.java)
-                .useRHS(::ProgramKeywordToken, ::Vargroup, ::Fcndefs, ::Main)
+                .on(ProgramKeyword::class.java)
+                .useRHS(::ProgramKeyword, ::Vargroup, ::Fcndefs, ::Main)
         Main()
-                .on(MainKeywordToken::class.java)
-                .useRHS(::MainKeywordToken, ::BBlock)
+                .on(MainKeyword::class.java)
+                .useRHS(::MainKeyword, ::BBlock)
         BBlock()
                 .on(LeftBrace::class.java)
                 .useRHS(::LeftBrace, ::Vargroup, ::Stmts, ::RightBrace)
         Vargroup()
-                .on(VarKeywordToken::class.java)
-                .useRHS(::VarKeywordToken, ::PPvarlist)
+                .on(VarKeyword::class.java)
+                .useRHS(::VarKeyword, ::PPvarlist)
                 .on(
-                        FunctionKeywordToken::class.java,
-                        MainKeywordToken::class.java,
+                        FunctionKeyword::class.java,
+                        MainKeyword::class.java,
                         Asterisk::class.java,
-                        IdentifierToken::class.java,
-                        IfKeywordToken::class.java,
-                        WhileKeywordToken::class.java,
-                        PrintKeywordToken::class.java,
-                        InputKeywordToken::class.java,
-                        ReturnKeywordToken::class.java,
+                        IdentifierTerminal::class.java,
+                        IfKeyword::class.java,
+                        WhileKeyword::class.java,
+                        PrintKeyword::class.java,
+                        InputKeyword::class.java,
+                        ReturnKeyword::class.java,
                         RightBrace::class.java,
                         Colon::class.java
                 )
@@ -40,24 +40,24 @@ object A5GrammarRules {
                 .useRHS(::LeftParen, ::Varlist, ::RightParen)
         Varlist()
                 .on(
-                        IntegerKeywordToken::class.java,
-                        FloatKeywordToken::class.java,
-                        StringKeywordToken::class.java,
-                        IdentifierToken::class.java,
-                        ClassKeywordToken::class.java
+                        IntegerKeyword::class.java,
+                        FloatKeyword::class.java,
+                        StringKeyword::class.java,
+                        IdentifierTerminal::class.java,
+                        ClassKeyword::class.java
                 )
                 .useRHS(::Varitem, ::SemiColon, ::Varlist)
                 .on(RightParen::class.java)
                 .useRHS()
         Varitem()
                 .on(
-                        IntegerKeywordToken::class.java,
-                        FloatKeywordToken::class.java,
-                        StringKeywordToken::class.java,
-                        IdentifierToken::class.java
+                        IntegerKeyword::class.java,
+                        FloatKeyword::class.java,
+                        StringKeyword::class.java,
+                        IdentifierTerminal::class.java
                 )
                 .useRHS(::Vardecl, ::Varitem_Suffix)
-                .on(ClassKeywordToken::class.java)
+                .on(ClassKeyword::class.java)
                 .useRHS(::Classdef)
         Varitem_Suffix()
                 .on(Equal::class.java)
@@ -66,39 +66,39 @@ object A5GrammarRules {
                 .useRHS()
         Vardecl()
                 .on(
-                        IntegerKeywordToken::class.java,
-                        FloatKeywordToken::class.java,
-                        StringKeywordToken::class.java,
-                        IdentifierToken::class.java
+                        IntegerKeyword::class.java,
+                        FloatKeyword::class.java,
+                        StringKeyword::class.java,
+                        IdentifierTerminal::class.java
                 )
                 .useRHS(::Simplekind, ::Varspec)
         Simplekind()
                 .on(
-                        IntegerKeywordToken::class.java,
-                        FloatKeywordToken::class.java,
-                        StringKeywordToken::class.java
+                        IntegerKeyword::class.java,
+                        FloatKeyword::class.java,
+                        StringKeyword::class.java
                 )
                 .useRHS(::BaseKind)
-                .on(IdentifierToken::class.java)
+                .on(IdentifierTerminal::class.java)
                 .useRHS(::Classid)
         BaseKind()
-                .on(IntegerKeywordToken::class.java)
-                .useRHS(::IntegerKeywordToken)
-                .on(FloatKeywordToken::class.java)
-                .useRHS(::FloatKeywordToken)
-                .on(StringKeywordToken::class.java)
-                .useRHS(::StringKeywordToken)
+                .on(IntegerKeyword::class.java)
+                .useRHS(::IntegerKeyword)
+                .on(FloatKeyword::class.java)
+                .useRHS(::FloatKeyword)
+                .on(StringKeyword::class.java)
+                .useRHS(::StringKeyword)
         Classid()
-                .on(IdentifierToken::class.java)
-                .useRHS(::IdentifierToken)
+                .on(IdentifierTerminal::class.java)
+                .useRHS(::IdentifierTerminal)
         Varspec()
-                .on(IdentifierToken::class.java)
+                .on(IdentifierTerminal::class.java)
                 .useRHS(::Varid, ::Arrspec)
                 .on(Asterisk::class.java)
                 .useRHS(::Deref_id)
         Varid()
-                .on(IdentifierToken::class.java)
-                .useRHS(::IdentifierToken)
+                .on(IdentifierTerminal::class.java)
+                .useRHS(::IdentifierTerminal)
         Arrspec()
                 .on(LeftBracket::class.java)
                 .useRHS(::KKint)
@@ -111,20 +111,20 @@ object A5GrammarRules {
                 .useRHS()
         KKint()
                 .on(LeftBracket::class.java)
-                .useRHS(::LeftBracket, ::IntegerToken, ::RightBracket)
+                .useRHS(::LeftBracket, ::IntegerTerminal, ::RightBracket)
         Deref_id()
                 .on(Asterisk::class.java)
-                .useRHS(::Deref, ::IdentifierToken)
+                .useRHS(::Deref, ::IdentifierTerminal)
         Deref()
                 .on(Asterisk::class.java)
                 .useRHS(::Asterisk)
         Varinit()
                 .on(
-                        IntegerToken::class.java,
-                        FloatToken::class.java,
-                        StringToken::class.java,
+                        IntegerTerminal::class.java,
+                        FloatTerminal::class.java,
+                        StringTerminal::class.java,
                         Asterisk::class.java,
-                        IdentifierToken::class.java,
+                        IdentifierTerminal::class.java,
                         Ampersand::class.java,
                         LeftParen::class.java
                 )
@@ -136,11 +136,11 @@ object A5GrammarRules {
                 .useRHS(::LeftBrace, ::Exprlist, ::RightBrace)
         Exprlist()
                 .on(
-                        IntegerToken::class.java,
-                        FloatToken::class.java,
-                        StringToken::class.java,
+                        IntegerTerminal::class.java,
+                        FloatTerminal::class.java,
+                        StringTerminal::class.java,
                         Asterisk::class.java,
-                        IdentifierToken::class.java,
+                        IdentifierTerminal::class.java,
                         Ampersand::class.java,
                         LeftParen::class.java
                 )
@@ -159,89 +159,89 @@ object A5GrammarRules {
                 )
                 .useRHS()
         Classdef()
-                .on(ClassKeywordToken::class.java)
+                .on(ClassKeyword::class.java)
                 .useRHS(::Classheader, ::Classdef_Suffix)
         Classdef_Suffix()
                 .on(LeftBrace::class.java)
                 .useRHS(::BBClassitems)
-                .on(IfKeywordToken::class.java)
-                .useRHS(::IfKeywordToken, ::BBClassitems)
+                .on(IfKeyword::class.java)
+                .useRHS(::IfKeyword, ::BBClassitems)
         BBClassitems()
                 .on(LeftBrace::class.java)
                 .useRHS(::LeftBrace, ::Classitems, ::RightBrace)
         Classheader()
-                .on(ClassKeywordToken::class.java)
-                .useRHS(::ClassKeywordToken, ::Classid, ::Classmom, ::Interfaces)
+                .on(ClassKeyword::class.java)
+                .useRHS(::ClassKeyword, ::Classid, ::Classmom, ::Interfaces)
         Classmom()
                 .on(Colon::class.java)
                 .useRHS(::Colon, ::Classid)
                 .on(
                         Plus::class.java,
                         LeftBrace::class.java,
-                        IfKeywordToken::class.java
+                        IfKeyword::class.java
                 )
                 .useRHS()
         Classitems()
-                .on(Colon::class.java, VarKeywordToken::class.java, FunctionKeywordToken::class.java)
+                .on(Colon::class.java, VarKeyword::class.java, FunctionKeyword::class.java)
                 .useRHS(::Classgroup, ::Classitems)
                 .on(RightBrace::class.java)
                 .useRHS()
         Classgroup()
                 .on(Colon::class.java)
                 .useRHS(::Class_ctrl)
-                .on(VarKeywordToken::class.java)
+                .on(VarKeyword::class.java)
                 .useRHS(::Vargroup)
-                .on(FunctionKeywordToken::class.java)
+                .on(FunctionKeyword::class.java)
                 .useRHS(::Mddecls)
         Class_ctrl()
                 .on(Colon::class.java)
-                .useRHS(::Colon, ::IdentifierToken)
+                .useRHS(::Colon, ::IdentifierTerminal)
         Interfaces()
                 .on(Plus::class.java)
                 .useRHS(::Plus, ::Classid, ::Interfaces)
-                .on(LeftBrace::class.java, IfKeywordToken::class.java)
+                .on(LeftBrace::class.java, IfKeyword::class.java)
                 .useRHS()
         Mddecls()
-                .on(FunctionKeywordToken::class.java)
+                .on(FunctionKeyword::class.java)
                 .useRHS(::Mdheader, ::Mddecls)
                 .on(
                         SemiColon::class.java,
-                        VarKeywordToken::class.java,
+                        VarKeyword::class.java,
                         RightBrace::class.java
                 )
                 .useRHS()
         Mdheader()
-                .on(FunctionKeywordToken::class.java)
-                .useRHS(::FunctionKeywordToken, ::Md_id, ::PParmlist, ::Retkind)
+                .on(FunctionKeyword::class.java)
+                .useRHS(::FunctionKeyword, ::Md_id, ::PParmlist, ::Retkind)
         Md_id()
-                .on(IdentifierToken::class.java)
+                .on(IdentifierTerminal::class.java)
                 .useRHS(::Classid, ::Colon, ::Fcnid)
         Fcndefs()
-                .on(FunctionKeywordToken::class.java)
+                .on(FunctionKeyword::class.java)
                 .useRHS(::Fcndef, ::Fcndefs)
-                .on(MainKeywordToken::class.java)
+                .on(MainKeyword::class.java)
                 .useRHS()
         Fcndef()
-                .on(FunctionKeywordToken::class.java)
+                .on(FunctionKeyword::class.java)
                 .useRHS(::Fcnheader, ::BBlock)
         Fcnheader()
-                .on(FunctionKeywordToken::class.java)
-                .useRHS(::FunctionKeywordToken, ::Fcnid, ::PParmlist, ::Retkind)
+                .on(FunctionKeyword::class.java)
+                .useRHS(::FunctionKeyword, ::Fcnid, ::PParmlist, ::Retkind)
         Fcnid()
-                .on(IdentifierToken::class.java)
-                .useRHS(::IdentifierToken)
+                .on(IdentifierTerminal::class.java)
+                .useRHS(::IdentifierTerminal)
         Retkind()
                 .on(
-                        IntegerKeywordToken::class.java,
-                        FloatKeywordToken::class.java,
-                        StringKeywordToken::class.java
+                        IntegerKeyword::class.java,
+                        FloatKeyword::class.java,
+                        StringKeyword::class.java
                 )
                 .useRHS(::BaseKind)
         PParmlist()
                 .on(LeftParen::class.java)
                 .useRHS(::LeftParen, ::Varspecs, ::RightParen)
         Varspecs()
-                .on(Asterisk::class.java, IdentifierToken::class.java)
+                .on(Asterisk::class.java, IdentifierTerminal::class.java)
                 .useRHS(::Varspec, ::More_varspecs)
                 .on(RightParen::class.java)
                 .useRHS()
@@ -253,34 +253,34 @@ object A5GrammarRules {
         Stmts()
                 .on(
                         Asterisk::class.java,
-                        IdentifierToken::class.java,
-                        IfKeywordToken::class.java,
-                        WhileKeywordToken::class.java,
-                        PrintKeywordToken::class.java,
-                        InputKeywordToken::class.java,
-                        ReturnKeywordToken::class.java
+                        IdentifierTerminal::class.java,
+                        IfKeyword::class.java,
+                        WhileKeyword::class.java,
+                        PrintKeyword::class.java,
+                        InputKeyword::class.java,
+                        ReturnKeyword::class.java
                 )
                 .useRHS(::Stmt, ::SemiColon, ::Stmts)
                 .on(RightBrace::class.java)
                 .useRHS()
         Stmt()
-                .on(IdentifierToken::class.java, Asterisk::class.java)
+                .on(IdentifierTerminal::class.java, Asterisk::class.java)
                 .useRHS(::StasgnOrFcall)
-                .on(IfKeywordToken::class.java)
+                .on(IfKeyword::class.java)
                 .useRHS(::Stif)
-                .on(WhileKeywordToken::class.java)
+                .on(WhileKeyword::class.java)
                 .useRHS(::Stwhile)
-                .on(PrintKeywordToken::class.java)
+                .on(PrintKeyword::class.java)
                 .useRHS(::Stprint)
-                .on(InputKeywordToken::class.java)
+                .on(InputKeyword::class.java)
                 .useRHS(::Stinput)
-                .on(ReturnKeywordToken::class.java)
+                .on(ReturnKeyword::class.java)
                 .useRHS(::Strtn)
         StasgnOrFcall()
                 .on(Asterisk::class.java)
                 .useRHS(::Deref_id, ::Stasgn_Suffix)
-                .on(IdentifierToken::class.java)
-                .useRHS(::IdentifierToken, ::StasgnOrFcall_Suffix)
+                .on(IdentifierTerminal::class.java)
+                .useRHS(::IdentifierTerminal, ::StasgnOrFcall_Suffix)
         StasgnOrFcall_Suffix()
                 .on(LeftBracket::class.java, Equal::class.java)
                 .useRHS(::Lval_Suffix, ::Stasgn_Suffix)
@@ -320,33 +320,33 @@ object A5GrammarRules {
                 .on()
                 .useRHS(::PPonly)
         Stif()
-                .on(IfKeywordToken::class.java)
-                .useRHS(::IfKeywordToken, ::PPexpr, ::BBlock, ::Elsepart)
+                .on(IfKeyword::class.java)
+                .useRHS(::IfKeyword, ::PPexpr, ::BBlock, ::Elsepart)
         Elsepart()
-                .on(ElseIfKeywordToken::class.java)
-                .useRHS(::ElseIfKeywordToken, ::PPexpr, ::BBlock, ::Elsepart)
-                .on(ElseKeywordToken::class.java)
-                .useRHS(::ElseKeywordToken, ::BBlock)
+                .on(ElseIfKeyword::class.java)
+                .useRHS(::ElseIfKeyword, ::PPexpr, ::BBlock, ::Elsepart)
+                .on(ElseKeyword::class.java)
+                .useRHS(::ElseKeyword, ::BBlock)
                 .on(SemiColon::class.java)
                 .useRHS()
         Stwhile()
-                .on(WhileKeywordToken::class.java)
-                .useRHS(::WhileKeywordToken, ::PPexpr, ::BBlock)
+                .on(WhileKeyword::class.java)
+                .useRHS(::WhileKeyword, ::PPexpr, ::BBlock)
         Stprint()
-                .on(PrintKeywordToken::class.java)
-                .useRHS(::PrintKeywordToken, ::PPexprs)
+                .on(PrintKeyword::class.java)
+                .useRHS(::PrintKeyword, ::PPexprs)
         Stinput()
-                .on(InputKeywordToken::class.java)
-                .useRHS(::InputKeywordToken, ::PPexprs)
+                .on(InputKeyword::class.java)
+                .useRHS(::InputKeyword, ::PPexprs)
         Strtn()
-                .on(ReturnKeywordToken::class.java)
-                .useRHS(::ReturnKeywordToken, ::Strtn_Suffix)
+                .on(ReturnKeyword::class.java)
+                .useRHS(::ReturnKeyword, ::Strtn_Suffix)
         Strtn_Suffix()
                 .on(
-                        IntegerToken::class.java,
-                        FloatToken::class.java,
-                        StringToken::class.java,
-                        IdentifierToken::class.java,
+                        IntegerTerminal::class.java,
+                        FloatTerminal::class.java,
+                        StringTerminal::class.java,
+                        IdentifierTerminal::class.java,
                         Asterisk::class.java,
                         Ampersand::class.java,
                         LeftParen::class.java
@@ -359,14 +359,14 @@ object A5GrammarRules {
                 .useRHS(::LeftParen, ::Expr, ::RightParen)
         Expr()
                 .on(
-                        IntegerToken::class.java,
-                        FloatToken::class.java,
-                        StringToken::class.java,
-                        IdentifierToken::class.java,
+                        IntegerTerminal::class.java,
+                        FloatTerminal::class.java,
+                        StringTerminal::class.java,
+                        IdentifierTerminal::class.java,
                         Asterisk::class.java,
                         Ampersand::class.java,
                         LeftParen::class.java,
-                        InputKeywordToken::class.java
+                        InputKeyword::class.java
                 )
                 .useRHS(::Rterm, ::Expr_Tail)
         Expr_Tail()
@@ -376,14 +376,14 @@ object A5GrammarRules {
                 .useRHS()
         Rterm()
                 .on(
-                        IntegerToken::class.java,
-                        FloatToken::class.java,
-                        StringToken::class.java,
-                        IdentifierToken::class.java,
+                        IntegerTerminal::class.java,
+                        FloatTerminal::class.java,
+                        StringTerminal::class.java,
+                        IdentifierTerminal::class.java,
                         Asterisk::class.java,
                         Ampersand::class.java,
                         LeftParen::class.java,
-                        InputKeywordToken::class.java
+                        InputKeyword::class.java
                 )
                 .useRHS(::Term, ::Rterm_Tail)
         Rterm_Tail()
@@ -405,14 +405,14 @@ object A5GrammarRules {
                 .useRHS()
         Term()
                 .on(
-                        IntegerToken::class.java,
-                        FloatToken::class.java,
-                        StringToken::class.java,
-                        IdentifierToken::class.java,
+                        IntegerTerminal::class.java,
+                        FloatTerminal::class.java,
+                        StringTerminal::class.java,
+                        IdentifierTerminal::class.java,
                         Asterisk::class.java,
                         Ampersand::class.java,
                         LeftParen::class.java,
-                        InputKeywordToken::class.java
+                        InputKeyword::class.java
                 )
                 .useRHS(::Fact, ::Term_Tail)
         Term_Tail()
@@ -435,21 +435,21 @@ object A5GrammarRules {
                 )
                 .useRHS()
         Fact()
-                .on(IntegerToken::class.java, FloatToken::class.java, StringToken::class.java)
+                .on(IntegerTerminal::class.java, FloatTerminal::class.java, StringTerminal::class.java)
                 .useRHS(::BaseLiteral)
-                .on(IdentifierToken::class.java, Asterisk::class.java)
+                .on(IdentifierTerminal::class.java, Asterisk::class.java)
                 .useRHS(::LvalOrFcall)
                 .on(Ampersand::class.java)
                 .useRHS(::Addrof_id)
                 .on(LeftParen::class.java)
                 .useRHS(::PPexpr)
-                .on(InputKeywordToken::class.java)
+                .on(InputKeyword::class.java)
                 .useRHS(::Stinput)
         LvalOrFcall()
                 .on(Asterisk::class.java)
                 .useRHS(::Deref_id)
-                .on(IdentifierToken::class.java)
-                .useRHS(::IdentifierToken, ::LvalOrFcall_Suffix)
+                .on(IdentifierTerminal::class.java)
+                .useRHS(::IdentifierTerminal, ::LvalOrFcall_Suffix)
         LvalOrFcall_Suffix()
                 .on(LeftBracket::class.java)
                 .useRHS(::Lval_Suffix)
@@ -475,15 +475,15 @@ object A5GrammarRules {
                 )
                 .useRHS()
         BaseLiteral()
-                .on(IntegerToken::class.java)
-                .useRHS(::IntegerToken)
-                .on(FloatToken::class.java)
-                .useRHS(::FloatToken)
-                .on(StringToken::class.java)
-                .useRHS(::StringToken)
+                .on(IntegerTerminal::class.java)
+                .useRHS(::IntegerTerminal)
+                .on(FloatTerminal::class.java)
+                .useRHS(::FloatTerminal)
+                .on(StringTerminal::class.java)
+                .useRHS(::StringTerminal)
         Addrof_id()
                 .on(Ampersand::class.java)
-                .useRHS(::Ampersand, ::IdentifierToken)
+                .useRHS(::Ampersand, ::IdentifierTerminal)
         Oprel()
                 .on(EqualEqual::class.java)
                 .useRHS(::EqualEqual)

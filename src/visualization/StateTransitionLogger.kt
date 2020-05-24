@@ -1,31 +1,31 @@
 package visualization
 
-import compiler.parser.Language.Token
+import compiler.parser.Symbols.Terminal
 import compiler.parser.TreeNode
 import java.util.*
 import java.util.stream.Collectors
 
 object StateTransitionLogger {
-    fun logBeforeState(stack: LinkedList<TreeNode>, token: Token) {
+    fun logBeforeState(stack: LinkedList<TreeNode>, terminal: Terminal) {
         println("Stack: " + format(stack))
     }
 
-    fun logGrammarRuleApplication(top: TreeNode, token: Token, rhs: List<TreeNode>) {
-        println("Move : " + format(top) + "(" + format(token) + ") => " + format(rhs) + "\n")
+    fun logGrammarRuleApplication(top: TreeNode, terminal: Terminal, rhs: List<TreeNode>) {
+        println("Move : " + format(top) + "(" + format(terminal) + ") => " + format(rhs) + "\n")
     }
 
-    fun logUnexpectedToken(top: TreeNode, token: Token) {
-        println("Expected: " + format(top) + " but found: " + format(token))
+    fun logUnexpectedToken(top: TreeNode, terminal: Terminal) {
+        println("Expected: " + format(top) + " but found: " + format(terminal))
     }
 
-    fun logUnknownGrammarRule(top: TreeNode, token: Token) {
+    fun logUnknownGrammarRule(top: TreeNode, terminal: Terminal) {
         println("\n")
         println("Grammar contains rule not in Grammar hierarchy: " + format(top))
     }
 
-    fun logPredictionNotFound(top: TreeNode, token: Token) {
+    fun logPredictionNotFound(top: TreeNode, terminal: Terminal) {
         println("\n")
-        println("User error; Rule: " + format(top) + " has no entry for " + format(token))
+        println("User error; Rule: " + format(top) + " has no entry for " + format(terminal))
     }
 
     fun format(rules: List<TreeNode>): String {
@@ -36,6 +36,6 @@ object StateTransitionLogger {
     }
 
     fun format(rule: TreeNode): String {
-        return if (rule is Token) rule.javaClass.simpleName else rule.toString()
+        return if (rule is Terminal) rule.javaClass.simpleName else rule.toString()
     }
 }

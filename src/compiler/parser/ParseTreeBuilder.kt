@@ -1,19 +1,19 @@
 package compiler.parser
 
-import compiler.parser.Language.Grammar
-import compiler.parser.Language.Grammar.ParseTreeSentinel
-import compiler.parser.Language.Token
-import compiler.parser.Language.Token.IgnorableTokens.EOFToken
+import compiler.parser.Symbols.NonTerminal
+import compiler.parser.Symbols.NonTerminal.ParseTreeSentinel
+import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbols.Terminal.Ignorable.EOFTerminal
 
 class ParseTreeBuilder {
     private var root: TreeNode? = null
 
-    fun setStartSymbol(startSymbol: Grammar): ParseTreeBuilderFirstStep {
+    fun setStartSymbol(startSymbol: NonTerminal): ParseTreeBuilderFirstStep {
         return object : ParseTreeBuilderFirstStep {
             override fun setInputSourceName(inputName: String): ParseTreeBuilderLastStep {
                 return object : ParseTreeBuilderLastStep {
-                    override fun build(tokens: List<Token>): TreeNode {
-                        val EOF = EOFToken()
+                    override fun build(terminals: List<Terminal>): TreeNode {
+                        val EOF = EOFTerminal()
                         val root = ParseTreeSentinel()
                         this@ParseTreeBuilder.root = root
                         root.children.push(EOF)
@@ -23,12 +23,12 @@ class ParseTreeBuilder {
                                 .setStartSymbol(startSymbol)
                                 .setEOF(EOF)
                                 .onGrammarRuleApplication(object : GrammarRuleApplicationListener {
-                                    override fun accept(p1: TreeNode, p2: Token, p3: List<TreeNode>) {
+                                    override fun accept(p1: TreeNode, p2: Terminal, p3: List<TreeNode>) {
                                         this@ParseTreeBuilder.AttachToTree(p1, p2, p3)
                                     }
                                 })
                                 .createParser()
-                                .parse(inputName, tokens)
+                                .parse(inputName, terminals)
                         return root
                     }
                 }
@@ -36,14 +36,14 @@ class ParseTreeBuilder {
         }
     }
 
-    private fun AttachToTree(top: TreeNode, token: Token, rhs: List<TreeNode>) {
-        if (top is Token && top !is EOFToken) {
-            token.parent = top.parent
+    private fun AttachToTree(top: TreeNode, terminal: Terminal, rhs: List<TreeNode>) {
+        if (top is Terminal && top !is EOFTerminal) {
+            terminal.parent = top.parent
             val siblings = top.parent!!.children
             val topIndex = top.parent!!.children.indexOf(top)
-            siblings[topIndex] = token
+            siblings[topIndex] = terminal
         }
-        if (top !is Token) {
+        if (top !is Terminal) {
             top.children.addAll(rhs)
             rhs.forEach { it.parent = top }
         }
@@ -55,7 +55,7 @@ class ParseTreeBuilder {
 
     interface ParseTreeBuilderLastStep {
         @Throws(Exception::class)
-        fun build(tokens: List<Token>): TreeNode
+        fun build(terminals: List<Terminal>): TreeNode
     }
 
 }

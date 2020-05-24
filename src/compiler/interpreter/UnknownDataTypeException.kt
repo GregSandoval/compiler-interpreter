@@ -1,7 +1,7 @@
 package compiler.interpreter
 
-import compiler.parser.Language.Token
+import compiler.parser.Symbols.Terminal
 import compiler.parser.UserException
 
-class UnknownDataTypeException(token: Token) :
-        UserException("Unknown data type: ${token.str}", token)
+class UnknownDataTypeException(terminal: Terminal) :
+        UserException("Unknown data type: ${terminal.str}", terminal)

@@ -1,97 +1,97 @@
 package compiler.parser.visitors
 
-import compiler.parser.Language.Token
-import compiler.parser.Language.Token.IgnorableTokens.*
-import compiler.parser.Language.Token.KeywordToken.*
-import compiler.parser.Language.Token.KeywordToken.TypeToken.*
-import compiler.parser.Language.Token.OperatorToken.*
-import compiler.parser.Language.Token.SymbolToken.*
-import compiler.parser.Language.Token.TypedToken.*
+import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbols.Terminal.Ignorable.*
+import compiler.parser.Symbols.Terminal.Keyword.*
+import compiler.parser.Symbols.Terminal.Keyword.Type.*
+import compiler.parser.Symbols.Terminal.Operator.*
+import compiler.parser.Symbols.Terminal.Punctuation.*
+import compiler.parser.Symbols.Terminal.TypedTerminal.*
 
 interface TokenTypedAdapterVisitor<T> : TokenVisitor<T> {
     fun defaultValue(): T
 
-    override fun visit(token: CommentToken): T {
+    override fun visit(token: CommentTerminal): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: EOFToken): T {
+    override fun visit(token: EOFTerminal): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: WhitespaceToken): T {
+    override fun visit(token: WhitespaceTerminal): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: IdentifierToken): T {
+    override fun visit(token: IdentifierTerminal): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: ProgramKeywordToken): T {
+    override fun visit(token: ProgramKeyword): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: MainKeywordToken): T {
+    override fun visit(token: MainKeyword): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: FunctionKeywordToken): T {
+    override fun visit(token: FunctionKeyword): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: ClassKeywordToken): T {
+    override fun visit(token: ClassKeyword): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: FloatKeywordToken): T {
+    override fun visit(token: FloatKeyword): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: IntegerKeywordToken): T {
+    override fun visit(token: IntegerKeyword): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: StringKeywordToken): T {
+    override fun visit(token: StringKeyword): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: VoidToken): T {
+    override fun visit(token: Void): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: IfKeywordToken): T {
+    override fun visit(token: IfKeyword): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: ElseIfKeywordToken): T {
+    override fun visit(token: ElseIfKeyword): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: ElseKeywordToken): T {
+    override fun visit(token: ElseKeyword): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: WhileKeywordToken): T {
+    override fun visit(token: WhileKeyword): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: InputKeywordToken): T {
+    override fun visit(token: InputKeyword): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: PrintKeywordToken): T {
+    override fun visit(token: PrintKeyword): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: NewKeywordToken): T {
+    override fun visit(token: NewKeyword): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: ReturnKeywordToken): T {
+    override fun visit(token: ReturnKeyword): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: VarKeywordToken): T {
+    override fun visit(token: VarKeyword): T {
         return visitChildren(token)
     }
 
@@ -151,15 +151,15 @@ interface TokenTypedAdapterVisitor<T> : TokenVisitor<T> {
         return visitChildren(token)
     }
 
-    override fun visit(token: FloatToken): T {
+    override fun visit(token: FloatTerminal): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: IntegerToken): T {
+    override fun visit(token: IntegerTerminal): T {
         return visitChildren(token)
     }
 
-    override fun visit(token: StringToken): T {
+    override fun visit(token: StringTerminal): T {
         return visitChildren(token)
     }
 
@@ -211,9 +211,9 @@ interface TokenTypedAdapterVisitor<T> : TokenVisitor<T> {
         return visitChildren(token)
     }
 
-    fun visitChildren(token: Token): T {
-        for (child in token.children) {
-            this.accept(child as Token)
+    fun visitChildren(terminal: Terminal): T {
+        for (child in terminal.children) {
+            this.accept(child as Terminal)
         }
         return defaultValue()
     }

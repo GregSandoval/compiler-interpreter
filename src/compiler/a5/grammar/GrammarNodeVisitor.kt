@@ -1,11 +1,11 @@
 package compiler.a5.grammar
 
-import compiler.parser.Language.Grammar
-import compiler.parser.Language.Grammar.*
+import compiler.parser.Symbols.NonTerminal
+import compiler.parser.Symbols.NonTerminal.*
 
 
 interface GrammarNodeVisitor {
-    fun accept(node: Grammar) = when (node) {
+    fun accept(node: NonTerminal) = when (node) {
         is Pgm -> visit(node)
         is Main -> visit(node)
         is BBlock -> visit(node)

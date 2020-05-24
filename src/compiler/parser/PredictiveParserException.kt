@@ -1,20 +1,20 @@
 package compiler.parser
 
-import compiler.parser.Language.Grammar
-import compiler.parser.Language.Token
+import compiler.parser.Symbols.NonTerminal
+import compiler.parser.Symbols.Terminal
 import java.util.stream.Collectors
 
-class PredictiveParserException(grammarNode: Grammar, token: Token) : UserException(formatMessage(grammarNode, token), token) {
+class PredictiveParserException(nonTerminalNode: NonTerminal, terminal: Terminal) : UserException(formatMessage(nonTerminalNode, terminal), terminal) {
     companion object {
-        private fun formatMessage(grammarRule: Grammar, token: Token): String {
-            val tokenClassName = token.javaClass.simpleName
-            val grammarClassName = grammarRule.javaClass.simpleName
-            val expectedTokens = grammarRule
+        private fun formatMessage(nonTerminalRule: NonTerminal, terminal: Terminal): String {
+            val tokenClassName = terminal.javaClass.simpleName
+            val grammarClassName = nonTerminalRule.javaClass.simpleName
+            val expectedTokens = nonTerminalRule
                     .getRHS()
                     .stream()
                     .map { it.simpleName }
                     .collect(Collectors.joining(" or "))
-            return "\nLL Table missing entry exception; $grammarRule($tokenClassName) = undefined\n$grammarClassName expected $expectedTokens but found $tokenClassName"
+            return "\nLL Table missing entry exception; $nonTerminalRule($tokenClassName) = undefined\n$grammarClassName expected $expectedTokens but found $tokenClassName"
         }
     }
 }

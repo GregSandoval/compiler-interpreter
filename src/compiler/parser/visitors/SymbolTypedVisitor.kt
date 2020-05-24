@@ -1,20 +1,20 @@
 package compiler.parser.visitors
 
-import compiler.parser.Language.Token
-import compiler.parser.Language.Token.SymbolToken.*
+import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbols.Terminal.Punctuation.*
 
 interface SymbolTypedVisitor<T> {
-    fun accept(token: Token.SymbolToken) = when (token) {
-        is Comma -> visit(token)
-        is SemiColon -> visit(token)
-        is LeftBrace -> visit(token)
-        is RightBrace -> visit(token)
-        is LeftBracket -> visit(token)
-        is RightBracket -> visit(token)
-        is LeftParen -> visit(token)
-        is RightParen -> visit(token)
-        is Colon -> visit(token)
-        is Period -> visit(token)
+    fun accept(terminal: Terminal.Punctuation) = when (terminal) {
+        is Comma -> visit(terminal)
+        is SemiColon -> visit(terminal)
+        is LeftBrace -> visit(terminal)
+        is RightBrace -> visit(terminal)
+        is LeftBracket -> visit(terminal)
+        is RightBracket -> visit(terminal)
+        is LeftParen -> visit(terminal)
+        is RightParen -> visit(terminal)
+        is Colon -> visit(terminal)
+        is Period -> visit(terminal)
     }
 
     fun visit(token: Comma): T

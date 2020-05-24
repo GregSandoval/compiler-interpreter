@@ -1,13 +1,13 @@
 package compiler.parser
 
-import compiler.parser.Language.Token
+import compiler.parser.Symbols.Terminal
 
-class UnexpectedToken(top: TreeNode, token: Token, inputName: String) : Exception(formatError(top, token, inputName)) {
+class UnexpectedToken(top: TreeNode, terminal: Terminal, inputName: String) : Exception(formatError(top, terminal, inputName)) {
     companion object {
-        private fun formatError(top: TreeNode, token: Token, inputName: String): String {
+        private fun formatError(top: TreeNode, terminal: Terminal, inputName: String): String {
             val grammarClassName = top.javaClass.simpleName
-            val tokenClassName = token.javaClass.simpleName
-            val tokenLineNumber = token.lineInfo.number
+            val tokenClassName = terminal.javaClass.simpleName
+            val tokenLineNumber = terminal.lineInfo.number
             return "\nUnexpected token; Expected a $grammarClassName but found a $tokenClassName\n\tat $inputName($inputName:$tokenLineNumber)"
         }
     }

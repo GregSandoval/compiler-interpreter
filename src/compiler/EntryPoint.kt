@@ -7,11 +7,11 @@ import compiler.lexer.LexerBuilder
 import compiler.lexer.NonFinalStateListener
 import compiler.lexer.UnknownTokenException
 import compiler.parser.AbstractSyntaxTreeBuilder
-import compiler.parser.Language.Grammar
-import compiler.parser.Language.Grammar.ParseTreeSentinel
-import compiler.parser.Language.Grammar.Pgm
-import compiler.parser.Language.Token
 import compiler.parser.ParseTreeBuilder
+import compiler.parser.Symbols.NonTerminal
+import compiler.parser.Symbols.NonTerminal.ParseTreeSentinel
+import compiler.parser.Symbols.NonTerminal.Pgm
+import compiler.parser.Symbols.Terminal
 import compiler.parser.TreeNode
 import compiler.utils.TextCursor
 import visualization.TreeVisualizer
@@ -29,15 +29,15 @@ object EntryPoint {
     @JvmStatic
     fun main(args: Array<String>) {
         val settings = processArgs(args)
-        val tokens: List<Token>
+        val terminals: List<Terminal>
 
         inputName = settings.inputName
-        if (settings.tokens != null) {
+        if (settings.terminals != null) {
             // Passed in token stream
-            tokens = settings.tokens!!
+            terminals = settings.terminals!!
         } else {
             // Tokenize file
-            tokens = LexerBuilder()
+            terminals = LexerBuilder()
                     .setDFA(A5LexiconDFA())
                     .onUnknownTokenFound(NonFinalStateListener { cursor, _ -> logUnknownToken(cursor) })
                     .createLexer()
@@ -55,7 +55,7 @@ object EntryPoint {
         var tree = ParseTreeBuilder()
                 .setStartSymbol(Pgm())
                 .setInputSourceName(settings.inputName)
-                .build(tokens)
+                .build(terminals)
 
         // Serialize current PST
         TreeVisualizer.toImage(tree, settings.pstOut)
@@ -91,7 +91,7 @@ object EntryPoint {
             }
         }
 
-        if (settings.inputText == null && settings.tokens == null) {
+        if (settings.inputText == null && settings.terminals == null) {
             Scanner(System.`in`)
                     .useDelimiter(Pattern.compile("$"))
                     .use { settings.inputText = if (it.hasNext()) it.next() else "" }
@@ -101,7 +101,7 @@ object EntryPoint {
 
     fun validateAST(tree: TreeNode) {
         println("Validating AST contains only tokens...")
-        val unhandledNodes = ArrayList<Grammar>()
+        val unhandledNodes = ArrayList<NonTerminal>()
         validateAST(tree, unhandledNodes)
 
         if (unhandledNodes.isEmpty()) {
@@ -113,11 +113,11 @@ object EntryPoint {
             println("Uh-oh; AST contains grammar nodes! Need to add more logic to these nodes:$unhandledNodes")
     }
 
-    fun validateAST(tree: TreeNode?, unhandledNodes: MutableList<Grammar>) {
+    fun validateAST(tree: TreeNode?, unhandledNodes: MutableList<NonTerminal>) {
         if (tree == null) {
             return
         }
-        if (tree is Grammar) {
+        if (tree is NonTerminal) {
             unhandledNodes.add(tree)
         }
         for (child in tree.children) {
@@ -134,6 +134,6 @@ object EntryPoint {
         var astOut = "ast"
         var inputName = "std.in"
         var inputText: String? = null
-        var tokens: List<Token>? = null
+        var terminals: List<Terminal>? = null
     }
 }

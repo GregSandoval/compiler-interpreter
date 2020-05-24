@@ -1,13 +1,13 @@
 package compiler.parser
 
-import compiler.parser.Language.Token
+import compiler.parser.Symbols.Terminal
 import compiler.utils.TriConsumer
 import java.util.*
 import java.util.function.BiConsumer
 
-typealias BeforeRuleApplicationListener = BiConsumer<LinkedList<TreeNode>, Token>
-typealias GeneralListener = BiConsumer<TreeNode, Token>
-typealias GrammarRuleApplicationListener = TriConsumer<TreeNode, Token, List<TreeNode>>
+typealias BeforeRuleApplicationListener = BiConsumer<LinkedList<TreeNode>, Terminal>
+typealias GeneralListener = BiConsumer<TreeNode, Terminal>
+typealias GrammarRuleApplicationListener = TriConsumer<TreeNode, Terminal, List<TreeNode>>
 
 object ParserListeners {
     fun BeforeRuleApplicationListenerIdentity(): BeforeRuleApplicationListener {
@@ -20,7 +20,7 @@ object ParserListeners {
 
     fun GrammarRuleApplicationIdentity(): GrammarRuleApplicationListener {
         return object : GrammarRuleApplicationListener {
-            override fun accept(p1: TreeNode, p2: Token, p3: List<TreeNode>) {
+            override fun accept(p1: TreeNode, p2: Terminal, p3: List<TreeNode>) {
             }
         }
     }

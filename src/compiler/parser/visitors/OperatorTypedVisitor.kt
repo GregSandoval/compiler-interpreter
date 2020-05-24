@@ -1,10 +1,10 @@
 package compiler.parser.visitors
 
-import compiler.parser.Language.Token.OperatorToken
-import compiler.parser.Language.Token.OperatorToken.*
+import compiler.parser.Symbols.Terminal.Operator
+import compiler.parser.Symbols.Terminal.Operator.*
 
 interface OperatorTypedVisitor<T> {
-    fun accept(token: OperatorToken) = when (token) {
+    fun accept(token: Operator) = when (token) {
         is LessThan -> visit(token)
         is GreaterThan -> visit(token)
         is Asterisk -> visit(token)

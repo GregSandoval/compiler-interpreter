@@ -1,27 +1,27 @@
 package compiler.interpreter
 
-import compiler.parser.Language.Token
-import compiler.parser.Language.Token.KeywordToken.TypeToken
-import compiler.parser.Language.Token.KeywordToken.TypeToken.*
-import compiler.parser.Language.Token.KeywordToken.VarKeywordToken
-import compiler.parser.Language.Token.OperatorToken.Equal
-import compiler.parser.Language.Token.TypedToken.IdentifierToken
+import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbols.Terminal.Keyword.Type
+import compiler.parser.Symbols.Terminal.Keyword.Type.*
+import compiler.parser.Symbols.Terminal.Keyword.VarKeyword
+import compiler.parser.Symbols.Terminal.Operator.Equal
+import compiler.parser.Symbols.Terminal.TypedTerminal.IdentifierTerminal
 import compiler.parser.visitors.TokenTypedAdapterVisitor
 
-class SymbolTableBuilder private constructor(private val symtab: SymbolTable) : TokenTypedAdapterVisitor<TypeToken?> {
-    override fun visit(token: VarKeywordToken): TypeToken? {
+class SymbolTableBuilder private constructor(private val symtab: SymbolTable) : TokenTypedAdapterVisitor<Type?> {
+    override fun visit(token: VarKeyword): Type? {
         val paren = token.children[0]
         for (equalOrDataType in paren.children) {
-            var identifier: IdentifierToken
-            var type: TypeToken
-            if (equalOrDataType is TypeToken) {
+            var identifier: IdentifierTerminal
+            var type: Type
+            if (equalOrDataType is Type) {
                 type = equalOrDataType
-                identifier = equalOrDataType.children[0] as IdentifierToken
+                identifier = equalOrDataType.children[0] as IdentifierTerminal
             } else if (equalOrDataType is Equal) {
-                type = equalOrDataType.children[0] as TypeToken
-                identifier = type.children[0] as IdentifierToken
+                type = equalOrDataType.children[0] as Type
+                identifier = type.children[0] as IdentifierTerminal
             } else {
-                throw UnknownDataTypeException(equalOrDataType as Token)
+                throw UnknownDataTypeException(equalOrDataType as Terminal)
             }
             if (symtab.hasSymbol(identifier)) {
                 throw RuntimeException(identifier.javaClass.simpleName + " has already been declared")
@@ -32,26 +32,26 @@ class SymbolTableBuilder private constructor(private val symtab: SymbolTable) : 
         return null
     }
 
-    override fun visit(token: StringKeywordToken): TypeToken {
+    override fun visit(token: StringKeyword): Type {
         return token
     }
 
-    override fun visit(token: FloatKeywordToken): TypeToken {
+    override fun visit(token: FloatKeyword): Type {
         return token
     }
 
-    override fun visit(token: IntegerKeywordToken): TypeToken {
+    override fun visit(token: IntegerKeyword): Type {
         return token
     }
 
-    override fun defaultValue(): TypeToken {
+    override fun defaultValue(): Type {
         return voidToken
     }
 
     companion object {
-        val voidToken = VoidToken()
+        val voidToken = Void()
         val undefined = Undefined()
-        fun build(node: Token, symtab: SymbolTable) {
+        fun build(node: Terminal, symtab: SymbolTable) {
             val visitor = SymbolTableBuilder(symtab)
             visitor.accept(node)
         }

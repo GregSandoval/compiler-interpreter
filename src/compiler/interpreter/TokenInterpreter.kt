@@ -1,12 +1,12 @@
 package compiler.interpreter
 
-import compiler.parser.Language.Token
-import compiler.parser.Language.Token.KeywordToken
-import compiler.parser.Language.Token.KeywordToken.*
-import compiler.parser.Language.Token.OperatorToken.*
-import compiler.parser.Language.Token.SymbolToken.LeftBrace
-import compiler.parser.Language.Token.SymbolToken.LeftParen
-import compiler.parser.Language.Token.TypedToken.*
+import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbols.Terminal.Keyword
+import compiler.parser.Symbols.Terminal.Keyword.*
+import compiler.parser.Symbols.Terminal.Operator.*
+import compiler.parser.Symbols.Terminal.Punctuation.LeftBrace
+import compiler.parser.Symbols.Terminal.Punctuation.LeftParen
+import compiler.parser.Symbols.Terminal.TypedTerminal.*
 import compiler.parser.TokenEvaluator
 import compiler.parser.TreeNode
 import java.util.*
@@ -17,12 +17,12 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
     private val scanner = Scanner(System.`in`)
 
     @Throws(Exception::class)
-    override fun visit(token: InputKeywordToken): String {
+    override fun visit(token: InputKeyword): String {
         return scanner.nextLine()
     }
 
     @Throws(Exception::class)
-    override fun visit(token: WhileKeywordToken) {
+    override fun visit(token: WhileKeyword) {
         val paren = token.children[0] as LeftParen
         val body = token.children[1] as LeftBrace
         while ((this.accept(paren) as List<Boolean>)[0]) {
@@ -31,7 +31,7 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
     }
 
     @Throws(Exception::class)
-    override fun visit(token: IfKeywordToken) {
+    override fun visit(token: IfKeyword) {
         val paren = token.children[0] as LeftParen
         val body = token.children[1] as LeftBrace
         if ((this.accept(paren) as List<Boolean>)[0]) {
@@ -41,11 +41,11 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
         if (token.children.size < 3) {
             return
         }
-        this.accept(token.children[2] as Token)
+        this.accept(token.children[2] as Terminal)
     }
 
     @Throws(Exception::class)
-    override fun visit(token: ElseIfKeywordToken) {
+    override fun visit(token: ElseIfKeyword) {
         val paren = token.children[0] as LeftParen
         val body = token.children[1] as LeftBrace
         if ((this.accept(paren) as List<Boolean>)[0]) {
@@ -55,19 +55,19 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
         if (token.children.size < 3) {
             return
         }
-        this.accept(token.children[2] as Token)
+        this.accept(token.children[2] as Terminal)
     }
 
     @Throws(Exception::class)
-    override fun visit(token: ElseKeywordToken) {
+    override fun visit(token: ElseKeyword) {
         val body = token.children[0] as LeftBrace
         this.accept(body)
         return
     }
 
     @Throws(Exception::class)
-    override fun visit(token: IdentifierToken): Any {
-        if (token.parent is TypeToken) {
+    override fun visit(token: IdentifierTerminal): Any {
+        if (token.parent is Type) {
             return token
         }
         val value = symtab.getValue(token)
@@ -79,14 +79,14 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
 
     @Throws(Exception::class)
     override fun visit(token: Equal) {
-        val identifier: Token
-        val identifierOrType = token.children[0] as Token
-        identifier = if (identifierOrType is KeywordToken) {
-            token.children[0].children[0] as Token
+        val identifier: Terminal
+        val identifierOrType = token.children[0] as Terminal
+        identifier = if (identifierOrType is Keyword) {
+            token.children[0].children[0] as Terminal
         } else {
-            token.children[0] as Token
+            token.children[0] as Terminal
         }
-        val value = this.accept(token.children[1] as Token)
+        val value = this.accept(token.children[1] as Terminal)
         if (!symtab.hasSymbol(identifier)) {
             throw Exception(identifier.str + " is not defined")
         }
@@ -97,13 +97,13 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
     override fun visit(token: LeftParen): List<Any> {
         val result: MutableList<Any> = ArrayList()
         for (child in token.children) {
-            result.add(this.accept(child as Token))
+            result.add(this.accept(child as Terminal))
         }
         return result
     }
 
     @Throws(Exception::class)
-    override fun visit(token: PrintKeywordToken) {
+    override fun visit(token: PrintKeyword) {
         print(
                 (this.accept(token.children[0] as LeftParen) as List<Any>)
                         .stream()
@@ -115,17 +115,17 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
 
     // Primitives
     @Throws(Exception::class)
-    override fun visit(token: FloatToken): Float {
+    override fun visit(token: FloatTerminal): Float {
         return token.value
     }
 
     @Throws(Exception::class)
-    override fun visit(token: IntegerToken): Int {
+    override fun visit(token: IntegerTerminal): Int {
         return token.value
     }
 
     @Throws(Exception::class)
-    override fun visit(token: StringToken): String {
+    override fun visit(token: StringTerminal): String {
         return token.str
     }
 
@@ -188,12 +188,12 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
     @Throws(Exception::class)
     override fun visit(token: Asterisk): Any {
         if (token.children.size == 1) {
-            val pointer = token.children[0] as Token
+            val pointer = token.children[0] as Terminal
             val address = symtab.getValue(pointer) as String
             return symtab.getValueAtAddress(address)!!
         }
-        val leftToken = token.children[0] as Token
-        val rightToken = token.children[1] as Token
+        val leftToken = token.children[0] as Terminal
+        val rightToken = token.children[1] as Terminal
         return numberBiFunction(
                 leftToken,
                 rightToken,
@@ -205,8 +205,8 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
 
     @Throws(Exception::class)
     override fun visit(token: Minus): Number {
-        val leftToken = token.children[0] as Token
-        val rightToken = token.children[1] as Token
+        val leftToken = token.children[0] as Terminal
+        val rightToken = token.children[1] as Terminal
         return numberBiFunction(
                 leftToken,
                 rightToken,
@@ -218,8 +218,8 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
 
     @Throws(Exception::class)
     override fun visit(token: Plus): Number {
-        val leftToken = token.children[0] as Token
-        val rightToken = token.children[1] as Token
+        val leftToken = token.children[0] as Terminal
+        val rightToken = token.children[1] as Terminal
         return numberBiFunction(
                 leftToken,
                 rightToken,
@@ -231,8 +231,8 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
 
     @Throws(Exception::class)
     override fun visit(token: BitShiftLeft): Number {
-        val leftToken = token.children[0] as Token
-        val rightToken = token.children[1] as Token
+        val leftToken = token.children[0] as Terminal
+        val rightToken = token.children[1] as Terminal
         return numberBiFunction(
                 leftToken,
                 rightToken,
@@ -244,8 +244,8 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
 
     @Throws(Exception::class)
     override fun visit(token: BitShiftRight): Number {
-        val leftToken = token.children[0] as Token
-        val rightToken = token.children[1] as Token
+        val leftToken = token.children[0] as Terminal
+        val rightToken = token.children[1] as Terminal
         return numberBiFunction(
                 leftToken,
                 rightToken,
@@ -257,8 +257,8 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
 
     @Throws(Exception::class)
     override fun visit(token: Caret): Number {
-        val leftToken = token.children[0] as Token
-        val rightToken = token.children[1] as Token
+        val leftToken = token.children[0] as Terminal
+        val rightToken = token.children[1] as Terminal
         return numberBiFunction(
                 leftToken,
                 rightToken,
@@ -270,8 +270,8 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
 
     @Throws(Exception::class)
     override fun visit(token: ForwardSlash): Number {
-        val leftToken = token.children[0] as Token
-        val rightToken = token.children[1] as Token
+        val leftToken = token.children[0] as Terminal
+        val rightToken = token.children[1] as Terminal
         return numberBiFunction(
                 leftToken,
                 rightToken,
@@ -283,7 +283,7 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
 
     @Throws(Exception::class)
     override fun visit(token: Ampersand): Any {
-        return symtab.getAddress((token.children[0] as Token))
+        return symtab.getAddress((token.children[0] as Terminal))
     }
 
     @Throws(Exception::class)
@@ -378,7 +378,7 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
 
     @Throws(Exception::class)
     fun <T> evaluate(valueType: Class<T>, node: TreeNode): T {
-        val token = assertClass(Token::class.java, node)
+        val token = assertClass(Terminal::class.java, node)
         return assertClass(valueType, this.accept(token))
     }
 
@@ -392,7 +392,7 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
 
     companion object {
         @Throws(Exception::class)
-        fun interpret(tree: Token, symtab: SymbolTable) {
+        fun interpret(tree: Terminal, symtab: SymbolTable) {
             TokenInterpreter(symtab).accept(tree)
         }
 

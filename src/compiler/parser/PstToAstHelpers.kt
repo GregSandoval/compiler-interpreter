@@ -1,13 +1,13 @@
 package compiler.parser
 
-import compiler.parser.Language.Grammar
-import compiler.parser.Language.Token
+import compiler.parser.Symbols.NonTerminal
+import compiler.parser.Symbols.Terminal
 import java.util.function.Consumer
 
 object PstToAstHelpers {
     fun hoist(tree: TreeNode) {
         for (token in tree.children) {
-            if (token !is Token) {
+            if (token !is Terminal) {
                 continue
             }
 
@@ -43,7 +43,7 @@ object PstToAstHelpers {
             }
             val token = children[i]
 
-            if (token !is Token) {
+            if (token !is Terminal) {
                 continue
             }
 
@@ -70,7 +70,7 @@ object PstToAstHelpers {
 
     fun rightContraction(tree: TreeNode) {
         val rightMostNode = tree.children.last
-        if (rightMostNode is Grammar) {
+        if (rightMostNode is NonTerminal) {
             tree.children.remove(rightMostNode)
             rightMostNode.parent = null
             rightMostNode.children.forEach { tree.children.addLast(it) }

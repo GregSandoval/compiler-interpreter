@@ -1,17 +1,17 @@
 package compiler.lexer
 
 import compiler.lexer.token.LineInfo
-import compiler.parser.Language.Token
-import compiler.parser.Language.Token.IgnorableTokens.CommentToken
-import compiler.parser.Language.Token.IgnorableTokens.WhitespaceToken
-import compiler.parser.Language.Token.OperatorToken.*
-import compiler.parser.Language.Token.SymbolToken.*
-import compiler.parser.Language.Token.TypedToken.*
+import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbols.Terminal.Ignorable.CommentTerminal
+import compiler.parser.Symbols.Terminal.Ignorable.WhitespaceTerminal
+import compiler.parser.Symbols.Terminal.Operator.*
+import compiler.parser.Symbols.Terminal.Punctuation.*
+import compiler.parser.Symbols.Terminal.TypedTerminal.*
 import compiler.utils.TextCursor
 
-typealias NoArgConstructor = () -> Token
+typealias NoArgConstructor = () -> Terminal
 
-typealias SingleArgConstructor = (String) -> Token
+typealias SingleArgConstructor = (String) -> Terminal
 
 sealed class LexicalNode {
 
@@ -55,15 +55,15 @@ sealed class LexicalNode {
         }
 
         sealed class FinalStateSingleArg(constructor: SingleArgConstructor) : FinalState(constructor) {
-            object IDENTIFIER : FinalStateSingleArg(::IdentifierToken)
-            object INTEGER : FinalStateSingleArg(::IntegerToken)
-            object FLOAT : FinalStateSingleArg(::FloatToken)
-            object WHITESPACE : FinalStateSingleArg(::WhitespaceToken)
-            object COMMENT : FinalStateSingleArg(::CommentToken)
-            object CLOSING_STRING : FinalStateSingleArg(::StringToken)
+            object IDENTIFIER : FinalStateSingleArg(::IdentifierTerminal)
+            object INTEGER : FinalStateSingleArg(::IntegerTerminal)
+            object FLOAT : FinalStateSingleArg(::FloatTerminal)
+            object WHITESPACE : FinalStateSingleArg(::WhitespaceTerminal)
+            object COMMENT : FinalStateSingleArg(::CommentTerminal)
+            object CLOSING_STRING : FinalStateSingleArg(::StringTerminal)
         }
 
-        fun getToken(cursor: TextCursor): Token {
+        fun getToken(cursor: TextCursor): Terminal {
             val text = cursor.getCurrentSentence()
             val token = constructor(text)
             token.lineInfo = LineInfo(cursor.getCursorLineNumber(), cursor.getCursorLinePosition())

@@ -1,7 +1,7 @@
 package compiler.interpreter
 
-import compiler.parser.Language.Token
+import compiler.parser.Symbols.Terminal
 import compiler.parser.UserException
 
-class UndeclaredIdentifierException(token: Token) :
-        UserException("Identifier '${token.str}' is undeclared. Please declare identifier in variable block", token)
+class UndeclaredIdentifierException(terminal: Terminal) :
+        UserException("Identifier '${terminal.str}' is undeclared. Please declare identifier in variable block", terminal)

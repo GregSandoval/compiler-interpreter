@@ -1,9 +1,9 @@
 package visualization.dotfile
 
-import compiler.parser.Language.Grammar.NULL_NODE
-import compiler.parser.Language.Token
-import compiler.parser.Language.Token.IgnorableTokens.EOFToken
-import compiler.parser.Language.Token.TypedToken.StringToken
+import compiler.parser.Symbols.NonTerminal.NULL_NODE
+import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbols.Terminal.Ignorable.EOFTerminal
+import compiler.parser.Symbols.Terminal.TypedTerminal.StringTerminal
 import compiler.parser.TreeNode
 import java.io.IOException
 import java.io.PrintWriter
@@ -89,9 +89,9 @@ object TreeDotFileSerializer {
 
     fun formatWithValue(rule: TreeNode): String {
         return when (rule) {
-            is EOFToken -> "EOF"
-            is StringToken -> "\'\'${rule.str}\'\'"
-            is Token -> rule.str
+            is EOFTerminal -> "EOF"
+            is StringTerminal -> "\'\'${rule.str}\'\'"
+            is Terminal -> rule.str
             else -> rule.toString()
         }
     }

@@ -1,11 +1,11 @@
 package compiler.a5.grammar
 
-import compiler.parser.Language.Grammar.*
-import compiler.parser.Language.Token.KeywordToken.VarKeywordToken
-import compiler.parser.Language.Token.OperatorToken.Equal
-import compiler.parser.Language.Token.OperatorToken.Plus
-import compiler.parser.Language.Token.SymbolToken.*
 import compiler.parser.PstToAstHelpers
+import compiler.parser.Symbols.NonTerminal.*
+import compiler.parser.Symbols.Terminal.Keyword.VarKeyword
+import compiler.parser.Symbols.Terminal.Operator.Equal
+import compiler.parser.Symbols.Terminal.Operator.Plus
+import compiler.parser.Symbols.Terminal.Punctuation.*
 import compiler.parser.TreeNode
 import java.util.*
 
@@ -200,7 +200,7 @@ class PstToAstGrammarVisitor : GrammarNodeVisitor {
         for (i in 0 until node.children.size - 1) {
             val left = node.children[i]
             val right = node.children[i + 1]
-            if (left is Colon && right is VarKeywordToken) {
+            if (left is Colon && right is VarKeyword) {
                 removables.add(right)
                 left.children.addLast(right)
                 right.parent = left

@@ -1,6 +1,6 @@
 package compiler.parser.visitors
 
-import compiler.parser.Language.Token
+import compiler.parser.Symbols.Terminal
 
 interface TokenVisitor<T> :
         IgnorableTypedVisitor<T>,
@@ -8,14 +8,14 @@ interface TokenVisitor<T> :
         OperatorTypedVisitor<T>,
         TypedTokenVisitor<T>,
         SymbolTypedVisitor<T> {
-    fun accept(token: Token) = when (token) {
-        is Token.SymbolToken -> this.accept(token)
-        is Token.IgnorableTokens -> this.accept(token)
-        is Token.OperatorToken -> this.accept(token)
-        is Token.KeywordToken -> this.accept(token)
-        is Token.TypedToken.FloatToken -> visit(token)
-        is Token.TypedToken.IdentifierToken -> visit(token)
-        is Token.TypedToken.IntegerToken -> visit(token)
-        is Token.TypedToken.StringToken -> visit(token)
+    fun accept(terminal: Terminal) = when (terminal) {
+        is Terminal.Punctuation -> this.accept(terminal)
+        is Terminal.Ignorable -> this.accept(terminal)
+        is Terminal.Operator -> this.accept(terminal)
+        is Terminal.Keyword -> this.accept(terminal)
+        is Terminal.TypedTerminal.FloatTerminal -> visit(terminal)
+        is Terminal.TypedTerminal.IdentifierTerminal -> visit(terminal)
+        is Terminal.TypedTerminal.IntegerTerminal -> visit(terminal)
+        is Terminal.TypedTerminal.StringTerminal -> visit(terminal)
     }
 }

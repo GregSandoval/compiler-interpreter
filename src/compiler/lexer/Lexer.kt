@@ -2,14 +2,14 @@ package compiler.lexer
 
 import compiler.a5.lexicon.DFA
 import compiler.lexer.token.KeywordTokenRecognizer
-import compiler.parser.Language.Token
-import compiler.parser.Language.Token.IgnorableTokens
+import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbols.Terminal.Ignorable
 import compiler.utils.TextCursor
 import java.util.*
 import java.util.function.BiConsumer
 import java.util.stream.Collectors
 
-typealias TokenCreatedListener = BiConsumer<Token, TextCursor>
+typealias TokenCreatedListener = BiConsumer<Terminal, TextCursor>
 
 class Lexer(
         private var dfa: DFA,
@@ -19,8 +19,8 @@ class Lexer(
         private var tokenCreatedListeners: TokenCreatedListener
 ) {
 
-    fun lex(text: String): List<Token> {
-        val tokens = ArrayList<Token>()
+    fun lex(text: String): List<Terminal> {
+        val tokens = ArrayList<Terminal>()
         val cursor = TextCursor(text)
 
         finalStateListeners = finalStateListeners.andThen {
@@ -38,7 +38,7 @@ class Lexer(
 
         return tokens
                 .stream()
-                .filter { terminal -> terminal !is IgnorableTokens }
+                .filter { terminal -> terminal !is Ignorable }
                 .map(KeywordTokenRecognizer::get)
                 .collect(Collectors.toList())
     }

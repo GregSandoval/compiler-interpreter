@@ -1,24 +1,24 @@
 package compiler.parser
 
-import compiler.parser.Language.Grammar
-import compiler.parser.Language.Token
-import compiler.parser.Language.Token.IgnorableTokens.EOFToken
 import compiler.parser.ParserListeners.BeforeRuleApplicationListenerIdentity
 import compiler.parser.ParserListeners.GeneralListenerIdentity
 import compiler.parser.ParserListeners.GrammarRuleApplicationIdentity
+import compiler.parser.Symbols.NonTerminal
+import compiler.parser.Symbols.Terminal
+import compiler.parser.Symbols.Terminal.Ignorable.EOFTerminal
 
 class ParserBuilder {
-    fun setStartSymbol(startSymbol: Grammar): ParserBuilderLastStep {
+    fun setStartSymbol(startSymbol: NonTerminal): ParserBuilderLastStep {
         return ParserBuilderLastStep(startSymbol)
     }
 
-    class ParserBuilderLastStep constructor(private val startSymbol: Grammar) {
+    class ParserBuilderLastStep constructor(private val startSymbol: NonTerminal) {
         private var beforeRuleApplication = BeforeRuleApplicationListenerIdentity()
         private var onGrammarRuleApplication = GrammarRuleApplicationIdentity()
         private var onPredictionNotFoundError = GeneralListenerIdentity()
         private var onUnknownGrammarRule = GeneralListenerIdentity()
         private var onUnexpectedToken = GeneralListenerIdentity()
-        private var eof: Token = EOFToken()
+        private var eof: Terminal = EOFTerminal()
         fun beforeRuleApplication(beforeRuleApplication: BeforeRuleApplicationListener): ParserBuilderLastStep {
             this.beforeRuleApplication = this.beforeRuleApplication.andThen(beforeRuleApplication)
             return this
@@ -44,7 +44,7 @@ class ParserBuilder {
             return this
         }
 
-        fun setEOF(eof: Token): ParserBuilderLastStep {
+        fun setEOF(eof: Terminal): ParserBuilderLastStep {
             this.eof = eof
             return this
         }
