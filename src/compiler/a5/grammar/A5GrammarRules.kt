@@ -1,5 +1,6 @@
 package compiler.a5.grammar
 
+import compiler.parser.LLTable
 import compiler.parser.Symbol.NonTerminal.*
 import compiler.parser.Symbol.Terminal.Keyword.*
 import compiler.parser.Symbol.Terminal.Keyword.Type.*
@@ -8,18 +9,20 @@ import compiler.parser.Symbol.Terminal.Punctuation.*
 import compiler.parser.Symbol.Terminal.TypedTerminal.*
 
 object A5GrammarRules {
-    fun build() {
-        Pgm()
-                .on(ProgramKeyword::class.java)
+    fun build(): LLTable {
+        val llTable = LLTable()
+
+        llTable
+                .on(Pgm(), ProgramKeyword::class.java)
                 .useRHS(::ProgramKeyword, ::Vargroup, ::Fcndefs, ::Main)
-        Main()
-                .on(MainKeyword::class.java)
+        llTable
+                .on(Main(), MainKeyword::class.java)
                 .useRHS(::MainKeyword, ::BBlock)
-        BBlock()
-                .on(LeftBrace::class.java)
+        llTable
+                .on(BBlock(), LeftBrace::class.java)
                 .useRHS(::LeftBrace, ::Vargroup, ::Stmts, ::RightBrace)
-        Vargroup()
-                .on(VarKeyword::class.java)
+        llTable
+                .on(Vargroup(), VarKeyword::class.java)
                 .useRHS(::VarKeyword, ::PPvarlist)
                 .on(
                         FunctionKeyword::class.java,
@@ -35,12 +38,12 @@ object A5GrammarRules {
                         Colon::class.java
                 )
                 .useRHS()
-        PPvarlist()
-                .on(LeftParen::class.java)
+        llTable
+                .on(PPvarlist(), LeftParen::class.java)
                 .useRHS(::LeftParen, ::Varlist, ::RightParen)
-        Varlist()
+        llTable
                 .on(
-                        IntegerKeyword::class.java,
+                        Varlist(), IntegerKeyword::class.java,
                         FloatKeyword::class.java,
                         StringKeyword::class.java,
                         IdentifierTerminal::class.java,
@@ -49,9 +52,9 @@ object A5GrammarRules {
                 .useRHS(::Varitem, ::SemiColon, ::Varlist)
                 .on(RightParen::class.java)
                 .useRHS()
-        Varitem()
+        llTable
                 .on(
-                        IntegerKeyword::class.java,
+                        Varitem(), IntegerKeyword::class.java,
                         FloatKeyword::class.java,
                         StringKeyword::class.java,
                         IdentifierTerminal::class.java
@@ -59,48 +62,48 @@ object A5GrammarRules {
                 .useRHS(::Vardecl, ::Varitem_Suffix)
                 .on(ClassKeyword::class.java)
                 .useRHS(::Classdef)
-        Varitem_Suffix()
-                .on(Equal::class.java)
+        llTable
+                .on(Varitem_Suffix(), Equal::class.java)
                 .useRHS(::Equal, ::Varinit)
                 .on(SemiColon::class.java)
                 .useRHS()
-        Vardecl()
+        llTable
                 .on(
-                        IntegerKeyword::class.java,
+                        Vardecl(), IntegerKeyword::class.java,
                         FloatKeyword::class.java,
                         StringKeyword::class.java,
                         IdentifierTerminal::class.java
                 )
                 .useRHS(::Simplekind, ::Varspec)
-        Simplekind()
+        llTable
                 .on(
-                        IntegerKeyword::class.java,
+                        Simplekind(), IntegerKeyword::class.java,
                         FloatKeyword::class.java,
                         StringKeyword::class.java
                 )
                 .useRHS(::BaseKind)
                 .on(IdentifierTerminal::class.java)
                 .useRHS(::Classid)
-        BaseKind()
-                .on(IntegerKeyword::class.java)
+        llTable
+                .on(BaseKind(), IntegerKeyword::class.java)
                 .useRHS(::IntegerKeyword)
                 .on(FloatKeyword::class.java)
                 .useRHS(::FloatKeyword)
                 .on(StringKeyword::class.java)
                 .useRHS(::StringKeyword)
-        Classid()
-                .on(IdentifierTerminal::class.java)
+        llTable
+                .on(Classid(), IdentifierTerminal::class.java)
                 .useRHS(::IdentifierTerminal)
-        Varspec()
-                .on(IdentifierTerminal::class.java)
+        llTable
+                .on(Varspec(), IdentifierTerminal::class.java)
                 .useRHS(::Varid, ::Arrspec)
                 .on(Asterisk::class.java)
                 .useRHS(::Deref_id)
-        Varid()
-                .on(IdentifierTerminal::class.java)
+        llTable
+                .on(Varid(), IdentifierTerminal::class.java)
                 .useRHS(::IdentifierTerminal)
-        Arrspec()
-                .on(LeftBracket::class.java)
+        llTable
+                .on(Arrspec(), LeftBracket::class.java)
                 .useRHS(::KKint)
                 .on(
                         Equal::class.java,
@@ -109,18 +112,18 @@ object A5GrammarRules {
                         RightParen::class.java
                 )
                 .useRHS()
-        KKint()
-                .on(LeftBracket::class.java)
+        llTable
+                .on(KKint(), LeftBracket::class.java)
                 .useRHS(::LeftBracket, ::IntegerTerminal, ::RightBracket)
-        Deref_id()
-                .on(Asterisk::class.java)
+        llTable
+                .on(Deref_id(), Asterisk::class.java)
                 .useRHS(::Deref, ::IdentifierTerminal)
-        Deref()
-                .on(Asterisk::class.java)
+        llTable
+                .on(Deref(), Asterisk::class.java)
                 .useRHS(::Asterisk)
-        Varinit()
+        llTable
                 .on(
-                        IntegerTerminal::class.java,
+                        Varinit(), IntegerTerminal::class.java,
                         FloatTerminal::class.java,
                         StringTerminal::class.java,
                         Asterisk::class.java,
@@ -131,12 +134,12 @@ object A5GrammarRules {
                 .useRHS(::Expr)
                 .on(LeftBrace::class.java)
                 .useRHS(::BBexprs)
-        BBexprs()
-                .on(LeftBrace::class.java)
+        llTable
+                .on(BBexprs(), LeftBrace::class.java)
                 .useRHS(::LeftBrace, ::Exprlist, ::RightBrace)
-        Exprlist()
+        llTable
                 .on(
-                        IntegerTerminal::class.java,
+                        Exprlist(), IntegerTerminal::class.java,
                         FloatTerminal::class.java,
                         StringTerminal::class.java,
                         Asterisk::class.java,
@@ -150,30 +153,30 @@ object A5GrammarRules {
                         RightParen::class.java
                 )
                 .useRHS()
-        Moreexprs()
-                .on(Comma::class.java)
+        llTable
+                .on(Moreexprs(), Comma::class.java)
                 .useRHS(::Comma, ::Exprlist)
                 .on(
                         RightBrace::class.java,
                         RightParen::class.java
                 )
                 .useRHS()
-        Classdef()
-                .on(ClassKeyword::class.java)
+        llTable
+                .on(Classdef(), ClassKeyword::class.java)
                 .useRHS(::Classheader, ::Classdef_Suffix)
-        Classdef_Suffix()
-                .on(LeftBrace::class.java)
+        llTable
+                .on(Classdef_Suffix(), LeftBrace::class.java)
                 .useRHS(::BBClassitems)
                 .on(IfKeyword::class.java)
                 .useRHS(::IfKeyword, ::BBClassitems)
-        BBClassitems()
-                .on(LeftBrace::class.java)
+        llTable
+                .on(BBClassitems(), LeftBrace::class.java)
                 .useRHS(::LeftBrace, ::Classitems, ::RightBrace)
-        Classheader()
-                .on(ClassKeyword::class.java)
+        llTable
+                .on(Classheader(), ClassKeyword::class.java)
                 .useRHS(::ClassKeyword, ::Classid, ::Classmom, ::Interfaces)
-        Classmom()
-                .on(Colon::class.java)
+        llTable
+                .on(Classmom(), Colon::class.java)
                 .useRHS(::Colon, ::Classid)
                 .on(
                         Plus::class.java,
@@ -181,28 +184,28 @@ object A5GrammarRules {
                         IfKeyword::class.java
                 )
                 .useRHS()
-        Classitems()
-                .on(Colon::class.java, VarKeyword::class.java, FunctionKeyword::class.java)
+        llTable
+                .on(Classitems(), Colon::class.java, VarKeyword::class.java, FunctionKeyword::class.java)
                 .useRHS(::Classgroup, ::Classitems)
                 .on(RightBrace::class.java)
                 .useRHS()
-        Classgroup()
-                .on(Colon::class.java)
+        llTable
+                .on(Classgroup(), Colon::class.java)
                 .useRHS(::Class_ctrl)
                 .on(VarKeyword::class.java)
                 .useRHS(::Vargroup)
                 .on(FunctionKeyword::class.java)
                 .useRHS(::Mddecls)
-        Class_ctrl()
-                .on(Colon::class.java)
+        llTable
+                .on(Class_ctrl(), Colon::class.java)
                 .useRHS(::Colon, ::IdentifierTerminal)
-        Interfaces()
-                .on(Plus::class.java)
+        llTable
+                .on(Interfaces(), Plus::class.java)
                 .useRHS(::Plus, ::Classid, ::Interfaces)
                 .on(LeftBrace::class.java, IfKeyword::class.java)
                 .useRHS()
-        Mddecls()
-                .on(FunctionKeyword::class.java)
+        llTable
+                .on(Mddecls(), FunctionKeyword::class.java)
                 .useRHS(::Mdheader, ::Mddecls)
                 .on(
                         SemiColon::class.java,
@@ -210,49 +213,49 @@ object A5GrammarRules {
                         RightBrace::class.java
                 )
                 .useRHS()
-        Mdheader()
-                .on(FunctionKeyword::class.java)
+        llTable
+                .on(Mdheader(), FunctionKeyword::class.java)
                 .useRHS(::FunctionKeyword, ::Md_id, ::PParmlist, ::Retkind)
-        Md_id()
-                .on(IdentifierTerminal::class.java)
+        llTable
+                .on(Md_id(), IdentifierTerminal::class.java)
                 .useRHS(::Classid, ::Colon, ::Fcnid)
-        Fcndefs()
-                .on(FunctionKeyword::class.java)
+        llTable
+                .on(Fcndefs(), FunctionKeyword::class.java)
                 .useRHS(::Fcndef, ::Fcndefs)
                 .on(MainKeyword::class.java)
                 .useRHS()
-        Fcndef()
-                .on(FunctionKeyword::class.java)
+        llTable
+                .on(Fcndef(), FunctionKeyword::class.java)
                 .useRHS(::Fcnheader, ::BBlock)
-        Fcnheader()
-                .on(FunctionKeyword::class.java)
+        llTable
+                .on(Fcnheader(), FunctionKeyword::class.java)
                 .useRHS(::FunctionKeyword, ::Fcnid, ::PParmlist, ::Retkind)
-        Fcnid()
-                .on(IdentifierTerminal::class.java)
+        llTable
+                .on(Fcnid(), IdentifierTerminal::class.java)
                 .useRHS(::IdentifierTerminal)
-        Retkind()
+        llTable
                 .on(
-                        IntegerKeyword::class.java,
+                        Retkind(), IntegerKeyword::class.java,
                         FloatKeyword::class.java,
                         StringKeyword::class.java
                 )
                 .useRHS(::BaseKind)
-        PParmlist()
-                .on(LeftParen::class.java)
+        llTable
+                .on(PParmlist(), LeftParen::class.java)
                 .useRHS(::LeftParen, ::Varspecs, ::RightParen)
-        Varspecs()
-                .on(Asterisk::class.java, IdentifierTerminal::class.java)
+        llTable
+                .on(Varspecs(), Asterisk::class.java, IdentifierTerminal::class.java)
                 .useRHS(::Varspec, ::More_varspecs)
                 .on(RightParen::class.java)
                 .useRHS()
-        More_varspecs()
-                .on(Comma::class.java)
+        llTable
+                .on(More_varspecs(), Comma::class.java)
                 .useRHS(::Comma, ::Varspecs)
                 .on(RightParen::class.java)
                 .useRHS()
-        Stmts()
+        llTable
                 .on(
-                        Asterisk::class.java,
+                        Stmts(), Asterisk::class.java,
                         IdentifierTerminal::class.java,
                         IfKeyword::class.java,
                         WhileKeyword::class.java,
@@ -263,8 +266,8 @@ object A5GrammarRules {
                 .useRHS(::Stmt, ::SemiColon, ::Stmts)
                 .on(RightBrace::class.java)
                 .useRHS()
-        Stmt()
-                .on(IdentifierTerminal::class.java, Asterisk::class.java)
+        llTable
+                .on(Stmt(), IdentifierTerminal::class.java, Asterisk::class.java)
                 .useRHS(::StasgnOrFcall)
                 .on(IfKeyword::class.java)
                 .useRHS(::Stif)
@@ -276,21 +279,21 @@ object A5GrammarRules {
                 .useRHS(::Stinput)
                 .on(ReturnKeyword::class.java)
                 .useRHS(::Strtn)
-        StasgnOrFcall()
-                .on(Asterisk::class.java)
+        llTable
+                .on(StasgnOrFcall(), Asterisk::class.java)
                 .useRHS(::Deref_id, ::Stasgn_Suffix)
                 .on(IdentifierTerminal::class.java)
                 .useRHS(::IdentifierTerminal, ::StasgnOrFcall_Suffix)
-        StasgnOrFcall_Suffix()
-                .on(LeftBracket::class.java, Equal::class.java)
+        llTable
+                .on(StasgnOrFcall_Suffix(), LeftBracket::class.java, Equal::class.java)
                 .useRHS(::Lval_Suffix, ::Stasgn_Suffix)
                 .on(LeftParen::class.java)
                 .useRHS(::PPexprs)
-        Stasgn_Suffix()
-                .on(Equal::class.java)
+        llTable
+                .on(Stasgn_Suffix(), Equal::class.java)
                 .useRHS(::Equal, ::Expr)
-        Lval_Suffix()
-                .on(LeftBracket::class.java)
+        llTable
+                .on(Lval_Suffix(), LeftBracket::class.java)
                 .useRHS(::KKexpr)
                 .on(
                         Equal::class.java,
@@ -311,39 +314,39 @@ object A5GrammarRules {
                         RightParen::class.java,
                         Comma::class.java
                 ).useRHS()
-        KKexpr()
-                .on(LeftBracket::class.java)
+        llTable
+                .on(KKexpr(), LeftBracket::class.java)
                 .useRHS(::LeftBracket, ::Expr, ::RightBracket)
-        PPexprs()
-                .on(LeftParen::class.java)
+        llTable
+                .on(PPexprs(), LeftParen::class.java)
                 .useRHS(::LeftParen, ::Exprlist, ::RightParen)
                 .on()
                 .useRHS(::PPonly)
-        Stif()
-                .on(IfKeyword::class.java)
+        llTable
+                .on(Stif(), IfKeyword::class.java)
                 .useRHS(::IfKeyword, ::PPexpr, ::BBlock, ::Elsepart)
-        Elsepart()
-                .on(ElseIfKeyword::class.java)
+        llTable
+                .on(Elsepart(), ElseIfKeyword::class.java)
                 .useRHS(::ElseIfKeyword, ::PPexpr, ::BBlock, ::Elsepart)
                 .on(ElseKeyword::class.java)
                 .useRHS(::ElseKeyword, ::BBlock)
                 .on(SemiColon::class.java)
                 .useRHS()
-        Stwhile()
-                .on(WhileKeyword::class.java)
+        llTable
+                .on(Stwhile(), WhileKeyword::class.java)
                 .useRHS(::WhileKeyword, ::PPexpr, ::BBlock)
-        Stprint()
-                .on(PrintKeyword::class.java)
+        llTable
+                .on(Stprint(), PrintKeyword::class.java)
                 .useRHS(::PrintKeyword, ::PPexprs)
-        Stinput()
-                .on(InputKeyword::class.java)
+        llTable
+                .on(Stinput(), InputKeyword::class.java)
                 .useRHS(::InputKeyword, ::PPexprs)
-        Strtn()
-                .on(ReturnKeyword::class.java)
+        llTable
+                .on(Strtn(), ReturnKeyword::class.java)
                 .useRHS(::ReturnKeyword, ::Strtn_Suffix)
-        Strtn_Suffix()
+        llTable
                 .on(
-                        IntegerTerminal::class.java,
+                        Strtn_Suffix(), IntegerTerminal::class.java,
                         FloatTerminal::class.java,
                         StringTerminal::class.java,
                         IdentifierTerminal::class.java,
@@ -354,12 +357,12 @@ object A5GrammarRules {
                 .useRHS(::Expr)
                 .on(SemiColon::class.java)
                 .useRHS()
-        PPexpr()
-                .on(LeftParen::class.java)
+        llTable
+                .on(PPexpr(), LeftParen::class.java)
                 .useRHS(::LeftParen, ::Expr, ::RightParen)
-        Expr()
+        llTable
                 .on(
-                        IntegerTerminal::class.java,
+                        Expr(), IntegerTerminal::class.java,
                         FloatTerminal::class.java,
                         StringTerminal::class.java,
                         IdentifierTerminal::class.java,
@@ -369,14 +372,14 @@ object A5GrammarRules {
                         InputKeyword::class.java
                 )
                 .useRHS(::Rterm, ::Expr_Tail)
-        Expr_Tail()
-                .on(EqualEqual::class.java, NotEqual::class.java, LessThan::class.java, LessThanOrEqual::class.java, GreaterThanOrEqual::class.java, GreaterThan::class.java)
+        llTable
+                .on(Expr_Tail(), EqualEqual::class.java, NotEqual::class.java, LessThan::class.java, LessThanOrEqual::class.java, GreaterThanOrEqual::class.java, GreaterThan::class.java)
                 .useRHS(::Oprel, ::Rterm, ::Expr_Tail)
                 .on(RightBrace::class.java, RightBracket::class.java, SemiColon::class.java, RightParen::class.java, Comma::class.java)
                 .useRHS()
-        Rterm()
+        llTable
                 .on(
-                        IntegerTerminal::class.java,
+                        Rterm(), IntegerTerminal::class.java,
                         FloatTerminal::class.java,
                         StringTerminal::class.java,
                         IdentifierTerminal::class.java,
@@ -386,8 +389,8 @@ object A5GrammarRules {
                         InputKeyword::class.java
                 )
                 .useRHS(::Term, ::Rterm_Tail)
-        Rterm_Tail()
-                .on(Plus::class.java, Minus::class.java)
+        llTable
+                .on(Rterm_Tail(), Plus::class.java, Minus::class.java)
                 .useRHS(::Opadd, ::Term, ::Rterm_Tail)
                 .on(
                         EqualEqual::class.java,
@@ -403,9 +406,9 @@ object A5GrammarRules {
                         RightParen::class.java
                 )
                 .useRHS()
-        Term()
+        llTable
                 .on(
-                        IntegerTerminal::class.java,
+                        Term(), IntegerTerminal::class.java,
                         FloatTerminal::class.java,
                         StringTerminal::class.java,
                         IdentifierTerminal::class.java,
@@ -415,8 +418,8 @@ object A5GrammarRules {
                         InputKeyword::class.java
                 )
                 .useRHS(::Fact, ::Term_Tail)
-        Term_Tail()
-                .on(Asterisk::class.java, ForwardSlash::class.java, Caret::class.java)
+        llTable
+                .on(Term_Tail(), Asterisk::class.java, ForwardSlash::class.java, Caret::class.java)
                 .useRHS(::Opmul, ::Fact, ::Term_Tail)
                 .on(
                         EqualEqual::class.java,
@@ -434,8 +437,8 @@ object A5GrammarRules {
                         Minus::class.java
                 )
                 .useRHS()
-        Fact()
-                .on(IntegerTerminal::class.java, FloatTerminal::class.java, StringTerminal::class.java)
+        llTable
+                .on(Fact(), IntegerTerminal::class.java, FloatTerminal::class.java, StringTerminal::class.java)
                 .useRHS(::BaseLiteral)
                 .on(IdentifierTerminal::class.java, Asterisk::class.java)
                 .useRHS(::LvalOrFcall)
@@ -445,13 +448,13 @@ object A5GrammarRules {
                 .useRHS(::PPexpr)
                 .on(InputKeyword::class.java)
                 .useRHS(::Stinput)
-        LvalOrFcall()
-                .on(Asterisk::class.java)
+        llTable
+                .on(LvalOrFcall(), Asterisk::class.java)
                 .useRHS(::Deref_id)
                 .on(IdentifierTerminal::class.java)
                 .useRHS(::IdentifierTerminal, ::LvalOrFcall_Suffix)
-        LvalOrFcall_Suffix()
-                .on(LeftBracket::class.java)
+        llTable
+                .on(LvalOrFcall_Suffix(), LeftBracket::class.java)
                 .useRHS(::Lval_Suffix)
                 .on(LeftParen::class.java)
                 .useRHS(::PPexprs)
@@ -474,18 +477,18 @@ object A5GrammarRules {
                         Comma::class.java
                 )
                 .useRHS()
-        BaseLiteral()
-                .on(IntegerTerminal::class.java)
+        llTable
+                .on(BaseLiteral(), IntegerTerminal::class.java)
                 .useRHS(::IntegerTerminal)
                 .on(FloatTerminal::class.java)
                 .useRHS(::FloatTerminal)
                 .on(StringTerminal::class.java)
                 .useRHS(::StringTerminal)
-        Addrof_id()
-                .on(Ampersand::class.java)
+        llTable
+                .on(Addrof_id(), Ampersand::class.java)
                 .useRHS(::Ampersand, ::IdentifierTerminal)
-        Oprel()
-                .on(EqualEqual::class.java)
+        llTable
+                .on(Oprel(), EqualEqual::class.java)
                 .useRHS(::EqualEqual)
                 .on(NotEqual::class.java)
                 .useRHS(::NotEqual)
@@ -497,23 +500,25 @@ object A5GrammarRules {
                 .useRHS(::GreaterThanOrEqual)
                 .on(GreaterThan::class.java)
                 .useRHS(::Gthan)
-        Lthan()
-                .on(LessThan::class.java)
+        llTable
+                .on(Lthan(), LessThan::class.java)
                 .useRHS(::LessThan)
-        Gthan()
-                .on(GreaterThan::class.java)
+        llTable
+                .on(Gthan(), GreaterThan::class.java)
                 .useRHS(::GreaterThan)
-        Opadd()
-                .on(Plus::class.java)
+        llTable
+                .on(Opadd(), Plus::class.java)
                 .useRHS(::Plus)
                 .on(Minus::class.java)
                 .useRHS(::Minus)
-        Opmul()
-                .on(Asterisk::class.java)
+        llTable
+                .on(Opmul(), Asterisk::class.java)
                 .useRHS(::Asterisk)
                 .on(ForwardSlash::class.java)
                 .useRHS(::ForwardSlash)
                 .on(Caret::class.java)
                 .useRHS(::Caret)
+
+        return llTable
     }
 }

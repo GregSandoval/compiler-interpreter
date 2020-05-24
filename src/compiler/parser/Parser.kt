@@ -23,7 +23,7 @@ class Parser(
     private val onGrammarRuleApplication: GrammarRuleApplicationListener
 
     @Throws(Exception::class)
-    fun parse(inputName: String, tokensIn: List<Terminal>) {
+    fun parse(inputName: String, tokensIn: List<Terminal>, table: LLTable) {
         val stack = LinkedList<TreeNode>()
         val tokens = LinkedList(tokensIn)
         stack.push(startSymbol)
@@ -44,11 +44,12 @@ class Parser(
                 onUnknownGrammarRule.accept(top, token)
                 throw RuntimeException("Node is neither Token nor Grammar rule: $top")
             }
-            val rhs = top.getRHS(token.javaClass)
+
+            val rhs = table.getRHS(top, token.javaClass)
 
             if (rhs == null) {
                 onPredictionNotFoundError.accept(top, token)
-                throw PredictiveParserException(top, token)
+                throw PredictiveParserException(top, token, table)
             }
 
             onGrammarRuleApplication.accept(top, token, rhs)

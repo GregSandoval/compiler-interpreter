@@ -8,7 +8,7 @@ import compiler.parser.Symbol.Terminal.Ignorable.EOFTerminal
 class ParseTreeBuilder {
     private var root: TreeNode? = null
 
-    fun setStartSymbol(startSymbol: NonTerminal): ParseTreeBuilderFirstStep {
+    fun setStartSymbol(startSymbol: NonTerminal, table: LLTable): ParseTreeBuilderFirstStep {
         return object : ParseTreeBuilderFirstStep {
             override fun setInputSourceName(inputName: String): ParseTreeBuilderLastStep {
                 return object : ParseTreeBuilderLastStep {
@@ -28,7 +28,7 @@ class ParseTreeBuilder {
                                     }
                                 })
                                 .createParser()
-                                .parse(inputName, terminals)
+                                .parse(inputName, terminals, table)
                         return root
                     }
                 }

@@ -49,11 +49,11 @@ object EntryPoint {
         }
 
         // Prepare grammar rules
-        A5GrammarRules.build()
+        val table = A5GrammarRules.build()
 
         // Parse token stream
         var tree = ParseTreeBuilder()
-                .setStartSymbol(Pgm())
+                .setStartSymbol(Pgm(), table)
                 .setInputSourceName(settings.inputName)
                 .build(terminals)
 

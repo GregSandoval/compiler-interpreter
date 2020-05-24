@@ -2,8 +2,6 @@ package compiler.parser
 
 import compiler.lexer.token.LineInfo
 import compiler.parser.Symbol.Terminal
-import java.util.*
-import java.util.stream.Collectors.toUnmodifiableList
 
 typealias NodeSupplier = () -> TreeNode
 typealias TokenClass = Class<out Terminal>
@@ -93,53 +91,6 @@ sealed class Symbol : TreeNode() {
         class Opadd : NonTerminal()
         class Opmul : NonTerminal()
         class Epsilon : NonTerminal()
-
-        init {
-            if (!LLTable.containsKey(this.javaClass)) {
-                LLTable[this.javaClass] = HashMap()
-            }
-        }
-
-        fun getRHS(token: TokenClass): List<TreeNode>? {
-            val table = LLTable.getOrDefault(this.javaClass, emptyMap<TokenClass, List<NodeSupplier>>())
-            val simpleRules = table[token] ?: return null
-
-            return simpleRules
-                    .stream()
-                    .map { it() }
-                    .collect(toUnmodifiableList())
-        }
-
-        fun getRHS(): Set<TokenClass> = LLTable[this.javaClass]!!.keys
-
-        fun on(vararg first: TokenClass): RuleBuilderSecondStep {
-            return RuleBuilderSecondStep(*first)
-        }
-
-        inner class RuleBuilderFirstStep {
-            fun on(vararg first: TokenClass): RuleBuilderSecondStep {
-                return RuleBuilderSecondStep(*first)
-            }
-        }
-
-        inner class RuleBuilderSecondStep constructor(private vararg val firstItems: TokenClass) {
-            fun useRHS(vararg rest: NodeSupplier): RuleBuilderFirstStep {
-                val rhs = ArrayList(listOf(*rest))
-                for (token in firstItems) {
-                    if (LLTable[this@NonTerminal.javaClass]!!.containsKey(token)) {
-                        throw RuntimeException("Double stuffed LL Table: Rule: " + this@NonTerminal.javaClass.simpleName + " Token: " + token.simpleName)
-                    }
-                    LLTable[this@NonTerminal.javaClass]!![token] = rhs
-                }
-                return RuleBuilderFirstStep()
-            }
-
-        }
-
-        companion object {
-            private val LLTable: MutableMap<Class<out Symbol>, MutableMap<TokenClass, List<NodeSupplier>>> =
-                    HashMap()
-        }
 
         override fun toString(): String {
             return this.javaClass.simpleName
