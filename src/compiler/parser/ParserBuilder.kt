@@ -4,8 +4,6 @@ import compiler.parser.ParserListeners.BeforeRuleApplicationListenerIdentity
 import compiler.parser.ParserListeners.GeneralListenerIdentity
 import compiler.parser.ParserListeners.GrammarRuleApplicationIdentity
 import compiler.parser.Symbol.NonTerminal
-import compiler.parser.Symbol.Terminal
-import compiler.parser.Symbol.Terminal.Ignorable.EOFTerminal
 
 class ParserBuilder {
     fun setStartSymbol(startSymbol: NonTerminal): ParserBuilderLastStep {
@@ -18,7 +16,7 @@ class ParserBuilder {
         private var onPredictionNotFoundError = GeneralListenerIdentity()
         private var onUnknownGrammarRule = GeneralListenerIdentity()
         private var onUnexpectedToken = GeneralListenerIdentity()
-        private var eof: Terminal = EOFTerminal()
+
         fun beforeRuleApplication(beforeRuleApplication: BeforeRuleApplicationListener): ParserBuilderLastStep {
             this.beforeRuleApplication = this.beforeRuleApplication.andThen(beforeRuleApplication)
             return this
@@ -41,11 +39,6 @@ class ParserBuilder {
 
         fun onGrammarRuleApplication(onGrammarRuleApplication: GrammarRuleApplicationListener): ParserBuilderLastStep {
             this.onGrammarRuleApplication = this.onGrammarRuleApplication.andThen(onGrammarRuleApplication)
-            return this
-        }
-
-        fun setEOF(eof: Terminal): ParserBuilderLastStep {
-            this.eof = eof
             return this
         }
 
