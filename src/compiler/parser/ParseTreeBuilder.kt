@@ -8,7 +8,7 @@ import compiler.parser.Symbol.Terminal.Ignorable.EOFTerminal
 class ParseTreeBuilder {
     private var root: TreeNode? = null
 
-    fun setStartSymbol(startSymbol: NonTerminal, table: LLTable): ParseTreeBuilderFirstStep {
+    fun setStartSymbol(startSymbol: NonTerminal, llTable: LLTable): ParseTreeBuilderFirstStep {
         return object : ParseTreeBuilderFirstStep {
             override fun setInputSourceName(inputName: String): ParseTreeBuilderLastStep {
                 return object : ParseTreeBuilderLastStep {
@@ -21,14 +21,13 @@ class ParseTreeBuilder {
                         root.children.forEach { it.parent = this@ParseTreeBuilder.root }
                         ParserBuilder()
                                 .setStartSymbol(startSymbol)
-                                .setEOF(EOF)
                                 .onGrammarRuleApplication(object : GrammarRuleApplicationListener {
                                     override fun accept(p1: TreeNode, p2: Terminal, p3: List<TreeNode>) {
                                         this@ParseTreeBuilder.AttachToTree(p1, p2, p3)
                                     }
                                 })
                                 .createParser()
-                                .parse(inputName, terminals, table)
+                                .parse(inputName, terminals, llTable)
                         return root
                     }
                 }

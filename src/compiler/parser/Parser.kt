@@ -6,24 +6,16 @@ import java.util.*
 import java.util.stream.Collectors
 
 class Parser(
-        eof: Terminal,
-        startSymbol: NonTerminal,
-        beforeRuleApplication: BeforeRuleApplicationListener,
-        onUnexpectedToken: GeneralListener,
-        onUnknownGrammarRule: GeneralListener,
-        onPredictionNotFoundError: GeneralListener,
-        onGrammarRuleApplication: GrammarRuleApplicationListener
+        private val startSymbol: NonTerminal,
+        private val beforeRuleApplication: BeforeRuleApplicationListener,
+        private val onUnexpectedToken: GeneralListener,
+        private val onUnknownGrammarRule: GeneralListener,
+        private val onPredictionNotFoundError: GeneralListener,
+        private val onGrammarRuleApplication: GrammarRuleApplicationListener
 ) {
-    private val startSymbol: NonTerminal
-    private val eof: TreeNode
-    private val beforeRuleApplication: BeforeRuleApplicationListener
-    private val onUnexpectedToken: GeneralListener
-    private val onUnknownGrammarRule: GeneralListener
-    private val onPredictionNotFoundError: GeneralListener
-    private val onGrammarRuleApplication: GrammarRuleApplicationListener
 
     @Throws(Exception::class)
-    fun parse(inputName: String, tokensIn: List<Terminal>, table: LLTable) {
+    fun parse(inputName: String, tokensIn: List<Terminal>, llTable: LLTable) {
         val stack = LinkedList<TreeNode>()
         val tokens = LinkedList(tokensIn)
         stack.push(startSymbol)
@@ -45,11 +37,11 @@ class Parser(
                 throw RuntimeException("Node is neither Token nor Grammar rule: $top")
             }
 
-            val rhs = table.getRHS(top, token.javaClass)
+            val rhs = llTable.getRHS(top, token.javaClass)
 
             if (rhs == null) {
                 onPredictionNotFoundError.accept(top, token)
-                throw PredictiveParserException(top, token, table)
+                throw PredictiveParserException(top, token, llTable)
             }
 
             onGrammarRuleApplication.accept(top, token, rhs)
@@ -75,15 +67,5 @@ class Parser(
 
     fun isEqual(terminal: Terminal, top: TreeNode): Boolean {
         return terminal.javaClass == top.javaClass
-    }
-
-    init {
-        this.eof = eof
-        this.startSymbol = startSymbol
-        this.beforeRuleApplication = beforeRuleApplication
-        this.onUnexpectedToken = onUnexpectedToken
-        this.onUnknownGrammarRule = onUnknownGrammarRule
-        this.onPredictionNotFoundError = onPredictionNotFoundError
-        this.onGrammarRuleApplication = onGrammarRuleApplication
     }
 }

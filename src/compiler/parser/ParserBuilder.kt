@@ -51,7 +51,6 @@ class ParserBuilder {
 
         fun createParser(): Parser {
             return Parser(
-                    eof,
                     startSymbol,
                     beforeRuleApplication,
                     onUnexpectedToken,
