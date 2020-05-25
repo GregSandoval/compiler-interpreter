@@ -13,7 +13,7 @@ import java.util.*
 import java.util.stream.Collectors
 import kotlin.math.pow
 
-class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
+class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
     private val scanner = Scanner(System.`in`)
 
     @Throws(Exception::class)
@@ -390,15 +390,8 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
         throw Exception("${clazz.simpleName} expected but found${obj.javaClass.simpleName}")
     }
 
-    companion object {
-        @Throws(Exception::class)
-        fun interpret(tree: Terminal, symtab: SymbolTable) {
-            TokenInterpreter(symtab).accept(tree)
-        }
-
-        fun classNotCompatibleException(left: Any, right: Any): Exception {
-            return Exception("Type ${left.javaClass.simpleName} and ${right.javaClass.simpleName} are cannot be used with operator")
-        }
+    fun classNotCompatibleException(left: Any, right: Any): Exception {
+        return Exception("Type ${left.javaClass.simpleName} and ${right.javaClass.simpleName} are cannot be used with operator")
     }
 
 }
