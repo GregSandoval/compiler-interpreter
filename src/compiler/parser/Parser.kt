@@ -27,10 +27,11 @@ class Parser(
         private val beforeRuleApplication: BeforeRuleListerner,
         private val onUnexpectedToken: UnexpectedRuleListener,
         private val onPredictionNotFoundError: PredictionNotFoundListener,
-        private val onGrammarRuleApplication: NonTerminalReplacedListener
+        private val onGrammarRuleApplication: NonTerminalReplacedListener,
+        private val llTable: LLTable
 ) {
 
-    fun parse(inputName: String, tokensIn: List<Terminal>, llTable: LLTable) {
+    fun parse(inputName: String, tokensIn: List<Terminal>) {
         val stack = LinkedList<Symbol>()
         val tokens = LinkedList(tokensIn)
         stack.push(startSymbol)
@@ -38,11 +39,12 @@ class Parser(
         while (!tokens.isEmpty() && !stack.isEmpty()) {
             beforeRuleApplication(stack, tokens.peek())
 
-            when (val top = stack.pop()) {
+            val rhs = when (val top = stack.pop()) {
                 is Terminal -> matchTerminal(top, tokens, inputName)
-                is NonTerminal -> applyProduction(top, tokens, llTable, stack)
+                is NonTerminal -> applyProduction(top, tokens)
             }
 
+            rhs.reversed().forEach(stack::push)
         }
 
         if (tokens.isEmpty() && stack.isEmpty()) {
@@ -63,28 +65,26 @@ class Parser(
         }
     }
 
-    fun applyProduction(top: NonTerminal, tokens: LinkedList<Terminal>, llTable: LLTable, stack: LinkedList<Symbol>) {
+    fun applyProduction(top: NonTerminal, tokens: LinkedList<Terminal>): List<Symbol> {
         val token = tokens.peek()
-        val rhs = llTable.getRHS(top, token::class)
+        val rhs = this.llTable.getRHS(top, token::class)
 
         if (rhs == null) {
             onPredictionNotFoundError(top, token)
-            throw PredictiveParserException(top, token, llTable)
+            throw PredictiveParserException(top, token, this.llTable)
         }
 
         onGrammarRuleApplication(top, token, rhs)
 
-        for (i in rhs.indices.reversed()) {
-            stack.push(rhs[i])
-        }
+        return rhs
     }
 
-    fun matchTerminal(top: Terminal, tokens: LinkedList<Terminal>, inputName: String) {
+    fun matchTerminal(top: Terminal, tokens: LinkedList<Terminal>, inputName: String): List<Symbol> {
         val token = tokens.pop()
 
         if (isEqual(token, top)) {
             onGrammarRuleApplication(top, token, emptyList())
-            return
+            return emptyList()
         }
 
         onUnexpectedToken(top, token)

@@ -15,8 +15,9 @@ class ParseTree(startSymbol: NonTerminal, llTable: LLTable, inputName: String, t
         ParserBuilder()
                 .setStartSymbol(startSymbol)
                 .setNonTerminalReplacedListener(this::link)
+                .setLLTable(llTable)
                 .createParser()
-                .parse(inputName, terminals, llTable)
+                .parse(inputName, terminals)
     }
 
     fun getTree(): TreeNode {

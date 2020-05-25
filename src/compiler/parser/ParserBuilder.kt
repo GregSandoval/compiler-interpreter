@@ -8,6 +8,7 @@ class ParserBuilder {
     private var unexpectedRuleListener: UnexpectedRuleListener = { _, _ -> }
     private var beforeRuleListener: BeforeRuleListerner = { _, _ -> }
     private lateinit var startSymbol: NonTerminal
+    private lateinit var llTable: LLTable
 
     fun setStartSymbol(startSymbol: NonTerminal): ParserBuilder {
         this.startSymbol = startSymbol
@@ -34,13 +35,19 @@ class ParserBuilder {
         return this
     }
 
+    fun setLLTable(llTable: LLTable): ParserBuilder {
+        this.llTable = llTable
+        return this
+    }
+
     fun createParser(): Parser {
         return Parser(
                 startSymbol,
                 beforeRuleListener,
                 unexpectedRuleListener,
                 predictionNotFoundListener,
-                nonTerminalReplacedListener
+                nonTerminalReplacedListener,
+                llTable
         )
     }
 
