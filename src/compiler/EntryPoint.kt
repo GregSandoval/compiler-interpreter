@@ -51,23 +51,25 @@ object EntryPoint {
         val llTable = A5GrammarRules.build()
 
         // Parse token stream
-        var tree = ParseTreeBuilder()
+        val parseTree = ParseTreeBuilder()
                 .setStartSymbol(Pgm(), llTable)
                 .setInputSourceName(settings.inputName)
                 .setTerminals(terminals)
                 .build()
 
+        var root = parseTree.getRoot()
+
         // Serialize current PST
-        TreeVisualizer.toImage(tree, settings.pstOut)
+        TreeVisualizer.toImage(root, settings.pstOut)
 
         // Transform PST to AST (in-place)
-        AbstractSyntaxTreeBuilder.fromParseTree(tree)
+        AbstractSyntaxTreeBuilder.fromParseTree(root)
 
         // Serialize ASt
-        TreeVisualizer.toImage(tree, settings.astOut)
-        tree = tree.children[0]
+        TreeVisualizer.toImage(root, settings.astOut)
+        root = root.children[0]
 
-        Interpreter.execute(tree)
+        Interpreter.execute(root)
     }
 
     @Throws(IOException::class)

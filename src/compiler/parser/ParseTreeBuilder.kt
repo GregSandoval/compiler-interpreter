@@ -1,12 +1,9 @@
 package compiler.parser
 
 import compiler.parser.Symbol.NonTerminal
-import compiler.parser.Symbol.NonTerminal.ParseTreeSentinel
 import compiler.parser.Symbol.Terminal
-import compiler.parser.Symbol.Terminal.Ignorable.EOFTerminal
 
 class ParseTreeBuilder {
-    private lateinit var root: TreeNode
     private lateinit var startSymbol: NonTerminal
     private lateinit var llTable: LLTable
     private lateinit var inputName: String
@@ -29,19 +26,8 @@ class ParseTreeBuilder {
     }
 
 
-    fun build(): TreeNode {
-        val EOF = EOFTerminal()
-        val root = ParseTreeSentinel()
-        this.root = root
-        root.children.push(EOF)
-        root.children.push(startSymbol)
-        root.children.forEach { it.parent = this.root }
-        ParserBuilder()
-                .setStartSymbol(startSymbol)
-                .setNonTerminalReplacedListener(ParseTreeLinker::link)
-                .createParser()
-                .parse(inputName, terminals, llTable)
-        return root
+    fun build(): ParseTree {
+        return ParseTree(this.startSymbol, this.llTable, this.inputName, this.terminals)
     }
 
 }
