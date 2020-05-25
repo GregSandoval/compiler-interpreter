@@ -51,6 +51,7 @@ object EntryPoint {
         Interpreter.execute(tree, symtab)
 
         // Log final symtab state
+        println()
         println(symtab)
     }
 
