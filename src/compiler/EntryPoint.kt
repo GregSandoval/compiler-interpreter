@@ -1,19 +1,13 @@
 package compiler
 
-import compiler.a5.grammar.A5GrammarRules
 import compiler.a5.lexer.A5Lexer
-import compiler.a5.lexicon.A5LexiconDFA
+import compiler.a5.parser.A7Parser
 import compiler.interpreter.Interpreter
-import compiler.lexer.LexerBuilder
-import compiler.lexer.UnknownTokenException
 import compiler.parser.AbstractSyntaxTreeBuilder
-import compiler.parser.ParseTreeBuilder
 import compiler.parser.Symbol.NonTerminal
 import compiler.parser.Symbol.NonTerminal.ParseTreeSentinel
-import compiler.parser.Symbol.NonTerminal.Pgm
 import compiler.parser.Symbol.Terminal
 import compiler.parser.TreeNode
-import compiler.utils.TextCursor
 import visualization.TreeVisualizer
 import java.io.IOException
 import java.nio.file.Files
@@ -44,15 +38,7 @@ object EntryPoint {
             throw Exception(exception)
         }
 
-        // Prepare grammar rules
-        val llTable = A5GrammarRules.build()
-
-        // Parse token stream
-        val parseTree = ParseTreeBuilder()
-                .setStartSymbol(Pgm(), llTable)
-                .setInputSourceName(settings.inputName)
-                .setTerminals(terminals)
-                .build()
+        val parseTree = A7Parser.parse(settings.inputName, terminals)
 
         var root = parseTree.getRoot()
 
