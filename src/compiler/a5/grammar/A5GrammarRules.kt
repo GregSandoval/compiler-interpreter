@@ -25,6 +25,7 @@ object A5GrammarRules {
                 .on(Vargroup(), VarKeyword::class)
                 .useRHS(::VarKeyword, ::PPvarlist)
                 .on(
+                        Vargroup(),
                         FunctionKeyword::class,
                         MainKeyword::class,
                         Asterisk::class,
@@ -50,7 +51,7 @@ object A5GrammarRules {
                         ClassKeyword::class
                 )
                 .useRHS(::Varitem, ::SemiColon, ::Varlist)
-                .on(RightParen::class)
+                .on(Varlist(), RightParen::class)
                 .useRHS()
         llTable
                 .on(
@@ -60,12 +61,12 @@ object A5GrammarRules {
                         IdentifierTerminal::class
                 )
                 .useRHS(::Vardecl, ::Varitem_Suffix)
-                .on(ClassKeyword::class)
+                .on(Varitem(), ClassKeyword::class)
                 .useRHS(::Classdef)
         llTable
                 .on(Varitem_Suffix(), Equal::class)
                 .useRHS(::Equal, ::Varinit)
-                .on(SemiColon::class)
+                .on(Varitem_Suffix(), SemiColon::class)
                 .useRHS()
         llTable
                 .on(
@@ -82,14 +83,14 @@ object A5GrammarRules {
                         StringKeyword::class
                 )
                 .useRHS(::BaseKind)
-                .on(IdentifierTerminal::class)
+                .on(Simplekind(), IdentifierTerminal::class)
                 .useRHS(::Classid)
         llTable
                 .on(BaseKind(), IntegerKeyword::class)
                 .useRHS(::IntegerKeyword)
-                .on(FloatKeyword::class)
+                .on(BaseKind(), FloatKeyword::class)
                 .useRHS(::FloatKeyword)
-                .on(StringKeyword::class)
+                .on(BaseKind(), StringKeyword::class)
                 .useRHS(::StringKeyword)
         llTable
                 .on(Classid(), IdentifierTerminal::class)
@@ -97,7 +98,7 @@ object A5GrammarRules {
         llTable
                 .on(Varspec(), IdentifierTerminal::class)
                 .useRHS(::Varid, ::Arrspec)
-                .on(Asterisk::class)
+                .on(Varspec(), Asterisk::class)
                 .useRHS(::Deref_id)
         llTable
                 .on(Varid(), IdentifierTerminal::class)
@@ -106,6 +107,7 @@ object A5GrammarRules {
                 .on(Arrspec(), LeftBracket::class)
                 .useRHS(::KKint)
                 .on(
+                        Arrspec(),
                         Equal::class,
                         SemiColon::class,
                         Comma::class,
@@ -132,7 +134,7 @@ object A5GrammarRules {
                         LeftParen::class
                 )
                 .useRHS(::Expr)
-                .on(LeftBrace::class)
+                .on(Varinit(), LeftBrace::class)
                 .useRHS(::BBexprs)
         llTable
                 .on(BBexprs(), LeftBrace::class)
@@ -149,6 +151,7 @@ object A5GrammarRules {
                 )
                 .useRHS(::Expr, ::Moreexprs)
                 .on(
+                        Exprlist(),
                         RightBrace::class,
                         RightParen::class
                 )
@@ -157,6 +160,7 @@ object A5GrammarRules {
                 .on(Moreexprs(), Comma::class)
                 .useRHS(::Comma, ::Exprlist)
                 .on(
+                        Moreexprs(),
                         RightBrace::class,
                         RightParen::class
                 )
@@ -167,7 +171,7 @@ object A5GrammarRules {
         llTable
                 .on(Classdef_Suffix(), LeftBrace::class)
                 .useRHS(::BBClassitems)
-                .on(IfKeyword::class)
+                .on(Classdef_Suffix(), IfKeyword::class)
                 .useRHS(::IfKeyword, ::BBClassitems)
         llTable
                 .on(BBClassitems(), LeftBrace::class)
@@ -179,6 +183,7 @@ object A5GrammarRules {
                 .on(Classmom(), Colon::class)
                 .useRHS(::Colon, ::Classid)
                 .on(
+                        Classmom(),
                         Plus::class,
                         LeftBrace::class,
                         IfKeyword::class
@@ -187,14 +192,14 @@ object A5GrammarRules {
         llTable
                 .on(Classitems(), Colon::class, VarKeyword::class, FunctionKeyword::class)
                 .useRHS(::Classgroup, ::Classitems)
-                .on(RightBrace::class)
+                .on(Classitems(), RightBrace::class)
                 .useRHS()
         llTable
                 .on(Classgroup(), Colon::class)
                 .useRHS(::Class_ctrl)
-                .on(VarKeyword::class)
+                .on(Classgroup(), VarKeyword::class)
                 .useRHS(::Vargroup)
-                .on(FunctionKeyword::class)
+                .on(Classgroup(), FunctionKeyword::class)
                 .useRHS(::Mddecls)
         llTable
                 .on(Class_ctrl(), Colon::class)
@@ -202,12 +207,13 @@ object A5GrammarRules {
         llTable
                 .on(Interfaces(), Plus::class)
                 .useRHS(::Plus, ::Classid, ::Interfaces)
-                .on(LeftBrace::class, IfKeyword::class)
+                .on(Interfaces(), LeftBrace::class, IfKeyword::class)
                 .useRHS()
         llTable
                 .on(Mddecls(), FunctionKeyword::class)
                 .useRHS(::Mdheader, ::Mddecls)
                 .on(
+                        Mddecls(),
                         SemiColon::class,
                         VarKeyword::class,
                         RightBrace::class
@@ -222,7 +228,7 @@ object A5GrammarRules {
         llTable
                 .on(Fcndefs(), FunctionKeyword::class)
                 .useRHS(::Fcndef, ::Fcndefs)
-                .on(MainKeyword::class)
+                .on(Fcndefs(), MainKeyword::class)
                 .useRHS()
         llTable
                 .on(Fcndef(), FunctionKeyword::class)
@@ -246,12 +252,12 @@ object A5GrammarRules {
         llTable
                 .on(Varspecs(), Asterisk::class, IdentifierTerminal::class)
                 .useRHS(::Varspec, ::More_varspecs)
-                .on(RightParen::class)
+                .on(Varspecs(), RightParen::class)
                 .useRHS()
         llTable
                 .on(More_varspecs(), Comma::class)
                 .useRHS(::Comma, ::Varspecs)
-                .on(RightParen::class)
+                .on(More_varspecs(), RightParen::class)
                 .useRHS()
         llTable
                 .on(
@@ -264,30 +270,30 @@ object A5GrammarRules {
                         ReturnKeyword::class
                 )
                 .useRHS(::Stmt, ::SemiColon, ::Stmts)
-                .on(RightBrace::class)
+                .on(Stmts(), RightBrace::class)
                 .useRHS()
         llTable
                 .on(Stmt(), IdentifierTerminal::class, Asterisk::class)
                 .useRHS(::StasgnOrFcall)
-                .on(IfKeyword::class)
+                .on(Stmt(), IfKeyword::class)
                 .useRHS(::Stif)
-                .on(WhileKeyword::class)
+                .on(Stmt(), WhileKeyword::class)
                 .useRHS(::Stwhile)
-                .on(PrintKeyword::class)
+                .on(Stmt(), PrintKeyword::class)
                 .useRHS(::Stprint)
-                .on(InputKeyword::class)
+                .on(Stmt(), InputKeyword::class)
                 .useRHS(::Stinput)
-                .on(ReturnKeyword::class)
+                .on(Stmt(), ReturnKeyword::class)
                 .useRHS(::Strtn)
         llTable
                 .on(StasgnOrFcall(), Asterisk::class)
                 .useRHS(::Deref_id, ::Stasgn_Suffix)
-                .on(IdentifierTerminal::class)
+                .on(StasgnOrFcall(), IdentifierTerminal::class)
                 .useRHS(::IdentifierTerminal, ::StasgnOrFcall_Suffix)
         llTable
                 .on(StasgnOrFcall_Suffix(), LeftBracket::class, Equal::class)
                 .useRHS(::Lval_Suffix, ::Stasgn_Suffix)
-                .on(LeftParen::class)
+                .on(StasgnOrFcall_Suffix(), LeftParen::class)
                 .useRHS(::PPexprs)
         llTable
                 .on(Stasgn_Suffix(), Equal::class)
@@ -296,6 +302,7 @@ object A5GrammarRules {
                 .on(Lval_Suffix(), LeftBracket::class)
                 .useRHS(::KKexpr)
                 .on(
+                        Lval_Suffix(),
                         Equal::class,
                         Asterisk::class,
                         ForwardSlash::class,
@@ -320,7 +327,7 @@ object A5GrammarRules {
         llTable
                 .on(PPexprs(), LeftParen::class)
                 .useRHS(::LeftParen, ::Exprlist, ::RightParen)
-                .on()
+                .on(PPexprs())
                 .useRHS(::PPonly)
         llTable
                 .on(Stif(), IfKeyword::class)
@@ -328,9 +335,9 @@ object A5GrammarRules {
         llTable
                 .on(Elsepart(), ElseIfKeyword::class)
                 .useRHS(::ElseIfKeyword, ::PPexpr, ::BBlock, ::Elsepart)
-                .on(ElseKeyword::class)
+                .on(Elsepart(), ElseKeyword::class)
                 .useRHS(::ElseKeyword, ::BBlock)
-                .on(SemiColon::class)
+                .on(Elsepart(), SemiColon::class)
                 .useRHS()
         llTable
                 .on(Stwhile(), WhileKeyword::class)
@@ -355,7 +362,7 @@ object A5GrammarRules {
                         LeftParen::class
                 )
                 .useRHS(::Expr)
-                .on(SemiColon::class)
+                .on(Strtn_Suffix(), SemiColon::class)
                 .useRHS()
         llTable
                 .on(PPexpr(), LeftParen::class)
@@ -375,7 +382,7 @@ object A5GrammarRules {
         llTable
                 .on(Expr_Tail(), EqualEqual::class, NotEqual::class, LessThan::class, LessThanOrEqual::class, GreaterThanOrEqual::class, GreaterThan::class)
                 .useRHS(::Oprel, ::Rterm, ::Expr_Tail)
-                .on(RightBrace::class, RightBracket::class, SemiColon::class, RightParen::class, Comma::class)
+                .on(Expr_Tail(), RightBrace::class, RightBracket::class, SemiColon::class, RightParen::class, Comma::class)
                 .useRHS()
         llTable
                 .on(
@@ -393,6 +400,7 @@ object A5GrammarRules {
                 .on(Rterm_Tail(), Plus::class, Minus::class)
                 .useRHS(::Opadd, ::Term, ::Rterm_Tail)
                 .on(
+                        Rterm_Tail(),
                         EqualEqual::class,
                         NotEqual::class,
                         LessThan::class,
@@ -422,6 +430,7 @@ object A5GrammarRules {
                 .on(Term_Tail(), Asterisk::class, ForwardSlash::class, Caret::class)
                 .useRHS(::Opmul, ::Fact, ::Term_Tail)
                 .on(
+                        Term_Tail(),
                         EqualEqual::class,
                         NotEqual::class,
                         LessThan::class,
@@ -440,25 +449,26 @@ object A5GrammarRules {
         llTable
                 .on(Fact(), IntegerTerminal::class, FloatTerminal::class, StringTerminal::class)
                 .useRHS(::BaseLiteral)
-                .on(IdentifierTerminal::class, Asterisk::class)
+                .on(Fact(), IdentifierTerminal::class, Asterisk::class)
                 .useRHS(::LvalOrFcall)
-                .on(Ampersand::class)
+                .on(Fact(), Ampersand::class)
                 .useRHS(::Addrof_id)
-                .on(LeftParen::class)
+                .on(Fact(), LeftParen::class)
                 .useRHS(::PPexpr)
-                .on(InputKeyword::class)
+                .on(Fact(), InputKeyword::class)
                 .useRHS(::Stinput)
         llTable
                 .on(LvalOrFcall(), Asterisk::class)
                 .useRHS(::Deref_id)
-                .on(IdentifierTerminal::class)
+                .on(LvalOrFcall(), IdentifierTerminal::class)
                 .useRHS(::IdentifierTerminal, ::LvalOrFcall_Suffix)
         llTable
                 .on(LvalOrFcall_Suffix(), LeftBracket::class)
                 .useRHS(::Lval_Suffix)
-                .on(LeftParen::class)
+                .on(LvalOrFcall_Suffix(), LeftParen::class)
                 .useRHS(::PPexprs)
                 .on(
+                        LvalOrFcall_Suffix(),
                         Asterisk::class,
                         ForwardSlash::class,
                         Caret::class,
@@ -480,9 +490,9 @@ object A5GrammarRules {
         llTable
                 .on(BaseLiteral(), IntegerTerminal::class)
                 .useRHS(::IntegerTerminal)
-                .on(FloatTerminal::class)
+                .on(BaseLiteral(), FloatTerminal::class)
                 .useRHS(::FloatTerminal)
-                .on(StringTerminal::class)
+                .on(BaseLiteral(), StringTerminal::class)
                 .useRHS(::StringTerminal)
         llTable
                 .on(Addrof_id(), Ampersand::class)
@@ -490,15 +500,15 @@ object A5GrammarRules {
         llTable
                 .on(Oprel(), EqualEqual::class)
                 .useRHS(::EqualEqual)
-                .on(NotEqual::class)
+                .on(Oprel(), NotEqual::class)
                 .useRHS(::NotEqual)
-                .on(LessThan::class)
+                .on(Oprel(), LessThan::class)
                 .useRHS(::Lthan)
-                .on(LessThanOrEqual::class)
+                .on(Oprel(), LessThanOrEqual::class)
                 .useRHS(::LessThanOrEqual)
-                .on(GreaterThanOrEqual::class)
+                .on(Oprel(), GreaterThanOrEqual::class)
                 .useRHS(::GreaterThanOrEqual)
-                .on(GreaterThan::class)
+                .on(Oprel(), GreaterThan::class)
                 .useRHS(::Gthan)
         llTable
                 .on(Lthan(), LessThan::class)
@@ -509,14 +519,14 @@ object A5GrammarRules {
         llTable
                 .on(Opadd(), Plus::class)
                 .useRHS(::Plus)
-                .on(Minus::class)
+                .on(Opadd(), Minus::class)
                 .useRHS(::Minus)
         llTable
                 .on(Opmul(), Asterisk::class)
                 .useRHS(::Asterisk)
-                .on(ForwardSlash::class)
+                .on(Opmul(), ForwardSlash::class)
                 .useRHS(::ForwardSlash)
-                .on(Caret::class)
+                .on(Opmul(), Caret::class)
                 .useRHS(::Caret)
 
         return llTable

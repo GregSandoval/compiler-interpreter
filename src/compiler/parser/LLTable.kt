@@ -1,5 +1,6 @@
 package compiler.parser
 
+import compiler.parser.Symbol.NonTerminal
 import java.util.*
 import java.util.stream.Collectors
 import kotlin.collections.HashMap
@@ -9,7 +10,7 @@ import kotlin.reflect.KClass
 class LLTable {
     private val LLTable: MutableMap<KClass<out Symbol>, MutableMap<TokenClass, List<NodeSupplier>>> = HashMap()
 
-    inner class RuleBuilderSecondStep constructor(private val nonTerminal: Symbol.NonTerminal, private vararg val tokenClass: TokenClass) {
+    inner class RuleBuilderSecondStep constructor(private val nonTerminal: NonTerminal, private vararg val tokenClass: TokenClass) {
         fun useRHS(vararg rest: NodeSupplier): RuleBuilderFirstStep {
             val rhs = ArrayList(listOf(*rest))
             for (token in tokenClass) {
@@ -31,17 +32,17 @@ class LLTable {
 
     }
 
-    inner class RuleBuilderFirstStep(private val nonTerminal: Symbol.NonTerminal) {
-        fun on(vararg first: TokenClass): RuleBuilderSecondStep {
+    inner class RuleBuilderFirstStep(private val nonTerminal: NonTerminal) {
+        fun on(nonTerminal: NonTerminal, vararg first: TokenClass): RuleBuilderSecondStep {
             return RuleBuilderSecondStep(nonTerminal, *first)
         }
     }
 
-    fun on(nonTerminal: Symbol.NonTerminal, vararg first: TokenClass): RuleBuilderSecondStep {
+    fun on(nonTerminal: NonTerminal, vararg first: TokenClass): RuleBuilderSecondStep {
         return RuleBuilderSecondStep(nonTerminal, *first)
     }
 
-    fun getRHS(nonTerminal: Symbol.NonTerminal): Set<TokenClass> {
+    fun getRHS(nonTerminal: NonTerminal): Set<TokenClass> {
         var table = LLTable[nonTerminal::class]
 
         if (table === null) {
@@ -52,7 +53,7 @@ class LLTable {
         return table.keys
     }
 
-    fun getRHS(nonTerminal: Symbol.NonTerminal, token: TokenClass): List<TreeNode>? {
+    fun getRHS(nonTerminal: NonTerminal, token: TokenClass): List<TreeNode>? {
         val table = LLTable.getOrDefault(nonTerminal::class, emptyMap<TokenClass, List<NodeSupplier>>())
         val simpleRules = table[token] ?: return null
 
