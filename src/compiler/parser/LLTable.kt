@@ -43,7 +43,7 @@ class LLTable {
         return table.keys
     }
 
-    fun getRHS(nonTerminal: NonTerminal, token: TokenClass): List<TreeNode>? {
+    fun getRHS(nonTerminal: NonTerminal, token: TokenClass): List<Symbol>? {
         val table = LLTable.getOrDefault(nonTerminal::class, emptyMap<TokenClass, List<NodeSupplier>>())
         val simpleRules = table[token] ?: return null
 

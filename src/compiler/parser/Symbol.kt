@@ -4,7 +4,7 @@ import compiler.lexer.token.LineInfo
 import compiler.parser.Symbol.Terminal
 import kotlin.reflect.KClass
 
-typealias NodeSupplier = () -> TreeNode
+typealias NodeSupplier = () -> Symbol
 typealias TokenClass = KClass<out Terminal>
 
 sealed class Symbol : TreeNode() {

@@ -7,7 +7,6 @@ import java.util.stream.Collectors
 
 typealias BeforeRuleListerner = (List<TreeNode>, Terminal) -> Unit
 typealias UnexpectedRuleListener = (TreeNode, Terminal) -> Unit
-typealias UnknownNonTerminal = UnexpectedRuleListener
 typealias PredictionNotFoundListener = UnexpectedRuleListener
 typealias NonTerminalReplacedListener = (TreeNode, Terminal, List<TreeNode>) -> Unit
 
@@ -27,52 +26,23 @@ class Parser(
         private val startSymbol: NonTerminal,
         private val beforeRuleApplication: BeforeRuleListerner,
         private val onUnexpectedToken: UnexpectedRuleListener,
-        private val onUnknownGrammarRule: UnknownNonTerminal,
         private val onPredictionNotFoundError: PredictionNotFoundListener,
         private val onGrammarRuleApplication: NonTerminalReplacedListener
 ) {
 
-    @Throws(Exception::class)
     fun parse(inputName: String, tokensIn: List<Terminal>, llTable: LLTable) {
-        val stack = LinkedList<TreeNode>()
+        val stack = LinkedList<Symbol>()
         val tokens = LinkedList(tokensIn)
         stack.push(startSymbol)
 
         while (!tokens.isEmpty() && !stack.isEmpty()) {
-            val token = tokens.peek()
+            beforeRuleApplication(stack, tokens.peek())
 
-            beforeRuleApplication(stack, token)
-
-            val top = stack.pop()
-
-            if (top is Terminal && isEqual(token, top)) {
-                tokens.pop()
-                onGrammarRuleApplication(top, token, emptyList())
-                continue
+            when (val top = stack.pop()) {
+                is Terminal -> matchTerminal(top, tokens, inputName)
+                is NonTerminal -> applyProduction(top, tokens, llTable, stack)
             }
 
-            if (top is Terminal) {
-                onUnexpectedToken(top, token)
-                throw UnexpectedToken(top, token, inputName)
-            }
-
-            if (top !is NonTerminal) {
-                onUnknownGrammarRule(top, token)
-                throw RuntimeException("Node is neither Token nor Grammar rule: $top")
-            }
-
-            val rhs = llTable.getRHS(top, token::class)
-
-            if (rhs == null) {
-                onPredictionNotFoundError(top, token)
-                throw PredictiveParserException(top, token, llTable)
-            }
-
-            onGrammarRuleApplication(top, token, rhs)
-
-            for (i in rhs.indices.reversed()) {
-                stack.push(rhs[i])
-            }
         }
 
         if (tokens.isEmpty() && stack.isEmpty()) {
@@ -91,6 +61,34 @@ class Parser(
                             .collect(Collectors.toList())
             )
         }
+    }
+
+    fun applyProduction(top: NonTerminal, tokens: LinkedList<Terminal>, llTable: LLTable, stack: LinkedList<Symbol>) {
+        val token = tokens.peek()
+        val rhs = llTable.getRHS(top, token::class)
+
+        if (rhs == null) {
+            onPredictionNotFoundError(top, token)
+            throw PredictiveParserException(top, token, llTable)
+        }
+
+        onGrammarRuleApplication(top, token, rhs)
+
+        for (i in rhs.indices.reversed()) {
+            stack.push(rhs[i])
+        }
+    }
+
+    fun matchTerminal(top: Terminal, tokens: LinkedList<Terminal>, inputName: String) {
+        val token = tokens.pop()
+
+        if (isEqual(token, top)) {
+            onGrammarRuleApplication(top, token, emptyList())
+            return
+        }
+
+        onUnexpectedToken(top, token)
+        throw UnexpectedToken(top, token, inputName)
     }
 
     fun isEqual(terminal: Terminal, top: TreeNode): Boolean {

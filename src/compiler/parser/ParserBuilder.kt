@@ -5,7 +5,6 @@ import compiler.parser.Symbol.NonTerminal
 class ParserBuilder {
     private var nonTerminalReplacedListener: NonTerminalReplacedListener = { _, _, _ -> }
     private var predictionNotFoundListener: PredictionNotFoundListener = { _, _ -> }
-    private var unknownNonTerminalListener: UnknownNonTerminal = { _, _ -> }
     private var unexpectedRuleListener: UnexpectedRuleListener = { _, _ -> }
     private var beforeRuleListener: BeforeRuleListerner = { _, _ -> }
     private lateinit var startSymbol: NonTerminal
@@ -25,11 +24,6 @@ class ParserBuilder {
         return this
     }
 
-    fun setUnknownNonTerminalListener(listener: UnknownNonTerminal): ParserBuilder {
-        this.unknownNonTerminalListener = this.unknownNonTerminalListener.andThen(listener)
-        return this
-    }
-
     fun setPredictionNotFoundListener(listener: PredictionNotFoundListener): ParserBuilder {
         this.predictionNotFoundListener = this.predictionNotFoundListener.andThen(listener)
         return this
@@ -45,7 +39,6 @@ class ParserBuilder {
                 startSymbol,
                 beforeRuleListener,
                 unexpectedRuleListener,
-                unknownNonTerminalListener,
                 predictionNotFoundListener,
                 nonTerminalReplacedListener
         )
