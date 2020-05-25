@@ -1,31 +1,34 @@
 package compiler.parser
 
-import compiler.a5.grammar.NonTerminalVisitor
-import compiler.a5.grammar.PstToAstGrammarVisitor
+import compiler.a5.grammar.PstToAstNonTerminalVisitor
 import compiler.a5.grammar.PstToAstTokenVisitor
 import compiler.parser.Symbol.NonTerminal
 import compiler.parser.Symbol.Terminal
-import compiler.parser.visitors.TokenVisitor
 
 object AbstractSyntaxTreeBuilder {
-    fun fromParseTree(tree: TreeNode?) {
-        val tokenVisitor = PstToAstTokenVisitor()
-        val grammarVisitor = PstToAstGrammarVisitor()
-        postordervisit(tree, tokenVisitor, grammarVisitor)
+    fun fromParseTree(tree: TreeNode) {
+        postordervisit(tree, PstToAstTokenVisitor(), PstToAstNonTerminalVisitor())
     }
 
-    fun postordervisit(tree: TreeNode?, tokenVisitor: TokenVisitor<*>, grammarVisitor: NonTerminalVisitor) {
+    fun postordervisit(tree: TreeNode?, tokenVisitor: PstToAstTokenVisitor, nonTerminalVisitor: PstToAstNonTerminalVisitor) {
         if (tree == null) {
             return
         }
+
         for (child in tree.children) {
-            postordervisit(child, tokenVisitor, grammarVisitor)
+            postordervisit(child, tokenVisitor, nonTerminalVisitor)
         }
+
+        // Remove NonTerminals that derive epsilon
         trim(tree)
+
+        // Contract NonTerminal chains
         contract(tree)
+
         if (tree is NonTerminal) {
-            grammarVisitor.accept(tree)
+            nonTerminalVisitor.accept(tree)
         }
+
         if (tree is Terminal) {
             tokenVisitor.accept(tree)
         }

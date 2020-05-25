@@ -9,7 +9,7 @@ import compiler.parser.Symbol.Terminal.Punctuation.*
 import compiler.parser.TreeNode
 import java.util.*
 
-class PstToAstGrammarVisitor : NonTerminalVisitor {
+class PstToAstNonTerminalVisitor : NonTerminalVisitor {
     override fun visit(node: Expr) {
         if (node.children.size == 2) {
             val left = node.children.pop()
