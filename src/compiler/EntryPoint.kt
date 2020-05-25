@@ -5,42 +5,38 @@ import compiler.a5.parser.A7Parser
 import compiler.interpreter.Interpreter
 import compiler.parser.ASTValidator
 import compiler.parser.AbstractSyntaxTreeBuilder
-import compiler.parser.Symbol.Terminal
 import visualization.TreeVisualizer
 
 object EntryPoint {
     var inputName: String? = null
-    val exception: String? = null
 
     @Throws(Exception::class)
     @JvmStatic
     fun main(args: Array<String>) {
         val inputs = CommandLine.processInputs(args)
-        val terminals: List<Terminal>
-
         inputName = inputs.sourceFileName
-        terminals = A5Lexer.lex(inputs.sourceText)
 
-        if (exception != null) {
-            throw Exception(exception)
-        }
-
+        val terminals = A5Lexer.lex(inputs.sourceText)
         val parseTree = A7Parser.parse(inputs.sourceFileName, terminals)
 
         var root = parseTree.getRoot()
 
-        // Serialize current PST
+        // Serialize PST to image
         TreeVisualizer.toImage(root, inputs.pstFileName)
 
         // Transform PST to AST (in-place)
         AbstractSyntaxTreeBuilder.fromParseTree(root)
 
+        // Validate new AST contains only terminals
         ASTValidator.validate(root)
 
-        // Serialize ASt
+        // Serialize AST to image
         TreeVisualizer.toImage(root, inputs.astFileName)
+
+        // Bypass sentinel node, not needed for execution
         root = root.children[0]
 
+        // Execute AST
         Interpreter.execute(root)
     }
 }
