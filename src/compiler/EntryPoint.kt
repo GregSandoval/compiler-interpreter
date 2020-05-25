@@ -13,7 +13,6 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
-import java.util.regex.Pattern
 
 object EntryPoint {
     var inputName: String? = null
@@ -25,39 +24,37 @@ object EntryPoint {
         val settings = processArgs(args)
         val terminals: List<Terminal>
 
-        inputName = settings.inputName
-        if (settings.terminals != null) {
-            // Passed in token stream
-            terminals = settings.terminals!!
-        } else {
-            // Tokenize file
-            terminals = A5Lexer.lex(settings.inputText!!)
-        }
+        inputName = settings.sourceFileName
+        terminals = A5Lexer.lex(settings.sourceText)
 
         if (exception != null) {
             throw Exception(exception)
         }
 
-        val parseTree = A7Parser.parse(settings.inputName, terminals)
+        val parseTree = A7Parser.parse(settings.sourceFileName, terminals)
 
         var root = parseTree.getRoot()
 
         // Serialize current PST
-        TreeVisualizer.toImage(root, settings.pstOut)
+        TreeVisualizer.toImage(root, settings.pstFileName)
 
         // Transform PST to AST (in-place)
         AbstractSyntaxTreeBuilder.fromParseTree(root)
 
         // Serialize ASt
-        TreeVisualizer.toImage(root, settings.astOut)
+        TreeVisualizer.toImage(root, settings.astFileName)
         root = root.children[0]
 
         Interpreter.execute(root)
     }
 
     @Throws(IOException::class)
-    private fun processArgs(args: Array<String>): ParserSettings {
-        val settings = ParserSettings()
+    private fun processArgs(args: Array<String>): UserInput {
+        var pstFileName = "pst"
+        var astFileName = "ast"
+        var sourceFileName = "std.in"
+        var sourceText: String? = null
+
         for (arg in args) {
             val split = arg.split("=".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
 
@@ -67,21 +64,20 @@ object EntryPoint {
             val key = split[0]
             val value = split[1]
             when (key) {
-                "--pst-name" -> settings.pstOut = value
-                "--ast-name" -> settings.astOut = value
+                "--pst-name" -> pstFileName = value
+                "--ast-name" -> astFileName = value
                 "--file" -> {
-                    settings.inputName = value
-                    settings.inputText = Files.readString(Path.of(settings.inputName))
+                    sourceFileName = value
+                    sourceText = Files.readString(Path.of(sourceFileName))
                 }
             }
         }
 
-        if (settings.inputText == null && settings.terminals == null) {
-            Scanner(System.`in`)
-                    .useDelimiter(Pattern.compile("$"))
-                    .use { settings.inputText = if (it.hasNext()) it.next() else "" }
+        if (sourceText == null) {
+            throw Exception("Source file name is required. Use --file flag to specify source.")
         }
-        return settings
+
+        return UserInput(pstFileName, astFileName, sourceFileName, sourceText)
     }
 
     fun validateAST(tree: TreeNode) {
@@ -111,11 +107,8 @@ object EntryPoint {
     }
 
 
-    private class ParserSettings {
-        var pstOut = "pst"
-        var astOut = "ast"
-        var inputName = "std.in"
-        var inputText: String? = null
-        var terminals: List<Terminal>? = null
-    }
+    private data class UserInput(var pstFileName: String = "pst",
+                                 var astFileName: String = "ast",
+                                 var sourceFileName: String = "std.in",
+                                 var sourceText: String)
 }
