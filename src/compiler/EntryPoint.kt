@@ -1,6 +1,7 @@
 package compiler
 
 import compiler.a5.grammar.A5GrammarRules
+import compiler.a5.lexer.A5Lexer
 import compiler.a5.lexicon.A5LexiconDFA
 import compiler.interpreter.Interpreter
 import compiler.lexer.LexerBuilder
@@ -36,11 +37,7 @@ object EntryPoint {
             terminals = settings.terminals!!
         } else {
             // Tokenize file
-            terminals = LexerBuilder()
-                    .setDFA(A5LexiconDFA())
-                    .onUnknownTokenFound { cursor, _ -> logUnknownToken(cursor) }
-                    .createLexer()
-                    .lex(settings.inputText!!)
+            terminals = A5Lexer.lex(settings.inputText!!)
         }
 
         if (exception != null) {
@@ -127,9 +124,6 @@ object EntryPoint {
         }
     }
 
-    private fun logUnknownToken(cursor: TextCursor) {
-        throw UnknownTokenException(cursor.getCurrentSentence(), cursor)
-    }
 
     private class ParserSettings {
         var pstOut = "pst"
