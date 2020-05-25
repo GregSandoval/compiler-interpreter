@@ -38,24 +38,10 @@ class ParseTreeBuilder {
         root.children.forEach { it.parent = this.root }
         ParserBuilder()
                 .setStartSymbol(startSymbol)
-                .setNonTerminalReplacedListener(this::attachNonTerminalToTree)
+                .setNonTerminalReplacedListener(ParseTreeLinker::link)
                 .createParser()
                 .parse(inputName, terminals, llTable)
         return root
-    }
-
-    private fun attachNonTerminalToTree(p1: TreeNode, p2: Terminal, p3: List<TreeNode>) {
-        if (p1 is Terminal && p1 !is EOFTerminal) {
-            p2.parent = p1.parent
-            val siblings = p1.parent!!.children
-            val topIndex = p1.parent!!.children.indexOf(p1)
-            siblings[topIndex] = p2
-        }
-
-        if (p1 !is Terminal) {
-            p1.children.addAll(p3)
-            p3.forEach { it.parent = p1 }
-        }
     }
 
 }
