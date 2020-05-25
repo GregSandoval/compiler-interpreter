@@ -3,8 +3,12 @@ package compiler
 import compiler.a5.lexer.A5Lexer
 import compiler.a5.parser.A7Parser
 import compiler.interpreter.Interpreter
+import compiler.interpreter.SymbolTable
+import compiler.interpreter.SymbolTableBuilder
+import compiler.interpreter.TypeChecker
 import compiler.parser.ASTValidator
 import compiler.parser.AbstractSyntaxTreeBuilder
+import compiler.parser.Symbol.Terminal
 import visualization.TreeVisualizer
 
 object EntryPoint {
@@ -19,24 +23,35 @@ object EntryPoint {
         val terminals = A5Lexer.lex(inputs.sourceText)
         val parseTree = A7Parser.parse(inputs.sourceFileName, terminals)
 
-        var root = parseTree.getRoot()
+        var tree = parseTree.getTree()
 
         // Serialize PST to image
-        TreeVisualizer.toImage(root, inputs.pstFileName)
+        TreeVisualizer.toImage(tree, inputs.pstFileName)
 
         // Transform PST to AST (in-place)
-        AbstractSyntaxTreeBuilder.fromParseTree(root)
+        AbstractSyntaxTreeBuilder.fromParseTree(tree)
 
         // Validate new AST contains only terminals
-        ASTValidator.validate(root)
+        ASTValidator.validate(tree)
 
         // Serialize AST to image
-        TreeVisualizer.toImage(root, inputs.astFileName)
+        TreeVisualizer.toImage(tree, inputs.astFileName)
 
         // Bypass sentinel node, not needed for execution
-        root = root.children[0]
+        tree = tree.children[0] as Terminal
+
+        // Build symbol table from AST
+        val symtab = SymbolTableBuilder.build(tree)
+
+        println(symtab)
+
+        // Check types within AST
+        TypeChecker.check(tree, symtab)
 
         // Execute AST
-        Interpreter.execute(root)
+        Interpreter.execute(tree, symtab)
+
+        println(symtab)
     }
+
 }

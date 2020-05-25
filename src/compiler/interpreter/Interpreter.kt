@@ -1,23 +1,10 @@
 package compiler.interpreter
 
 import compiler.parser.Symbol.Terminal
-import compiler.parser.TreeNode
 
 object Interpreter {
-    fun execute(tree: TreeNode?) {
-        if (tree !is Terminal) {
-            throw Exception("Grammar node in AST?")
-        }
-        val symtab = SymbolTable()
-        SymbolTableBuilder.build(tree, symtab)
-        TypeChecker.check(tree, symtab)
-        println()
-        println()
-        println("Symbol table: \n$symtab\n")
-        println("Program output:")
+    fun execute(tree: Terminal, symtab: SymbolTable) {
         TokenInterpreter.interpret(tree, symtab)
         println()
-        println()
-        println("Symbol table: \n$symtab\n")
     }
 }

@@ -49,11 +49,13 @@ class SymbolTable {
     }
 
     override fun toString(): String {
-        return symtab.entries
-                .stream()
-                .map {
-                    it.key + ":" + types[it.key]!!.str + " = " + it.value.toString()
-                }
-                .collect(Collectors.joining("\n"))
+        return "================ Symbol Table ================\n" +
+                symtab.entries
+                        .stream()
+                        .map {
+                            it.key + ":" + types[it.key]!!.str + " = " + it.value.toString()
+                        }
+                        .collect(Collectors.joining("\n")) +
+                "\n=============================================="
     }
 }

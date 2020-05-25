@@ -5,13 +5,13 @@ import compiler.parser.Symbol.Terminal
 import compiler.parser.Symbol.Terminal.Ignorable.EOFTerminal
 
 class ParseTree(startSymbol: NonTerminal, llTable: LLTable, inputName: String, terminals: List<Terminal>) {
-    private val root: TreeNode = NonTerminal.ParseTreeSentinel()
+    private val tree: TreeNode = NonTerminal.ParseTreeSentinel()
     private val EOF = EOFTerminal()
 
     init {
-        root.children.push(EOF)
-        root.children.push(startSymbol)
-        root.children.forEach { it.parent = root }
+        tree.children.push(EOF)
+        tree.children.push(startSymbol)
+        tree.children.forEach { it.parent = tree }
         ParserBuilder()
                 .setStartSymbol(startSymbol)
                 .setNonTerminalReplacedListener(this::link)
@@ -19,8 +19,8 @@ class ParseTree(startSymbol: NonTerminal, llTable: LLTable, inputName: String, t
                 .parse(inputName, terminals, llTable)
     }
 
-    fun getRoot(): TreeNode {
-        return this.root
+    fun getTree(): TreeNode {
+        return this.tree
     }
 
     fun link(top: TreeNode, token: Terminal, rhs: List<TreeNode>) {

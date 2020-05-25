@@ -51,9 +51,11 @@ class SymbolTableBuilder private constructor(private val symtab: SymbolTable) : 
     companion object {
         val voidToken = Void()
         val undefined = Undefined()
-        fun build(node: Terminal, symtab: SymbolTable) {
+        fun build(node: Terminal): SymbolTable {
+            val symtab = SymbolTable()
             val visitor = SymbolTableBuilder(symtab)
             visitor.accept(node)
+            return symtab
         }
     }
 
