@@ -5,13 +5,31 @@ import compiler.parser.Symbol.Terminal
 import java.util.*
 import java.util.stream.Collectors
 
+typealias BeforeRuleListerner = (List<TreeNode>, Terminal) -> Unit
+typealias UnexpectedRuleListener = (TreeNode, Terminal) -> Unit
+typealias UnknownNonTerminal = UnexpectedRuleListener
+typealias PredictionNotFoundListener = UnexpectedRuleListener
+typealias NonTerminalReplacedListener = (TreeNode, Terminal, List<TreeNode>) -> Unit
+
+fun <P1> ((P1) -> Unit).andThen(next: (P1) -> Unit): ((P1) -> Unit) {
+    return { p1 -> this(p1); next(p1) }
+}
+
+fun <P1, P2> ((P1, P2) -> Unit).andThen(next: (P1, P2) -> Unit): ((P1, P2) -> Unit) {
+    return { p1, p2 -> this(p1, p2); next(p1, p2) }
+}
+
+fun <P1, P2, P3> ((P1, P2, P3) -> Unit).andThen(next: (P1, P2, P3) -> Unit): ((P1, P2, P3) -> Unit) {
+    return { p1, p2, p3 -> this(p1, p2, p3); next(p1, p2, p3) }
+}
+
 class Parser(
         private val startSymbol: NonTerminal,
-        private val beforeRuleApplication: BeforeRuleApplicationListener,
-        private val onUnexpectedToken: GeneralListener,
-        private val onUnknownGrammarRule: GeneralListener,
-        private val onPredictionNotFoundError: GeneralListener,
-        private val onGrammarRuleApplication: GrammarRuleApplicationListener
+        private val beforeRuleApplication: BeforeRuleListerner,
+        private val onUnexpectedToken: UnexpectedRuleListener,
+        private val onUnknownGrammarRule: UnknownNonTerminal,
+        private val onPredictionNotFoundError: PredictionNotFoundListener,
+        private val onGrammarRuleApplication: NonTerminalReplacedListener
 ) {
 
     @Throws(Exception::class)
@@ -23,34 +41,34 @@ class Parser(
         while (!tokens.isEmpty() && !stack.isEmpty()) {
             val token = tokens.peek()
 
-            beforeRuleApplication.accept(stack, token)
+            beforeRuleApplication(stack, token)
 
             val top = stack.pop()
 
             if (top is Terminal && isEqual(token, top)) {
                 tokens.pop()
-                onGrammarRuleApplication.accept(top, token, emptyList())
+                onGrammarRuleApplication(top, token, emptyList())
                 continue
             }
 
             if (top is Terminal) {
-                onUnexpectedToken.accept(top, token)
+                onUnexpectedToken(top, token)
                 throw UnexpectedToken(top, token, inputName)
             }
 
             if (top !is NonTerminal) {
-                onUnknownGrammarRule.accept(top, token)
+                onUnknownGrammarRule(top, token)
                 throw RuntimeException("Node is neither Token nor Grammar rule: $top")
             }
 
             val rhs = llTable.getRHS(top, token.javaClass)
 
             if (rhs == null) {
-                onPredictionNotFoundError.accept(top, token)
+                onPredictionNotFoundError(top, token)
                 throw PredictiveParserException(top, token, llTable)
             }
 
-            onGrammarRuleApplication.accept(top, token, rhs)
+            onGrammarRuleApplication(top, token, rhs)
 
             for (i in rhs.indices.reversed()) {
                 stack.push(rhs[i])

@@ -3,9 +3,8 @@ package compiler.lexer
 import compiler.a5.lexicon.DFA
 import compiler.lexer.LexicalNode.ERROR
 import compiler.utils.TextCursor
-import compiler.utils.TriConsumer
 
-typealias TransitionListener = TriConsumer<LexicalNode, Char, LexicalNode>
+typealias TransitionListener = (LexicalNode, Char, LexicalNode) -> Unit
 
 open class DFAExecutor(private val dfa: DFA, private val listeners: TransitionListener) {
 
@@ -17,7 +16,7 @@ open class DFAExecutor(private val dfa: DFA, private val listeners: TransitionLi
             if (next == ERROR)
                 break
 
-            listeners.accept(current, input.next(), next)
+            listeners(current, input.next(), next)
             current = next
         }
         return current

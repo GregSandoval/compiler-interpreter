@@ -4,7 +4,6 @@ import compiler.a5.grammar.A5GrammarRules
 import compiler.a5.lexicon.A5LexiconDFA
 import compiler.interpreter.Interpreter
 import compiler.lexer.LexerBuilder
-import compiler.lexer.NonFinalStateListener
 import compiler.lexer.UnknownTokenException
 import compiler.parser.AbstractSyntaxTreeBuilder
 import compiler.parser.ParseTreeBuilder
@@ -39,7 +38,7 @@ object EntryPoint {
             // Tokenize file
             terminals = LexerBuilder()
                     .setDFA(A5LexiconDFA())
-                    .onUnknownTokenFound(NonFinalStateListener { cursor, _ -> logUnknownToken(cursor) })
+                    .onUnknownTokenFound { cursor, _ -> logUnknownToken(cursor) }
                     .createLexer()
                     .lex(settings.inputText!!)
         }

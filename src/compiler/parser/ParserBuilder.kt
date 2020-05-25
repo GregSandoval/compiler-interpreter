@@ -1,16 +1,13 @@
 package compiler.parser
 
-import compiler.parser.ParserListeners.BeforeRuleApplicationListenerIdentity
-import compiler.parser.ParserListeners.GeneralListenerIdentity
-import compiler.parser.ParserListeners.GrammarRuleApplicationIdentity
 import compiler.parser.Symbol.NonTerminal
 
 class ParserBuilder {
-    private var beforeRuleApplication = BeforeRuleApplicationListenerIdentity()
-    private var onGrammarRuleApplication = GrammarRuleApplicationIdentity()
-    private var onPredictionNotFoundError = GeneralListenerIdentity()
-    private var onUnknownGrammarRule = GeneralListenerIdentity()
-    private var onUnexpectedToken = GeneralListenerIdentity()
+    private var nonTerminalReplacedListener: NonTerminalReplacedListener = { _, _, _ -> }
+    private var predictionNotFoundListener: PredictionNotFoundListener = { _, _ -> }
+    private var unknownNonTerminalListener: UnknownNonTerminal = { _, _ -> }
+    private var unexpectedRuleListener: UnexpectedRuleListener = { _, _ -> }
+    private var beforeRuleListener: BeforeRuleListerner = { _, _ -> }
     private lateinit var startSymbol: NonTerminal
 
     fun setStartSymbol(startSymbol: NonTerminal): ParserBuilder {
@@ -18,41 +15,41 @@ class ParserBuilder {
         return this
     }
 
-
-    fun beforeRuleApplication(beforeRuleApplication: BeforeRuleApplicationListener): ParserBuilder {
-        this.beforeRuleApplication = this.beforeRuleApplication.andThen(beforeRuleApplication)
+    fun setBeforeRuleListener(listener: BeforeRuleListerner): ParserBuilder {
+        this.beforeRuleListener = this.beforeRuleListener.andThen(listener)
         return this
     }
 
-    fun onUnexpectedToken(onUnexpectedToken: GeneralListener): ParserBuilder {
-        this.onUnexpectedToken = this.onUnexpectedToken.andThen(onUnexpectedToken)
+    fun setUnexpectedRuleListener(listener: UnexpectedRuleListener): ParserBuilder {
+        this.unexpectedRuleListener = this.unexpectedRuleListener.andThen(listener)
         return this
     }
 
-    fun onUnknownGrammarRule(onUnknownGrammarRule: GeneralListener): ParserBuilder {
-        this.onUnknownGrammarRule = this.onUnknownGrammarRule.andThen(onUnknownGrammarRule)
+    fun setUnknownNonTerminalListener(listener: UnknownNonTerminal): ParserBuilder {
+        this.unknownNonTerminalListener = this.unknownNonTerminalListener.andThen(listener)
         return this
     }
 
-    fun onPredictionNotFoundError(onPredictionNotFoundError: GeneralListener): ParserBuilder {
-        this.onPredictionNotFoundError = this.onPredictionNotFoundError.andThen(onPredictionNotFoundError)
+    fun setPredictionNotFoundListener(listener: PredictionNotFoundListener): ParserBuilder {
+        this.predictionNotFoundListener = this.predictionNotFoundListener.andThen(listener)
         return this
     }
 
-    fun onGrammarRuleApplication(onGrammarRuleApplication: GrammarRuleApplicationListener): ParserBuilder {
-        this.onGrammarRuleApplication = this.onGrammarRuleApplication.andThen(onGrammarRuleApplication)
+    fun setNonTerminalReplacedListener(listener: NonTerminalReplacedListener): ParserBuilder {
+        this.nonTerminalReplacedListener = this.nonTerminalReplacedListener.andThen(listener)
         return this
     }
 
     fun createParser(): Parser {
         return Parser(
                 startSymbol,
-                beforeRuleApplication,
-                onUnexpectedToken,
-                onUnknownGrammarRule,
-                onPredictionNotFoundError,
-                onGrammarRuleApplication
+                beforeRuleListener,
+                unexpectedRuleListener,
+                unknownNonTerminalListener,
+                predictionNotFoundListener,
+                nonTerminalReplacedListener
         )
     }
 
 }
+

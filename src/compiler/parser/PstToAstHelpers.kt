@@ -2,7 +2,6 @@ package compiler.parser
 
 import compiler.parser.Symbol.NonTerminal
 import compiler.parser.Symbol.Terminal
-import java.util.function.Consumer
 
 object PstToAstHelpers {
     fun hoist(tree: TreeNode) {
@@ -24,7 +23,7 @@ object PstToAstHelpers {
             tree.children.remove(token)
 
             // Set tree's children to point to token as new parent
-            tree.children.forEach(Consumer { child: TreeNode -> child.parent = token })
+            tree.children.forEach { it.parent = token }
 
             // Add rule's children to the token;
             while (--tokenIndex != 0 && !tree.children.isEmpty())

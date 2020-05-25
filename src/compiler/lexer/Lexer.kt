@@ -4,12 +4,12 @@ import compiler.a5.lexicon.DFA
 import compiler.lexer.token.KeywordTokenRecognizer
 import compiler.parser.Symbol.Terminal
 import compiler.parser.Symbol.Terminal.Ignorable
+import compiler.parser.andThen
 import compiler.utils.TextCursor
 import java.util.*
-import java.util.function.BiConsumer
 import java.util.stream.Collectors
 
-typealias TokenCreatedListener = BiConsumer<Terminal, TextCursor>
+typealias TokenCreatedListener = (Terminal, TextCursor) -> Unit
 
 class Lexer(
         private var dfa: DFA,
@@ -26,7 +26,7 @@ class Lexer(
         finalStateListeners = finalStateListeners.andThen {
             val token = it.getToken(cursor)
             tokens.add(token)
-            tokenCreatedListeners.accept(token, cursor)
+            tokenCreatedListeners(token, cursor)
         }
 
         DFARepeatingExecutor(

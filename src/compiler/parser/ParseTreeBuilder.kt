@@ -5,7 +5,7 @@ import compiler.parser.Symbol.NonTerminal.ParseTreeSentinel
 import compiler.parser.Symbol.Terminal
 import compiler.parser.Symbol.Terminal.Ignorable.EOFTerminal
 
-class ParseTreeBuilder : GrammarRuleApplicationListener {
+class ParseTreeBuilder {
     private lateinit var root: TreeNode
     private lateinit var startSymbol: NonTerminal
     private lateinit var llTable: LLTable
@@ -38,13 +38,13 @@ class ParseTreeBuilder : GrammarRuleApplicationListener {
         root.children.forEach { it.parent = this.root }
         ParserBuilder()
                 .setStartSymbol(startSymbol)
-                .onGrammarRuleApplication(this)
+                .setNonTerminalReplacedListener(this::attachNonTerminalToTree)
                 .createParser()
                 .parse(inputName, terminals, llTable)
         return root
     }
 
-    override fun accept(p1: TreeNode, p2: Terminal, p3: List<TreeNode>) {
+    private fun attachNonTerminalToTree(p1: TreeNode, p2: Terminal, p3: List<TreeNode>) {
         if (p1 is Terminal && p1 !is EOFTerminal) {
             p2.parent = p1.parent
             val siblings = p1.parent!!.children

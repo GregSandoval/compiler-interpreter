@@ -1,15 +1,13 @@
 package compiler.lexer
 
 import compiler.a5.lexicon.DFA
+import compiler.parser.andThen
 
 class LexerBuilder {
-    private var onTransition: TransitionListener = object : TransitionListener {
-        override fun accept(p1: LexicalNode, p2: Char, p3: LexicalNode) {
-        }
-    }
-    private var onFinalState: FinalStateListener = FinalStateListener { }
-    private var onTokenCreated: TokenCreatedListener = TokenCreatedListener { _, _ -> }
-    private var onNonFinalState = NonFinalStateListener { _, _ -> }
+    private var onTransition: TransitionListener = { _, _, _ -> }
+    private var onFinalState: FinalStateListener = { _ -> }
+    private var onTokenCreated: TokenCreatedListener = { _, _ -> }
+    private var onNonFinalState: NonFinalStateListener = { _, _ -> }
 
     fun onTransition(onTransition: TransitionListener): LexerBuilder {
         this.onTransition = this.onTransition.andThen(onTransition)

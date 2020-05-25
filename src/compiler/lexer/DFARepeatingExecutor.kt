@@ -5,11 +5,9 @@ import compiler.lexer.LexicalNode.FinalState
 import compiler.lexer.LexicalNode.NonFinalState
 import compiler.lexer.LexicalNode.NonFinalState.START
 import compiler.utils.TextCursor
-import java.util.function.BiConsumer
-import java.util.function.Consumer
 
-typealias FinalStateListener = Consumer<FinalState>
-typealias NonFinalStateListener = BiConsumer<TextCursor, NonFinalState>
+typealias FinalStateListener = (FinalState) -> Unit
+typealias NonFinalStateListener = (TextCursor, NonFinalState) -> Unit
 
 class DFARepeatingExecutor(
         private val dfa: DFA,
@@ -21,8 +19,8 @@ class DFARepeatingExecutor(
     override fun execute(input: TextCursor): LexicalNode {
         while (input.hasNext()) {
             when (val state = super.execute(input)) {
-                is FinalState -> finalStateListeners.accept(state)
-                is NonFinalState -> nonFinalStateListener.accept(input, state)
+                is FinalState -> finalStateListeners(state)
+                is NonFinalState -> nonFinalStateListener(input, state)
             }
         }
         return START
