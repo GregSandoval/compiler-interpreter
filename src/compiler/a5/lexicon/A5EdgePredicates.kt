@@ -1,21 +1,20 @@
 package compiler.a5.lexicon
 
-import java.util.function.Predicate
 
 /**
  * A grouping of commonly used functions for detecting character classes.
  * Used to define the conditions for when the lexer should transition
  * to a different state.
  */
-typealias CharPredicate = Predicate<Char>
+typealias Predicate<T> = (T) -> Boolean
 
-fun isSymbol(char: Char) = CharPredicate { char == it }
+fun isSymbol(char: Char): Predicate<Char> = { char == it }
 
 // CHARACTER SETS
-val ALowerCaseLetter = CharPredicate { it in 'a'..'z' }
-val AUpperCaseLetter = CharPredicate { it in 'A'..'Z' }
+val ALowerCaseLetter: Predicate<Char> = { it in 'a'..'z' }
+val AUpperCaseLetter: Predicate<Char> = { it in 'A'..'Z' }
 val ALetter = ALowerCaseLetter.or(AUpperCaseLetter)
-val ADigit = CharPredicate { it in '0'..'9' }
+val ADigit: Predicate<Char> = { it in '0'..'9' }
 
 // WHITE SPACE AND NEWLINES
 val ATab = isSymbol('\t')
@@ -54,17 +53,17 @@ val AUnderscore = isSymbol('_')
 val AExclamationMark = isSymbol('!')
 
 // EVERYTHING EXCEPT LINE FEED
-val ANotNewline = ALineSeparator.negate()
+val ANotNewline = ALineSeparator.not()
 
 infix fun <T> Predicate<T>.or(other: Predicate<in T>): Predicate<T> {
-    return Predicate { t: T -> test(t) || other.test(t) }
+    return { input: T -> this(input) || other(input) }
 }
 
 infix fun <T> Predicate<T>.and(other: Predicate<in T>): Predicate<T> {
-    return Predicate { t: T -> test(t) && other.test(t) }
+    return { input: T -> this(input) && other(input) }
 }
 
 operator fun <T> Predicate<T>.not(): Predicate<T> {
-    return Predicate { t: T -> !test(t) }
+    return { input: T -> !this(input) }
 }
 
