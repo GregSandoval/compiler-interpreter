@@ -45,7 +45,7 @@ object EntryPoint {
         println(symtab)
 
         // Check types within AST
-        TypeChecker.check(tree, symtab)
+        TypeChecker.validate(tree, symtab)
 
         // Execute AST
         Interpreter.execute(tree, symtab)
