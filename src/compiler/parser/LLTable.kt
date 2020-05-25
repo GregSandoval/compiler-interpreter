@@ -10,8 +10,12 @@ import kotlin.reflect.KClass
 class LLTable {
     private val LLTable: MutableMap<KClass<out Symbol>, MutableMap<TokenClass, List<NodeSupplier>>> = HashMap()
 
-    inner class RuleBuilderSecondStep constructor(private val nonTerminal: NonTerminal, private vararg val tokenClass: TokenClass) {
-        fun useRHS(vararg rest: NodeSupplier): RuleBuilderFirstStep {
+    fun on(nonTerminal: NonTerminal, vararg first: TokenClass): ProductionBuilder {
+        return ProductionBuilder(nonTerminal, *first)
+    }
+
+    inner class ProductionBuilder constructor(private val nonTerminal: NonTerminal, private vararg val tokenClass: TokenClass) {
+        fun useRHS(vararg rest: NodeSupplier) {
             val rhs = ArrayList(listOf(*rest))
             for (token in tokenClass) {
                 var table = LLTable[nonTerminal::class]
@@ -27,19 +31,8 @@ class LLTable {
 
                 table[token] = rhs
             }
-            return RuleBuilderFirstStep(nonTerminal)
         }
 
-    }
-
-    inner class RuleBuilderFirstStep(private val nonTerminal: NonTerminal) {
-        fun on(nonTerminal: NonTerminal, vararg first: TokenClass): RuleBuilderSecondStep {
-            return RuleBuilderSecondStep(nonTerminal, *first)
-        }
-    }
-
-    fun on(nonTerminal: NonTerminal, vararg first: TokenClass): RuleBuilderSecondStep {
-        return RuleBuilderSecondStep(nonTerminal, *first)
     }
 
     fun getRHS(nonTerminal: NonTerminal): Set<TokenClass> {
