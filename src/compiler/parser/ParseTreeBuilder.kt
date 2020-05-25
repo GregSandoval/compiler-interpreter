@@ -6,17 +6,11 @@ import compiler.parser.Symbol.Terminal
 class ParseTreeBuilder {
     private lateinit var startSymbol: NonTerminal
     private lateinit var llTable: LLTable
-    private lateinit var inputName: String
     private lateinit var terminals: List<Terminal>
 
     fun setStartSymbol(startSymbol: NonTerminal, llTable: LLTable): ParseTreeBuilder {
         this.startSymbol = startSymbol
         this.llTable = llTable
-        return this
-    }
-
-    fun setInputSourceName(inputName: String): ParseTreeBuilder {
-        this.inputName = inputName
         return this
     }
 
@@ -27,7 +21,7 @@ class ParseTreeBuilder {
 
 
     fun build(): ParseTree {
-        return ParseTree(this.startSymbol, this.llTable, this.inputName, this.terminals)
+        return ParseTree(this.startSymbol, this.llTable, this.terminals)
     }
 
 }

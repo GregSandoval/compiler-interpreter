@@ -4,7 +4,7 @@ import compiler.parser.Symbol.NonTerminal
 import compiler.parser.Symbol.Terminal
 import compiler.parser.Symbol.Terminal.Ignorable.EOFTerminal
 
-class ParseTree(startSymbol: NonTerminal, llTable: LLTable, inputName: String, terminals: List<Terminal>) {
+class ParseTree(startSymbol: NonTerminal, llTable: LLTable, terminals: List<Terminal>) {
     private val tree: TreeNode = NonTerminal.ParseTreeSentinel()
     private val EOF = EOFTerminal()
 
@@ -17,7 +17,7 @@ class ParseTree(startSymbol: NonTerminal, llTable: LLTable, inputName: String, t
                 .setNonTerminalReplacedListener(this::link)
                 .setLLTable(llTable)
                 .createParser()
-                .parse(inputName, terminals)
+                .parse(terminals)
     }
 
     fun getTree(): TreeNode {

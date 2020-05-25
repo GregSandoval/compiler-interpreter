@@ -7,12 +7,11 @@ import compiler.parser.Symbol.NonTerminal.Pgm
 import compiler.parser.Symbol.Terminal
 
 object A7Parser {
-    fun parse(inputName: String, terminals: List<Terminal>): ParseTree {
+    fun parse(terminals: List<Terminal>): ParseTree {
         val llTable = A5GrammarRules.build()
 
         return ParseTreeBuilder()
                 .setStartSymbol(Pgm(), llTable)
-                .setInputSourceName(inputName)
                 .setTerminals(terminals)
                 .build()
     }

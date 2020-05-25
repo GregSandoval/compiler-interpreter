@@ -31,7 +31,7 @@ class Parser(
         private val llTable: LLTable
 ) {
 
-    fun parse(inputName: String, tokensIn: List<Terminal>) {
+    fun parse(tokensIn: List<Terminal>) {
         val stack = LinkedList<Symbol>()
         val tokens = LinkedList(tokensIn)
         stack.push(startSymbol)
@@ -40,7 +40,7 @@ class Parser(
             beforeRuleApplication(stack, tokens.peek())
 
             val rhs = when (val top = stack.pop()) {
-                is Terminal -> matchTerminal(top, tokens, inputName)
+                is Terminal -> matchTerminal(top, tokens)
                 is NonTerminal -> applyProduction(top, tokens)
             }
 
@@ -79,7 +79,7 @@ class Parser(
         return rhs
     }
 
-    fun matchTerminal(top: Terminal, tokens: LinkedList<Terminal>, inputName: String): List<Symbol> {
+    fun matchTerminal(top: Terminal, tokens: LinkedList<Terminal>): List<Symbol> {
         val token = tokens.pop()
 
         if (isEqual(token, top)) {
@@ -88,7 +88,7 @@ class Parser(
         }
 
         onUnexpectedToken(top, token)
-        throw UnexpectedToken(top, token, inputName)
+        throw UnexpectedToken(top, token)
     }
 
     fun isEqual(terminal: Terminal, top: TreeNode): Boolean {

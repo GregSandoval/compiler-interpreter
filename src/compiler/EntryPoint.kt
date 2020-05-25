@@ -19,7 +19,7 @@ object EntryPoint {
         inputName = inputs.sourceFileName
 
         val terminals = A5Lexer.lex(inputs.sourceText)
-        val parseTree = A7Parser.parse(inputs.sourceFileName, terminals)
+        val parseTree = A7Parser.parse(terminals)
 
         var tree = parseTree.getTree()
 
