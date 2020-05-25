@@ -3,7 +3,6 @@ package compiler
 import compiler.a5.lexer.A5Lexer
 import compiler.a5.parser.A7Parser
 import compiler.interpreter.Interpreter
-import compiler.interpreter.SymbolTable
 import compiler.interpreter.SymbolTableBuilder
 import compiler.interpreter.TypeChecker
 import compiler.parser.ASTValidator
