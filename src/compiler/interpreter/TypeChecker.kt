@@ -14,6 +14,7 @@ class TypeChecker private constructor(private val symtab: SymbolTable) : TokenTy
     private val floatType = FloatKeyword()
     private val stringType = StringKeyword()
     private val integerType = IntegerKeyword()
+
     override fun visit(token: Asterisk): Type {
         return if (token.children.size == 1) {
             this.accept(token.children[0] as Terminal)
@@ -31,15 +32,18 @@ class TypeChecker private constructor(private val symtab: SymbolTable) : TokenTy
         val rval = token.children[1] as Terminal
         val lvalType = this.accept(lval)
         val rvalType = this.accept(rval)
+
         when {
             lvalType is FloatKeyword && rvalType is FloatKeyword -> return lvalType
             lvalType is IntegerKeyword && rvalType is IntegerKeyword -> return lvalType
             lvalType is FloatKeyword && rvalType is IntegerKeyword -> return lvalType
             lval is Type -> lval = lval.children[0] as Terminal
         }
+
         if (lvalType.javaClass != rvalType.javaClass) {
             throw AssignmentTypeException(lval, rval, lvalType, rvalType)
         }
+
         return lvalType
     }
 
@@ -111,23 +115,13 @@ class TypeChecker private constructor(private val symtab: SymbolTable) : TokenTy
     private fun checkBinaryOperator(operator: Operator): Type {
         val left: Type = this.accept(operator.children[0] as Terminal)
         val right: Type = this.accept(operator.children[1] as Terminal)
-        when {
-            left is FloatKeyword && right is FloatKeyword -> {
-                return left
-            }
-            left is IntegerKeyword && right is IntegerKeyword -> {
-                return left
-            }
-            left is FloatKeyword && right is IntegerKeyword -> {
-                return left
-            }
-            left is IntegerKeyword && right is FloatKeyword -> {
-                return right
-            }
-            left.javaClass != right.javaClass -> {
-                throw OperatorTypeException(operator, left, right)
-            }
-            else -> return left
+        return when {
+            left is FloatKeyword && right is FloatKeyword -> left
+            left is IntegerKeyword && right is IntegerKeyword -> left
+            left is FloatKeyword && right is IntegerKeyword -> left
+            left is IntegerKeyword && right is FloatKeyword -> right
+            left.javaClass != right.javaClass -> throw OperatorTypeException(operator, left, right)
+            else -> left
         }
     }
 
