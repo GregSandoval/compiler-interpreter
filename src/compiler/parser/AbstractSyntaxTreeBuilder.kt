@@ -1,6 +1,6 @@
 package compiler.parser
 
-import compiler.a5.grammar.GrammarNodeVisitor
+import compiler.a5.grammar.NonTerminalVisitor
 import compiler.a5.grammar.PstToAstGrammarVisitor
 import compiler.a5.grammar.PstToAstTokenVisitor
 import compiler.parser.Symbol.NonTerminal
@@ -14,7 +14,7 @@ object AbstractSyntaxTreeBuilder {
         postordervisit(tree, tokenVisitor, grammarVisitor)
     }
 
-    fun postordervisit(tree: TreeNode?, tokenVisitor: TokenVisitor<*>, grammarVisitor: GrammarNodeVisitor) {
+    fun postordervisit(tree: TreeNode?, tokenVisitor: TokenVisitor<*>, grammarVisitor: NonTerminalVisitor) {
         if (tree == null) {
             return
         }

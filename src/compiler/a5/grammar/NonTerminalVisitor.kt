@@ -4,7 +4,7 @@ import compiler.parser.Symbol.NonTerminal
 import compiler.parser.Symbol.NonTerminal.*
 
 
-interface GrammarNodeVisitor {
+interface NonTerminalVisitor {
     fun accept(node: NonTerminal) = when (node) {
         is Pgm -> visit(node)
         is Main -> visit(node)
