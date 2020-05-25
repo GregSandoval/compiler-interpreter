@@ -2,9 +2,10 @@ package compiler.parser
 
 import compiler.lexer.token.LineInfo
 import compiler.parser.Symbol.Terminal
+import kotlin.reflect.KClass
 
 typealias NodeSupplier = () -> TreeNode
-typealias TokenClass = Class<out Terminal>
+typealias TokenClass = KClass<out Terminal>
 
 sealed class Symbol : TreeNode() {
 

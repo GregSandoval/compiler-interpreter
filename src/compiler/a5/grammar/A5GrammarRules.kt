@@ -13,510 +13,510 @@ object A5GrammarRules {
         val llTable = LLTable()
 
         llTable
-                .on(Pgm(), ProgramKeyword::class.java)
+                .on(Pgm(), ProgramKeyword::class)
                 .useRHS(::ProgramKeyword, ::Vargroup, ::Fcndefs, ::Main)
         llTable
-                .on(Main(), MainKeyword::class.java)
+                .on(Main(), MainKeyword::class)
                 .useRHS(::MainKeyword, ::BBlock)
         llTable
-                .on(BBlock(), LeftBrace::class.java)
+                .on(BBlock(), LeftBrace::class)
                 .useRHS(::LeftBrace, ::Vargroup, ::Stmts, ::RightBrace)
         llTable
-                .on(Vargroup(), VarKeyword::class.java)
+                .on(Vargroup(), VarKeyword::class)
                 .useRHS(::VarKeyword, ::PPvarlist)
                 .on(
-                        FunctionKeyword::class.java,
-                        MainKeyword::class.java,
-                        Asterisk::class.java,
-                        IdentifierTerminal::class.java,
-                        IfKeyword::class.java,
-                        WhileKeyword::class.java,
-                        PrintKeyword::class.java,
-                        InputKeyword::class.java,
-                        ReturnKeyword::class.java,
-                        RightBrace::class.java,
-                        Colon::class.java
+                        FunctionKeyword::class,
+                        MainKeyword::class,
+                        Asterisk::class,
+                        IdentifierTerminal::class,
+                        IfKeyword::class,
+                        WhileKeyword::class,
+                        PrintKeyword::class,
+                        InputKeyword::class,
+                        ReturnKeyword::class,
+                        RightBrace::class,
+                        Colon::class
                 )
                 .useRHS()
         llTable
-                .on(PPvarlist(), LeftParen::class.java)
+                .on(PPvarlist(), LeftParen::class)
                 .useRHS(::LeftParen, ::Varlist, ::RightParen)
         llTable
                 .on(
-                        Varlist(), IntegerKeyword::class.java,
-                        FloatKeyword::class.java,
-                        StringKeyword::class.java,
-                        IdentifierTerminal::class.java,
-                        ClassKeyword::class.java
+                        Varlist(), IntegerKeyword::class,
+                        FloatKeyword::class,
+                        StringKeyword::class,
+                        IdentifierTerminal::class,
+                        ClassKeyword::class
                 )
                 .useRHS(::Varitem, ::SemiColon, ::Varlist)
-                .on(RightParen::class.java)
+                .on(RightParen::class)
                 .useRHS()
         llTable
                 .on(
-                        Varitem(), IntegerKeyword::class.java,
-                        FloatKeyword::class.java,
-                        StringKeyword::class.java,
-                        IdentifierTerminal::class.java
+                        Varitem(), IntegerKeyword::class,
+                        FloatKeyword::class,
+                        StringKeyword::class,
+                        IdentifierTerminal::class
                 )
                 .useRHS(::Vardecl, ::Varitem_Suffix)
-                .on(ClassKeyword::class.java)
+                .on(ClassKeyword::class)
                 .useRHS(::Classdef)
         llTable
-                .on(Varitem_Suffix(), Equal::class.java)
+                .on(Varitem_Suffix(), Equal::class)
                 .useRHS(::Equal, ::Varinit)
-                .on(SemiColon::class.java)
+                .on(SemiColon::class)
                 .useRHS()
         llTable
                 .on(
-                        Vardecl(), IntegerKeyword::class.java,
-                        FloatKeyword::class.java,
-                        StringKeyword::class.java,
-                        IdentifierTerminal::class.java
+                        Vardecl(), IntegerKeyword::class,
+                        FloatKeyword::class,
+                        StringKeyword::class,
+                        IdentifierTerminal::class
                 )
                 .useRHS(::Simplekind, ::Varspec)
         llTable
                 .on(
-                        Simplekind(), IntegerKeyword::class.java,
-                        FloatKeyword::class.java,
-                        StringKeyword::class.java
+                        Simplekind(), IntegerKeyword::class,
+                        FloatKeyword::class,
+                        StringKeyword::class
                 )
                 .useRHS(::BaseKind)
-                .on(IdentifierTerminal::class.java)
+                .on(IdentifierTerminal::class)
                 .useRHS(::Classid)
         llTable
-                .on(BaseKind(), IntegerKeyword::class.java)
+                .on(BaseKind(), IntegerKeyword::class)
                 .useRHS(::IntegerKeyword)
-                .on(FloatKeyword::class.java)
+                .on(FloatKeyword::class)
                 .useRHS(::FloatKeyword)
-                .on(StringKeyword::class.java)
+                .on(StringKeyword::class)
                 .useRHS(::StringKeyword)
         llTable
-                .on(Classid(), IdentifierTerminal::class.java)
+                .on(Classid(), IdentifierTerminal::class)
                 .useRHS(::IdentifierTerminal)
         llTable
-                .on(Varspec(), IdentifierTerminal::class.java)
+                .on(Varspec(), IdentifierTerminal::class)
                 .useRHS(::Varid, ::Arrspec)
-                .on(Asterisk::class.java)
+                .on(Asterisk::class)
                 .useRHS(::Deref_id)
         llTable
-                .on(Varid(), IdentifierTerminal::class.java)
+                .on(Varid(), IdentifierTerminal::class)
                 .useRHS(::IdentifierTerminal)
         llTable
-                .on(Arrspec(), LeftBracket::class.java)
+                .on(Arrspec(), LeftBracket::class)
                 .useRHS(::KKint)
                 .on(
-                        Equal::class.java,
-                        SemiColon::class.java,
-                        Comma::class.java,
-                        RightParen::class.java
+                        Equal::class,
+                        SemiColon::class,
+                        Comma::class,
+                        RightParen::class
                 )
                 .useRHS()
         llTable
-                .on(KKint(), LeftBracket::class.java)
+                .on(KKint(), LeftBracket::class)
                 .useRHS(::LeftBracket, ::IntegerTerminal, ::RightBracket)
         llTable
-                .on(Deref_id(), Asterisk::class.java)
+                .on(Deref_id(), Asterisk::class)
                 .useRHS(::Deref, ::IdentifierTerminal)
         llTable
-                .on(Deref(), Asterisk::class.java)
+                .on(Deref(), Asterisk::class)
                 .useRHS(::Asterisk)
         llTable
                 .on(
-                        Varinit(), IntegerTerminal::class.java,
-                        FloatTerminal::class.java,
-                        StringTerminal::class.java,
-                        Asterisk::class.java,
-                        IdentifierTerminal::class.java,
-                        Ampersand::class.java,
-                        LeftParen::class.java
+                        Varinit(), IntegerTerminal::class,
+                        FloatTerminal::class,
+                        StringTerminal::class,
+                        Asterisk::class,
+                        IdentifierTerminal::class,
+                        Ampersand::class,
+                        LeftParen::class
                 )
                 .useRHS(::Expr)
-                .on(LeftBrace::class.java)
+                .on(LeftBrace::class)
                 .useRHS(::BBexprs)
         llTable
-                .on(BBexprs(), LeftBrace::class.java)
+                .on(BBexprs(), LeftBrace::class)
                 .useRHS(::LeftBrace, ::Exprlist, ::RightBrace)
         llTable
                 .on(
-                        Exprlist(), IntegerTerminal::class.java,
-                        FloatTerminal::class.java,
-                        StringTerminal::class.java,
-                        Asterisk::class.java,
-                        IdentifierTerminal::class.java,
-                        Ampersand::class.java,
-                        LeftParen::class.java
+                        Exprlist(), IntegerTerminal::class,
+                        FloatTerminal::class,
+                        StringTerminal::class,
+                        Asterisk::class,
+                        IdentifierTerminal::class,
+                        Ampersand::class,
+                        LeftParen::class
                 )
                 .useRHS(::Expr, ::Moreexprs)
                 .on(
-                        RightBrace::class.java,
-                        RightParen::class.java
+                        RightBrace::class,
+                        RightParen::class
                 )
                 .useRHS()
         llTable
-                .on(Moreexprs(), Comma::class.java)
+                .on(Moreexprs(), Comma::class)
                 .useRHS(::Comma, ::Exprlist)
                 .on(
-                        RightBrace::class.java,
-                        RightParen::class.java
+                        RightBrace::class,
+                        RightParen::class
                 )
                 .useRHS()
         llTable
-                .on(Classdef(), ClassKeyword::class.java)
+                .on(Classdef(), ClassKeyword::class)
                 .useRHS(::Classheader, ::Classdef_Suffix)
         llTable
-                .on(Classdef_Suffix(), LeftBrace::class.java)
+                .on(Classdef_Suffix(), LeftBrace::class)
                 .useRHS(::BBClassitems)
-                .on(IfKeyword::class.java)
+                .on(IfKeyword::class)
                 .useRHS(::IfKeyword, ::BBClassitems)
         llTable
-                .on(BBClassitems(), LeftBrace::class.java)
+                .on(BBClassitems(), LeftBrace::class)
                 .useRHS(::LeftBrace, ::Classitems, ::RightBrace)
         llTable
-                .on(Classheader(), ClassKeyword::class.java)
+                .on(Classheader(), ClassKeyword::class)
                 .useRHS(::ClassKeyword, ::Classid, ::Classmom, ::Interfaces)
         llTable
-                .on(Classmom(), Colon::class.java)
+                .on(Classmom(), Colon::class)
                 .useRHS(::Colon, ::Classid)
                 .on(
-                        Plus::class.java,
-                        LeftBrace::class.java,
-                        IfKeyword::class.java
+                        Plus::class,
+                        LeftBrace::class,
+                        IfKeyword::class
                 )
                 .useRHS()
         llTable
-                .on(Classitems(), Colon::class.java, VarKeyword::class.java, FunctionKeyword::class.java)
+                .on(Classitems(), Colon::class, VarKeyword::class, FunctionKeyword::class)
                 .useRHS(::Classgroup, ::Classitems)
-                .on(RightBrace::class.java)
+                .on(RightBrace::class)
                 .useRHS()
         llTable
-                .on(Classgroup(), Colon::class.java)
+                .on(Classgroup(), Colon::class)
                 .useRHS(::Class_ctrl)
-                .on(VarKeyword::class.java)
+                .on(VarKeyword::class)
                 .useRHS(::Vargroup)
-                .on(FunctionKeyword::class.java)
+                .on(FunctionKeyword::class)
                 .useRHS(::Mddecls)
         llTable
-                .on(Class_ctrl(), Colon::class.java)
+                .on(Class_ctrl(), Colon::class)
                 .useRHS(::Colon, ::IdentifierTerminal)
         llTable
-                .on(Interfaces(), Plus::class.java)
+                .on(Interfaces(), Plus::class)
                 .useRHS(::Plus, ::Classid, ::Interfaces)
-                .on(LeftBrace::class.java, IfKeyword::class.java)
+                .on(LeftBrace::class, IfKeyword::class)
                 .useRHS()
         llTable
-                .on(Mddecls(), FunctionKeyword::class.java)
+                .on(Mddecls(), FunctionKeyword::class)
                 .useRHS(::Mdheader, ::Mddecls)
                 .on(
-                        SemiColon::class.java,
-                        VarKeyword::class.java,
-                        RightBrace::class.java
+                        SemiColon::class,
+                        VarKeyword::class,
+                        RightBrace::class
                 )
                 .useRHS()
         llTable
-                .on(Mdheader(), FunctionKeyword::class.java)
+                .on(Mdheader(), FunctionKeyword::class)
                 .useRHS(::FunctionKeyword, ::Md_id, ::PParmlist, ::Retkind)
         llTable
-                .on(Md_id(), IdentifierTerminal::class.java)
+                .on(Md_id(), IdentifierTerminal::class)
                 .useRHS(::Classid, ::Colon, ::Fcnid)
         llTable
-                .on(Fcndefs(), FunctionKeyword::class.java)
+                .on(Fcndefs(), FunctionKeyword::class)
                 .useRHS(::Fcndef, ::Fcndefs)
-                .on(MainKeyword::class.java)
+                .on(MainKeyword::class)
                 .useRHS()
         llTable
-                .on(Fcndef(), FunctionKeyword::class.java)
+                .on(Fcndef(), FunctionKeyword::class)
                 .useRHS(::Fcnheader, ::BBlock)
         llTable
-                .on(Fcnheader(), FunctionKeyword::class.java)
+                .on(Fcnheader(), FunctionKeyword::class)
                 .useRHS(::FunctionKeyword, ::Fcnid, ::PParmlist, ::Retkind)
         llTable
-                .on(Fcnid(), IdentifierTerminal::class.java)
+                .on(Fcnid(), IdentifierTerminal::class)
                 .useRHS(::IdentifierTerminal)
         llTable
                 .on(
-                        Retkind(), IntegerKeyword::class.java,
-                        FloatKeyword::class.java,
-                        StringKeyword::class.java
+                        Retkind(), IntegerKeyword::class,
+                        FloatKeyword::class,
+                        StringKeyword::class
                 )
                 .useRHS(::BaseKind)
         llTable
-                .on(PParmlist(), LeftParen::class.java)
+                .on(PParmlist(), LeftParen::class)
                 .useRHS(::LeftParen, ::Varspecs, ::RightParen)
         llTable
-                .on(Varspecs(), Asterisk::class.java, IdentifierTerminal::class.java)
+                .on(Varspecs(), Asterisk::class, IdentifierTerminal::class)
                 .useRHS(::Varspec, ::More_varspecs)
-                .on(RightParen::class.java)
+                .on(RightParen::class)
                 .useRHS()
         llTable
-                .on(More_varspecs(), Comma::class.java)
+                .on(More_varspecs(), Comma::class)
                 .useRHS(::Comma, ::Varspecs)
-                .on(RightParen::class.java)
+                .on(RightParen::class)
                 .useRHS()
         llTable
                 .on(
-                        Stmts(), Asterisk::class.java,
-                        IdentifierTerminal::class.java,
-                        IfKeyword::class.java,
-                        WhileKeyword::class.java,
-                        PrintKeyword::class.java,
-                        InputKeyword::class.java,
-                        ReturnKeyword::class.java
+                        Stmts(), Asterisk::class,
+                        IdentifierTerminal::class,
+                        IfKeyword::class,
+                        WhileKeyword::class,
+                        PrintKeyword::class,
+                        InputKeyword::class,
+                        ReturnKeyword::class
                 )
                 .useRHS(::Stmt, ::SemiColon, ::Stmts)
-                .on(RightBrace::class.java)
+                .on(RightBrace::class)
                 .useRHS()
         llTable
-                .on(Stmt(), IdentifierTerminal::class.java, Asterisk::class.java)
+                .on(Stmt(), IdentifierTerminal::class, Asterisk::class)
                 .useRHS(::StasgnOrFcall)
-                .on(IfKeyword::class.java)
+                .on(IfKeyword::class)
                 .useRHS(::Stif)
-                .on(WhileKeyword::class.java)
+                .on(WhileKeyword::class)
                 .useRHS(::Stwhile)
-                .on(PrintKeyword::class.java)
+                .on(PrintKeyword::class)
                 .useRHS(::Stprint)
-                .on(InputKeyword::class.java)
+                .on(InputKeyword::class)
                 .useRHS(::Stinput)
-                .on(ReturnKeyword::class.java)
+                .on(ReturnKeyword::class)
                 .useRHS(::Strtn)
         llTable
-                .on(StasgnOrFcall(), Asterisk::class.java)
+                .on(StasgnOrFcall(), Asterisk::class)
                 .useRHS(::Deref_id, ::Stasgn_Suffix)
-                .on(IdentifierTerminal::class.java)
+                .on(IdentifierTerminal::class)
                 .useRHS(::IdentifierTerminal, ::StasgnOrFcall_Suffix)
         llTable
-                .on(StasgnOrFcall_Suffix(), LeftBracket::class.java, Equal::class.java)
+                .on(StasgnOrFcall_Suffix(), LeftBracket::class, Equal::class)
                 .useRHS(::Lval_Suffix, ::Stasgn_Suffix)
-                .on(LeftParen::class.java)
+                .on(LeftParen::class)
                 .useRHS(::PPexprs)
         llTable
-                .on(Stasgn_Suffix(), Equal::class.java)
+                .on(Stasgn_Suffix(), Equal::class)
                 .useRHS(::Equal, ::Expr)
         llTable
-                .on(Lval_Suffix(), LeftBracket::class.java)
+                .on(Lval_Suffix(), LeftBracket::class)
                 .useRHS(::KKexpr)
                 .on(
-                        Equal::class.java,
-                        Asterisk::class.java,
-                        ForwardSlash::class.java,
-                        Caret::class.java,
-                        Plus::class.java,
-                        Minus::class.java,
-                        EqualEqual::class.java,
-                        NotEqual::class.java,
-                        LessThan::class.java,
-                        LessThanOrEqual::class.java,
-                        GreaterThanOrEqual::class.java,
-                        GreaterThan::class.java,
-                        RightBrace::class.java,
-                        RightBracket::class.java,
-                        SemiColon::class.java,
-                        RightParen::class.java,
-                        Comma::class.java
+                        Equal::class,
+                        Asterisk::class,
+                        ForwardSlash::class,
+                        Caret::class,
+                        Plus::class,
+                        Minus::class,
+                        EqualEqual::class,
+                        NotEqual::class,
+                        LessThan::class,
+                        LessThanOrEqual::class,
+                        GreaterThanOrEqual::class,
+                        GreaterThan::class,
+                        RightBrace::class,
+                        RightBracket::class,
+                        SemiColon::class,
+                        RightParen::class,
+                        Comma::class
                 ).useRHS()
         llTable
-                .on(KKexpr(), LeftBracket::class.java)
+                .on(KKexpr(), LeftBracket::class)
                 .useRHS(::LeftBracket, ::Expr, ::RightBracket)
         llTable
-                .on(PPexprs(), LeftParen::class.java)
+                .on(PPexprs(), LeftParen::class)
                 .useRHS(::LeftParen, ::Exprlist, ::RightParen)
                 .on()
                 .useRHS(::PPonly)
         llTable
-                .on(Stif(), IfKeyword::class.java)
+                .on(Stif(), IfKeyword::class)
                 .useRHS(::IfKeyword, ::PPexpr, ::BBlock, ::Elsepart)
         llTable
-                .on(Elsepart(), ElseIfKeyword::class.java)
+                .on(Elsepart(), ElseIfKeyword::class)
                 .useRHS(::ElseIfKeyword, ::PPexpr, ::BBlock, ::Elsepart)
-                .on(ElseKeyword::class.java)
+                .on(ElseKeyword::class)
                 .useRHS(::ElseKeyword, ::BBlock)
-                .on(SemiColon::class.java)
+                .on(SemiColon::class)
                 .useRHS()
         llTable
-                .on(Stwhile(), WhileKeyword::class.java)
+                .on(Stwhile(), WhileKeyword::class)
                 .useRHS(::WhileKeyword, ::PPexpr, ::BBlock)
         llTable
-                .on(Stprint(), PrintKeyword::class.java)
+                .on(Stprint(), PrintKeyword::class)
                 .useRHS(::PrintKeyword, ::PPexprs)
         llTable
-                .on(Stinput(), InputKeyword::class.java)
+                .on(Stinput(), InputKeyword::class)
                 .useRHS(::InputKeyword, ::PPexprs)
         llTable
-                .on(Strtn(), ReturnKeyword::class.java)
+                .on(Strtn(), ReturnKeyword::class)
                 .useRHS(::ReturnKeyword, ::Strtn_Suffix)
         llTable
                 .on(
-                        Strtn_Suffix(), IntegerTerminal::class.java,
-                        FloatTerminal::class.java,
-                        StringTerminal::class.java,
-                        IdentifierTerminal::class.java,
-                        Asterisk::class.java,
-                        Ampersand::class.java,
-                        LeftParen::class.java
+                        Strtn_Suffix(), IntegerTerminal::class,
+                        FloatTerminal::class,
+                        StringTerminal::class,
+                        IdentifierTerminal::class,
+                        Asterisk::class,
+                        Ampersand::class,
+                        LeftParen::class
                 )
                 .useRHS(::Expr)
-                .on(SemiColon::class.java)
+                .on(SemiColon::class)
                 .useRHS()
         llTable
-                .on(PPexpr(), LeftParen::class.java)
+                .on(PPexpr(), LeftParen::class)
                 .useRHS(::LeftParen, ::Expr, ::RightParen)
         llTable
                 .on(
-                        Expr(), IntegerTerminal::class.java,
-                        FloatTerminal::class.java,
-                        StringTerminal::class.java,
-                        IdentifierTerminal::class.java,
-                        Asterisk::class.java,
-                        Ampersand::class.java,
-                        LeftParen::class.java,
-                        InputKeyword::class.java
+                        Expr(), IntegerTerminal::class,
+                        FloatTerminal::class,
+                        StringTerminal::class,
+                        IdentifierTerminal::class,
+                        Asterisk::class,
+                        Ampersand::class,
+                        LeftParen::class,
+                        InputKeyword::class
                 )
                 .useRHS(::Rterm, ::Expr_Tail)
         llTable
-                .on(Expr_Tail(), EqualEqual::class.java, NotEqual::class.java, LessThan::class.java, LessThanOrEqual::class.java, GreaterThanOrEqual::class.java, GreaterThan::class.java)
+                .on(Expr_Tail(), EqualEqual::class, NotEqual::class, LessThan::class, LessThanOrEqual::class, GreaterThanOrEqual::class, GreaterThan::class)
                 .useRHS(::Oprel, ::Rterm, ::Expr_Tail)
-                .on(RightBrace::class.java, RightBracket::class.java, SemiColon::class.java, RightParen::class.java, Comma::class.java)
+                .on(RightBrace::class, RightBracket::class, SemiColon::class, RightParen::class, Comma::class)
                 .useRHS()
         llTable
                 .on(
-                        Rterm(), IntegerTerminal::class.java,
-                        FloatTerminal::class.java,
-                        StringTerminal::class.java,
-                        IdentifierTerminal::class.java,
-                        Asterisk::class.java,
-                        Ampersand::class.java,
-                        LeftParen::class.java,
-                        InputKeyword::class.java
+                        Rterm(), IntegerTerminal::class,
+                        FloatTerminal::class,
+                        StringTerminal::class,
+                        IdentifierTerminal::class,
+                        Asterisk::class,
+                        Ampersand::class,
+                        LeftParen::class,
+                        InputKeyword::class
                 )
                 .useRHS(::Term, ::Rterm_Tail)
         llTable
-                .on(Rterm_Tail(), Plus::class.java, Minus::class.java)
+                .on(Rterm_Tail(), Plus::class, Minus::class)
                 .useRHS(::Opadd, ::Term, ::Rterm_Tail)
                 .on(
-                        EqualEqual::class.java,
-                        NotEqual::class.java,
-                        LessThan::class.java,
-                        LessThanOrEqual::class.java,
-                        GreaterThanOrEqual::class.java,
-                        GreaterThan::class.java,
-                        RightBrace::class.java,
-                        RightBracket::class.java,
-                        SemiColon::class.java,
-                        Comma::class.java,
-                        RightParen::class.java
+                        EqualEqual::class,
+                        NotEqual::class,
+                        LessThan::class,
+                        LessThanOrEqual::class,
+                        GreaterThanOrEqual::class,
+                        GreaterThan::class,
+                        RightBrace::class,
+                        RightBracket::class,
+                        SemiColon::class,
+                        Comma::class,
+                        RightParen::class
                 )
                 .useRHS()
         llTable
                 .on(
-                        Term(), IntegerTerminal::class.java,
-                        FloatTerminal::class.java,
-                        StringTerminal::class.java,
-                        IdentifierTerminal::class.java,
-                        Asterisk::class.java,
-                        Ampersand::class.java,
-                        LeftParen::class.java,
-                        InputKeyword::class.java
+                        Term(), IntegerTerminal::class,
+                        FloatTerminal::class,
+                        StringTerminal::class,
+                        IdentifierTerminal::class,
+                        Asterisk::class,
+                        Ampersand::class,
+                        LeftParen::class,
+                        InputKeyword::class
                 )
                 .useRHS(::Fact, ::Term_Tail)
         llTable
-                .on(Term_Tail(), Asterisk::class.java, ForwardSlash::class.java, Caret::class.java)
+                .on(Term_Tail(), Asterisk::class, ForwardSlash::class, Caret::class)
                 .useRHS(::Opmul, ::Fact, ::Term_Tail)
                 .on(
-                        EqualEqual::class.java,
-                        NotEqual::class.java,
-                        LessThan::class.java,
-                        LessThanOrEqual::class.java,
-                        GreaterThanOrEqual::class.java,
-                        GreaterThan::class.java,
-                        RightBrace::class.java,
-                        RightBracket::class.java,
-                        SemiColon::class.java,
-                        Comma::class.java,
-                        RightParen::class.java,
-                        Plus::class.java,
-                        Minus::class.java
+                        EqualEqual::class,
+                        NotEqual::class,
+                        LessThan::class,
+                        LessThanOrEqual::class,
+                        GreaterThanOrEqual::class,
+                        GreaterThan::class,
+                        RightBrace::class,
+                        RightBracket::class,
+                        SemiColon::class,
+                        Comma::class,
+                        RightParen::class,
+                        Plus::class,
+                        Minus::class
                 )
                 .useRHS()
         llTable
-                .on(Fact(), IntegerTerminal::class.java, FloatTerminal::class.java, StringTerminal::class.java)
+                .on(Fact(), IntegerTerminal::class, FloatTerminal::class, StringTerminal::class)
                 .useRHS(::BaseLiteral)
-                .on(IdentifierTerminal::class.java, Asterisk::class.java)
+                .on(IdentifierTerminal::class, Asterisk::class)
                 .useRHS(::LvalOrFcall)
-                .on(Ampersand::class.java)
+                .on(Ampersand::class)
                 .useRHS(::Addrof_id)
-                .on(LeftParen::class.java)
+                .on(LeftParen::class)
                 .useRHS(::PPexpr)
-                .on(InputKeyword::class.java)
+                .on(InputKeyword::class)
                 .useRHS(::Stinput)
         llTable
-                .on(LvalOrFcall(), Asterisk::class.java)
+                .on(LvalOrFcall(), Asterisk::class)
                 .useRHS(::Deref_id)
-                .on(IdentifierTerminal::class.java)
+                .on(IdentifierTerminal::class)
                 .useRHS(::IdentifierTerminal, ::LvalOrFcall_Suffix)
         llTable
-                .on(LvalOrFcall_Suffix(), LeftBracket::class.java)
+                .on(LvalOrFcall_Suffix(), LeftBracket::class)
                 .useRHS(::Lval_Suffix)
-                .on(LeftParen::class.java)
+                .on(LeftParen::class)
                 .useRHS(::PPexprs)
                 .on(
-                        Asterisk::class.java,
-                        ForwardSlash::class.java,
-                        Caret::class.java,
-                        Plus::class.java,
-                        Minus::class.java,
-                        EqualEqual::class.java,
-                        NotEqual::class.java,
-                        LessThan::class.java,
-                        LessThanOrEqual::class.java,
-                        GreaterThan::class.java,
-                        GreaterThanOrEqual::class.java,
-                        RightBrace::class.java,
-                        RightBracket::class.java,
-                        SemiColon::class.java,
-                        RightParen::class.java,
-                        Comma::class.java
+                        Asterisk::class,
+                        ForwardSlash::class,
+                        Caret::class,
+                        Plus::class,
+                        Minus::class,
+                        EqualEqual::class,
+                        NotEqual::class,
+                        LessThan::class,
+                        LessThanOrEqual::class,
+                        GreaterThan::class,
+                        GreaterThanOrEqual::class,
+                        RightBrace::class,
+                        RightBracket::class,
+                        SemiColon::class,
+                        RightParen::class,
+                        Comma::class
                 )
                 .useRHS()
         llTable
-                .on(BaseLiteral(), IntegerTerminal::class.java)
+                .on(BaseLiteral(), IntegerTerminal::class)
                 .useRHS(::IntegerTerminal)
-                .on(FloatTerminal::class.java)
+                .on(FloatTerminal::class)
                 .useRHS(::FloatTerminal)
-                .on(StringTerminal::class.java)
+                .on(StringTerminal::class)
                 .useRHS(::StringTerminal)
         llTable
-                .on(Addrof_id(), Ampersand::class.java)
+                .on(Addrof_id(), Ampersand::class)
                 .useRHS(::Ampersand, ::IdentifierTerminal)
         llTable
-                .on(Oprel(), EqualEqual::class.java)
+                .on(Oprel(), EqualEqual::class)
                 .useRHS(::EqualEqual)
-                .on(NotEqual::class.java)
+                .on(NotEqual::class)
                 .useRHS(::NotEqual)
-                .on(LessThan::class.java)
+                .on(LessThan::class)
                 .useRHS(::Lthan)
-                .on(LessThanOrEqual::class.java)
+                .on(LessThanOrEqual::class)
                 .useRHS(::LessThanOrEqual)
-                .on(GreaterThanOrEqual::class.java)
+                .on(GreaterThanOrEqual::class)
                 .useRHS(::GreaterThanOrEqual)
-                .on(GreaterThan::class.java)
+                .on(GreaterThan::class)
                 .useRHS(::Gthan)
         llTable
-                .on(Lthan(), LessThan::class.java)
+                .on(Lthan(), LessThan::class)
                 .useRHS(::LessThan)
         llTable
-                .on(Gthan(), GreaterThan::class.java)
+                .on(Gthan(), GreaterThan::class)
                 .useRHS(::GreaterThan)
         llTable
-                .on(Opadd(), Plus::class.java)
+                .on(Opadd(), Plus::class)
                 .useRHS(::Plus)
-                .on(Minus::class.java)
+                .on(Minus::class)
                 .useRHS(::Minus)
         llTable
-                .on(Opmul(), Asterisk::class.java)
+                .on(Opmul(), Asterisk::class)
                 .useRHS(::Asterisk)
-                .on(ForwardSlash::class.java)
+                .on(ForwardSlash::class)
                 .useRHS(::ForwardSlash)
-                .on(Caret::class.java)
+                .on(Caret::class)
                 .useRHS(::Caret)
 
         return llTable

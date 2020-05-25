@@ -61,7 +61,7 @@ class Parser(
                 throw RuntimeException("Node is neither Token nor Grammar rule: $top")
             }
 
-            val rhs = llTable.getRHS(top, token.javaClass)
+            val rhs = llTable.getRHS(top, token::class)
 
             if (rhs == null) {
                 onPredictionNotFoundError(top, token)
