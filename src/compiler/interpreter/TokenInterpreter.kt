@@ -71,7 +71,7 @@ class TokenInterpreter(private val symtab: SymbolTable) : TokenEvaluator {
             return token
         }
         val value = symtab.getValue(token)
-        if (value === SymbolTableBuilder.undefined) {
+        if (value === undefined) {
             throw IdentifierUsedBeforeInitializationException(token)
         }
         return value

@@ -2,11 +2,8 @@ package visualization
 
 import compiler.parser.TreeNode
 import visualization.dotfile.TreeDotFileSerializer
-import java.io.IOException
 
 object TreeVisualizer {
-    @JvmStatic
-    @Throws(IOException::class, InterruptedException::class)
     fun toImage(tree: TreeNode, name: String) {
         TreeDotFileSerializer.serialize(tree, "$name.dot")
         var p = ProcessBuilder("dot", "-Tpng", "$name.dot", "-o", "$name.png")

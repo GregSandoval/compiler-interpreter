@@ -13,7 +13,6 @@ import visualization.TreeVisualizer
 object EntryPoint {
     var inputName: String? = null
 
-    @Throws(Exception::class)
     @JvmStatic
     fun main(args: Array<String>) {
         val inputs = CommandLine.processInputs(args)
@@ -42,6 +41,7 @@ object EntryPoint {
         // Build symbol table from AST
         val symtab = SymbolTableBuilder.build(tree)
 
+        // Log initial symtab state
         println(symtab)
 
         // Check types within AST
@@ -50,6 +50,7 @@ object EntryPoint {
         // Execute AST
         Interpreter.execute(tree, symtab)
 
+        // Log final symtab state
         println(symtab)
     }
 
