@@ -1,441 +1,453 @@
 package compiler.a5.grammar
 
 import compiler.parser.LLTable
+import compiler.parser.NodeSupplier
+import compiler.parser.Symbol.NonTerminal
 import compiler.parser.Symbol.NonTerminal.*
+import compiler.parser.Symbol.Terminal
 import compiler.parser.Symbol.Terminal.Keyword.*
 import compiler.parser.Symbol.Terminal.Keyword.Type.*
 import compiler.parser.Symbol.Terminal.Operator.*
 import compiler.parser.Symbol.Terminal.Punctuation.*
 import compiler.parser.Symbol.Terminal.TypedTerminal.*
+import kotlin.reflect.KClass
 
 object A5GrammarRules {
+    private lateinit var llTable: LLTable
+
     fun build(): LLTable {
-        val llTable = LLTable()
+        this.llTable = LLTable()
 
-        llTable.on(Pgm(), ProgramKeyword::class).useRHS(::ProgramKeyword, ::Vargroup, ::Fcndefs, ::Main)
+        Pgm::class[ProgramKeyword::class] = listOf(::ProgramKeyword, ::Vargroup, ::Fcndefs, ::Main)
 
 
-        llTable.on(Main(), MainKeyword::class).useRHS(::MainKeyword, ::BBlock)
+        Main::class[MainKeyword::class] = listOf(::MainKeyword, ::BBlock)
 
 
-        llTable.on(BBlock(), LeftBrace::class).useRHS(::LeftBrace, ::Vargroup, ::Stmts, ::RightBrace)
+        BBlock::class[LeftBrace::class] = listOf(::LeftBrace, ::Vargroup, ::Stmts, ::RightBrace)
 
 
-        llTable.on(Vargroup(), VarKeyword::class).useRHS(::VarKeyword, ::PPvarlist)
-        llTable.on(Vargroup(), FunctionKeyword::class).useRHS()
-        llTable.on(Vargroup(), MainKeyword::class).useRHS()
-        llTable.on(Vargroup(), Asterisk::class).useRHS()
-        llTable.on(Vargroup(), IdentifierTerminal::class).useRHS()
-        llTable.on(Vargroup(), IfKeyword::class).useRHS()
-        llTable.on(Vargroup(), WhileKeyword::class).useRHS()
-        llTable.on(Vargroup(), PrintKeyword::class).useRHS()
-        llTable.on(Vargroup(), InputKeyword::class).useRHS()
-        llTable.on(Vargroup(), ReturnKeyword::class).useRHS()
-        llTable.on(Vargroup(), RightBrace::class).useRHS()
-        llTable.on(Vargroup(), Colon::class).useRHS()
+        Vargroup::class[VarKeyword::class] = listOf(::VarKeyword, ::PPvarlist)
+        Vargroup::class[FunctionKeyword::class] = listOf()
+        Vargroup::class[MainKeyword::class] = listOf()
+        Vargroup::class[Asterisk::class] = listOf()
+        Vargroup::class[IdentifierTerminal::class] = listOf()
+        Vargroup::class[IfKeyword::class] = listOf()
+        Vargroup::class[WhileKeyword::class] = listOf()
+        Vargroup::class[PrintKeyword::class] = listOf()
+        Vargroup::class[InputKeyword::class] = listOf()
+        Vargroup::class[ReturnKeyword::class] = listOf()
+        Vargroup::class[RightBrace::class] = listOf()
+        Vargroup::class[Colon::class] = listOf()
 
 
-        llTable.on(PPvarlist(), LeftParen::class).useRHS(::LeftParen, ::Varlist, ::RightParen)
+        PPvarlist::class[LeftParen::class] = listOf(::LeftParen, ::Varlist, ::RightParen)
 
 
-        llTable.on(Varlist(), IntegerKeyword::class).useRHS(::Varitem, ::SemiColon, ::Varlist)
-        llTable.on(Varlist(), FloatKeyword::class).useRHS(::Varitem, ::SemiColon, ::Varlist)
-        llTable.on(Varlist(), StringKeyword::class).useRHS(::Varitem, ::SemiColon, ::Varlist)
-        llTable.on(Varlist(), IdentifierTerminal::class).useRHS(::Varitem, ::SemiColon, ::Varlist)
-        llTable.on(Varlist(), ClassKeyword::class).useRHS(::Varitem, ::SemiColon, ::Varlist)
-        llTable.on(Varlist(), RightParen::class).useRHS()
-        llTable.on(Varitem(), IntegerKeyword::class).useRHS(::Vardecl, ::Varitem_Suffix)
-        llTable.on(Varitem(), FloatKeyword::class).useRHS(::Vardecl, ::Varitem_Suffix)
-        llTable.on(Varitem(), StringKeyword::class).useRHS(::Vardecl, ::Varitem_Suffix)
-        llTable.on(Varitem(), IdentifierTerminal::class).useRHS(::Vardecl, ::Varitem_Suffix)
-        llTable.on(Varitem(), ClassKeyword::class).useRHS(::Classdef)
+        Varlist::class[IntegerKeyword::class] = listOf(::Varitem, ::SemiColon, ::Varlist)
+        Varlist::class[FloatKeyword::class] = listOf(::Varitem, ::SemiColon, ::Varlist)
+        Varlist::class[StringKeyword::class] = listOf(::Varitem, ::SemiColon, ::Varlist)
+        Varlist::class[IdentifierTerminal::class] = listOf(::Varitem, ::SemiColon, ::Varlist)
+        Varlist::class[ClassKeyword::class] = listOf(::Varitem, ::SemiColon, ::Varlist)
+        Varlist::class[RightParen::class] = listOf()
+        Varitem::class[IntegerKeyword::class] = listOf(::Vardecl, ::Varitem_Suffix)
+        Varitem::class[FloatKeyword::class] = listOf(::Vardecl, ::Varitem_Suffix)
+        Varitem::class[StringKeyword::class] = listOf(::Vardecl, ::Varitem_Suffix)
+        Varitem::class[IdentifierTerminal::class] = listOf(::Vardecl, ::Varitem_Suffix)
+        Varitem::class[ClassKeyword::class] = listOf(::Classdef)
 
 
-        llTable.on(Varitem_Suffix(), Equal::class).useRHS(::Equal, ::Varinit)
-        llTable.on(Varitem_Suffix(), SemiColon::class).useRHS()
+        Varitem_Suffix::class[Equal::class] = listOf(::Equal, ::Varinit)
+        Varitem_Suffix::class[SemiColon::class] = listOf()
 
 
-        llTable.on(Vardecl(), IntegerKeyword::class).useRHS(::Simplekind, ::Varspec)
-        llTable.on(Vardecl(), FloatKeyword::class).useRHS(::Simplekind, ::Varspec)
-        llTable.on(Vardecl(), StringKeyword::class).useRHS(::Simplekind, ::Varspec)
-        llTable.on(Vardecl(), IdentifierTerminal::class).useRHS(::Simplekind, ::Varspec)
+        Vardecl::class[IntegerKeyword::class] = listOf(::Simplekind, ::Varspec)
+        Vardecl::class[FloatKeyword::class] = listOf(::Simplekind, ::Varspec)
+        Vardecl::class[StringKeyword::class] = listOf(::Simplekind, ::Varspec)
+        Vardecl::class[IdentifierTerminal::class] = listOf(::Simplekind, ::Varspec)
 
 
-        llTable.on(Simplekind(), IntegerKeyword::class).useRHS(::BaseKind)
-        llTable.on(Simplekind(), FloatKeyword::class).useRHS(::BaseKind)
-        llTable.on(Simplekind(), StringKeyword::class).useRHS(::BaseKind)
-        llTable.on(Simplekind(), IdentifierTerminal::class).useRHS(::Classid)
+        Simplekind::class[IntegerKeyword::class] = listOf(::BaseKind)
+        Simplekind::class[FloatKeyword::class] = listOf(::BaseKind)
+        Simplekind::class[StringKeyword::class] = listOf(::BaseKind)
+        Simplekind::class[IdentifierTerminal::class] = listOf(::Classid)
 
 
-        llTable.on(BaseKind(), IntegerKeyword::class).useRHS(::IntegerKeyword)
-        llTable.on(BaseKind(), FloatKeyword::class).useRHS(::FloatKeyword)
-        llTable.on(BaseKind(), StringKeyword::class).useRHS(::StringKeyword)
+        BaseKind::class[IntegerKeyword::class] = listOf(::IntegerKeyword)
+        BaseKind::class[FloatKeyword::class] = listOf(::FloatKeyword)
+        BaseKind::class[StringKeyword::class] = listOf(::StringKeyword)
 
 
-        llTable.on(Classid(), IdentifierTerminal::class).useRHS(::IdentifierTerminal)
+        Classid::class[IdentifierTerminal::class] = listOf(::IdentifierTerminal)
 
 
-        llTable.on(Varspec(), IdentifierTerminal::class).useRHS(::Varid, ::Arrspec)
-        llTable.on(Varspec(), Asterisk::class).useRHS(::Deref_id)
+        Varspec::class[IdentifierTerminal::class] = listOf(::Varid, ::Arrspec)
+        Varspec::class[Asterisk::class] = listOf(::Deref_id)
 
 
-        llTable.on(Varid(), IdentifierTerminal::class).useRHS(::IdentifierTerminal)
+        Varid::class[IdentifierTerminal::class] = listOf(::IdentifierTerminal)
 
 
-        llTable.on(Arrspec(), LeftBracket::class).useRHS(::KKint)
-        llTable.on(Arrspec(), Equal::class).useRHS()
-        llTable.on(Arrspec(), SemiColon::class).useRHS()
-        llTable.on(Arrspec(), Comma::class).useRHS()
-        llTable.on(Arrspec(), RightParen::class).useRHS()
+        Arrspec::class[LeftBracket::class] = listOf(::KKint)
+        Arrspec::class[Equal::class] = listOf()
+        Arrspec::class[SemiColon::class] = listOf()
+        Arrspec::class[Comma::class] = listOf()
+        Arrspec::class[RightParen::class] = listOf()
 
 
-        llTable.on(KKint(), LeftBracket::class).useRHS(::LeftBracket, ::IntegerTerminal, ::RightBracket)
+        KKint::class[LeftBracket::class] = listOf(::LeftBracket, ::IntegerTerminal, ::RightBracket)
 
 
-        llTable.on(Deref_id(), Asterisk::class).useRHS(::Deref, ::IdentifierTerminal)
+        Deref_id::class[Asterisk::class] = listOf(::Deref, ::IdentifierTerminal)
 
 
-        llTable.on(Deref(), Asterisk::class).useRHS(::Asterisk)
+        Deref::class[Asterisk::class] = listOf(::Asterisk)
 
 
-        llTable.on(Varinit(), IntegerTerminal::class).useRHS(::Expr)
-        llTable.on(Varinit(), FloatTerminal::class).useRHS(::Expr)
-        llTable.on(Varinit(), StringTerminal::class).useRHS(::Expr)
-        llTable.on(Varinit(), Asterisk::class).useRHS(::Expr)
-        llTable.on(Varinit(), IdentifierTerminal::class).useRHS(::Expr)
-        llTable.on(Varinit(), Ampersand::class).useRHS(::Expr)
-        llTable.on(Varinit(), LeftParen::class).useRHS(::Expr)
-        llTable.on(Varinit(), LeftBrace::class).useRHS(::BBexprs)
+        Varinit::class[IntegerTerminal::class] = listOf(::Expr)
+        Varinit::class[FloatTerminal::class] = listOf(::Expr)
+        Varinit::class[StringTerminal::class] = listOf(::Expr)
+        Varinit::class[Asterisk::class] = listOf(::Expr)
+        Varinit::class[IdentifierTerminal::class] = listOf(::Expr)
+        Varinit::class[Ampersand::class] = listOf(::Expr)
+        Varinit::class[LeftParen::class] = listOf(::Expr)
+        Varinit::class[LeftBrace::class] = listOf(::BBexprs)
 
 
-        llTable.on(BBexprs(), LeftBrace::class).useRHS(::LeftBrace, ::Exprlist, ::RightBrace)
+        BBexprs::class[LeftBrace::class] = listOf(::LeftBrace, ::Exprlist, ::RightBrace)
 
 
-        llTable.on(Exprlist(), IntegerTerminal::class).useRHS(::Expr, ::Moreexprs)
-        llTable.on(Exprlist(), FloatTerminal::class).useRHS(::Expr, ::Moreexprs)
-        llTable.on(Exprlist(), StringTerminal::class).useRHS(::Expr, ::Moreexprs)
-        llTable.on(Exprlist(), Asterisk::class).useRHS(::Expr, ::Moreexprs)
-        llTable.on(Exprlist(), IdentifierTerminal::class).useRHS(::Expr, ::Moreexprs)
-        llTable.on(Exprlist(), Ampersand::class).useRHS(::Expr, ::Moreexprs)
-        llTable.on(Exprlist(), LeftParen::class).useRHS(::Expr, ::Moreexprs)
-        llTable.on(Exprlist(), RightBrace::class).useRHS()
-        llTable.on(Exprlist(), RightParen::class).useRHS()
+        Exprlist::class[IntegerTerminal::class] = listOf(::Expr, ::Moreexprs)
+        Exprlist::class[FloatTerminal::class] = listOf(::Expr, ::Moreexprs)
+        Exprlist::class[StringTerminal::class] = listOf(::Expr, ::Moreexprs)
+        Exprlist::class[Asterisk::class] = listOf(::Expr, ::Moreexprs)
+        Exprlist::class[IdentifierTerminal::class] = listOf(::Expr, ::Moreexprs)
+        Exprlist::class[Ampersand::class] = listOf(::Expr, ::Moreexprs)
+        Exprlist::class[LeftParen::class] = listOf(::Expr, ::Moreexprs)
+        Exprlist::class[RightBrace::class] = listOf()
+        Exprlist::class[RightParen::class] = listOf()
 
 
-        llTable.on(Moreexprs(), Comma::class).useRHS(::Comma, ::Exprlist)
-        llTable.on(Moreexprs(), RightBrace::class).useRHS()
-        llTable.on(Moreexprs(), RightParen::class).useRHS()
+        Moreexprs::class[Comma::class] = listOf(::Comma, ::Exprlist)
+        Moreexprs::class[RightBrace::class] = listOf()
+        Moreexprs::class[RightParen::class] = listOf()
 
 
-        llTable.on(Classdef(), ClassKeyword::class).useRHS(::Classheader, ::Classdef_Suffix)
+        Classdef::class[ClassKeyword::class] = listOf(::Classheader, ::Classdef_Suffix)
 
 
-        llTable.on(Classdef_Suffix(), LeftBrace::class).useRHS(::BBClassitems)
-        llTable.on(Classdef_Suffix(), IfKeyword::class).useRHS(::IfKeyword, ::BBClassitems)
+        Classdef_Suffix::class[LeftBrace::class] = listOf(::BBClassitems)
+        Classdef_Suffix::class[IfKeyword::class] = listOf(::IfKeyword, ::BBClassitems)
 
 
-        llTable.on(BBClassitems(), LeftBrace::class).useRHS(::LeftBrace, ::Classitems, ::RightBrace)
+        BBClassitems::class[LeftBrace::class] = listOf(::LeftBrace, ::Classitems, ::RightBrace)
 
 
-        llTable.on(Classheader(), ClassKeyword::class).useRHS(::ClassKeyword, ::Classid, ::Classmom, ::Interfaces)
+        Classheader::class[ClassKeyword::class] = listOf(::ClassKeyword, ::Classid, ::Classmom, ::Interfaces)
 
 
-        llTable.on(Classmom(), Colon::class).useRHS(::Colon, ::Classid)
-        llTable.on(Classmom(), Plus::class).useRHS()
-        llTable.on(Classmom(), LeftBrace::class).useRHS()
-        llTable.on(Classmom(), IfKeyword::class).useRHS()
+        Classmom::class[Colon::class] = listOf(::Colon, ::Classid)
+        Classmom::class[Plus::class] = listOf()
+        Classmom::class[LeftBrace::class] = listOf()
+        Classmom::class[IfKeyword::class] = listOf()
 
 
-        llTable.on(Classitems(), Colon::class).useRHS(::Classgroup, ::Classitems)
-        llTable.on(Classitems(), VarKeyword::class).useRHS(::Classgroup, ::Classitems)
-        llTable.on(Classitems(), FunctionKeyword::class).useRHS(::Classgroup, ::Classitems)
-        llTable.on(Classitems(), RightBrace::class).useRHS()
+        Classitems::class[Colon::class] = listOf(::Classgroup, ::Classitems)
+        Classitems::class[VarKeyword::class] = listOf(::Classgroup, ::Classitems)
+        Classitems::class[FunctionKeyword::class] = listOf(::Classgroup, ::Classitems)
+        Classitems::class[RightBrace::class] = listOf()
 
 
-        llTable.on(Classgroup(), Colon::class).useRHS(::Class_ctrl)
-        llTable.on(Classgroup(), VarKeyword::class).useRHS(::Vargroup)
-        llTable.on(Classgroup(), FunctionKeyword::class).useRHS(::Mddecls)
+        Classgroup::class[Colon::class] = listOf(::Class_ctrl)
+        Classgroup::class[VarKeyword::class] = listOf(::Vargroup)
+        Classgroup::class[FunctionKeyword::class] = listOf(::Mddecls)
 
 
-        llTable.on(Class_ctrl(), Colon::class).useRHS(::Colon, ::IdentifierTerminal)
+        Class_ctrl::class[Colon::class] = listOf(::Colon, ::IdentifierTerminal)
 
 
-        llTable.on(Interfaces(), Plus::class).useRHS(::Plus, ::Classid, ::Interfaces)
-        llTable.on(Interfaces(), LeftBrace::class).useRHS()
-        llTable.on(Interfaces(), IfKeyword::class).useRHS()
+        Interfaces::class[Plus::class] = listOf(::Plus, ::Classid, ::Interfaces)
+        Interfaces::class[LeftBrace::class] = listOf()
+        Interfaces::class[IfKeyword::class] = listOf()
 
 
-        llTable.on(Mddecls(), FunctionKeyword::class).useRHS(::Mdheader, ::Mddecls)
-        llTable.on(Mddecls(), SemiColon::class).useRHS()
-        llTable.on(Mddecls(), VarKeyword::class).useRHS()
-        llTable.on(Mddecls(), RightBrace::class).useRHS()
+        Mddecls::class[FunctionKeyword::class] = listOf(::Mdheader, ::Mddecls)
+        Mddecls::class[SemiColon::class] = listOf()
+        Mddecls::class[VarKeyword::class] = listOf()
+        Mddecls::class[RightBrace::class] = listOf()
 
 
-        llTable.on(Mdheader(), FunctionKeyword::class).useRHS(::FunctionKeyword, ::Md_id, ::PParmlist, ::Retkind)
+        Mdheader::class[FunctionKeyword::class] = listOf(::FunctionKeyword, ::Md_id, ::PParmlist, ::Retkind)
 
 
-        llTable.on(Md_id(), IdentifierTerminal::class).useRHS(::Classid, ::Colon, ::Fcnid)
+        Md_id::class[IdentifierTerminal::class] = listOf(::Classid, ::Colon, ::Fcnid)
 
 
-        llTable.on(Fcndefs(), FunctionKeyword::class).useRHS(::Fcndef, ::Fcndefs)
-        llTable.on(Fcndefs(), MainKeyword::class).useRHS()
+        Fcndefs::class[FunctionKeyword::class] = listOf(::Fcndef, ::Fcndefs)
+        Fcndefs::class[MainKeyword::class] = listOf()
 
 
-        llTable.on(Fcndef(), FunctionKeyword::class).useRHS(::Fcnheader, ::BBlock)
+        Fcndef::class[FunctionKeyword::class] = listOf(::Fcnheader, ::BBlock)
 
 
-        llTable.on(Fcnheader(), FunctionKeyword::class).useRHS(::FunctionKeyword, ::Fcnid, ::PParmlist, ::Retkind)
+        Fcnheader::class[FunctionKeyword::class] = listOf(::FunctionKeyword, ::Fcnid, ::PParmlist, ::Retkind)
 
 
-        llTable.on(Fcnid(), IdentifierTerminal::class).useRHS(::IdentifierTerminal)
+        Fcnid::class[IdentifierTerminal::class] = listOf(::IdentifierTerminal)
 
 
-        llTable.on(Retkind(), IntegerKeyword::class, FloatKeyword::class, StringKeyword::class).useRHS(::BaseKind)
+        Retkind::class[IntegerKeyword::class] = listOf(::BaseKind)
+        Retkind::class[FloatKeyword::class] = listOf(::BaseKind)
+        Retkind::class[StringKeyword::class] = listOf(::BaseKind)
 
 
-        llTable.on(PParmlist(), LeftParen::class).useRHS(::LeftParen, ::Varspecs, ::RightParen)
+        PParmlist::class[LeftParen::class] = listOf(::LeftParen, ::Varspecs, ::RightParen)
 
 
-        llTable.on(Varspecs(), Asterisk::class).useRHS(::Varspec, ::More_varspecs)
-        llTable.on(Varspecs(), IdentifierTerminal::class).useRHS(::Varspec, ::More_varspecs)
-        llTable.on(Varspecs(), RightParen::class).useRHS()
+        Varspecs::class[Asterisk::class] = listOf(::Varspec, ::More_varspecs)
+        Varspecs::class[IdentifierTerminal::class] = listOf(::Varspec, ::More_varspecs)
+        Varspecs::class[RightParen::class] = listOf()
 
 
-        llTable.on(More_varspecs(), Comma::class).useRHS(::Comma, ::Varspecs)
-        llTable.on(More_varspecs(), RightParen::class).useRHS()
+        More_varspecs::class[Comma::class] = listOf(::Comma, ::Varspecs)
+        More_varspecs::class[RightParen::class] = listOf()
 
 
-        llTable.on(Stmts(), Asterisk::class).useRHS(::Stmt, ::SemiColon, ::Stmts)
-        llTable.on(Stmts(), IdentifierTerminal::class).useRHS(::Stmt, ::SemiColon, ::Stmts)
-        llTable.on(Stmts(), IfKeyword::class).useRHS(::Stmt, ::SemiColon, ::Stmts)
-        llTable.on(Stmts(), WhileKeyword::class).useRHS(::Stmt, ::SemiColon, ::Stmts)
-        llTable.on(Stmts(), PrintKeyword::class).useRHS(::Stmt, ::SemiColon, ::Stmts)
-        llTable.on(Stmts(), InputKeyword::class).useRHS(::Stmt, ::SemiColon, ::Stmts)
-        llTable.on(Stmts(), ReturnKeyword::class).useRHS(::Stmt, ::SemiColon, ::Stmts)
-        llTable.on(Stmts(), RightBrace::class).useRHS()
+        Stmts::class[Asterisk::class] = listOf(::Stmt, ::SemiColon, ::Stmts)
+        Stmts::class[IdentifierTerminal::class] = listOf(::Stmt, ::SemiColon, ::Stmts)
+        Stmts::class[IfKeyword::class] = listOf(::Stmt, ::SemiColon, ::Stmts)
+        Stmts::class[WhileKeyword::class] = listOf(::Stmt, ::SemiColon, ::Stmts)
+        Stmts::class[PrintKeyword::class] = listOf(::Stmt, ::SemiColon, ::Stmts)
+        Stmts::class[InputKeyword::class] = listOf(::Stmt, ::SemiColon, ::Stmts)
+        Stmts::class[ReturnKeyword::class] = listOf(::Stmt, ::SemiColon, ::Stmts)
+        Stmts::class[RightBrace::class] = listOf()
 
 
-        llTable.on(Stmt(), IdentifierTerminal::class).useRHS(::StasgnOrFcall)
-        llTable.on(Stmt(), Asterisk::class).useRHS(::StasgnOrFcall)
-        llTable.on(Stmt(), IfKeyword::class).useRHS(::Stif)
-        llTable.on(Stmt(), WhileKeyword::class).useRHS(::Stwhile)
-        llTable.on(Stmt(), PrintKeyword::class).useRHS(::Stprint)
-        llTable.on(Stmt(), InputKeyword::class).useRHS(::Stinput)
-        llTable.on(Stmt(), ReturnKeyword::class).useRHS(::Strtn)
+        Stmt::class[IdentifierTerminal::class] = listOf(::StasgnOrFcall)
+        Stmt::class[Asterisk::class] = listOf(::StasgnOrFcall)
+        Stmt::class[IfKeyword::class] = listOf(::Stif)
+        Stmt::class[WhileKeyword::class] = listOf(::Stwhile)
+        Stmt::class[PrintKeyword::class] = listOf(::Stprint)
+        Stmt::class[InputKeyword::class] = listOf(::Stinput)
+        Stmt::class[ReturnKeyword::class] = listOf(::Strtn)
 
 
-        llTable.on(StasgnOrFcall(), Asterisk::class).useRHS(::Deref_id, ::Stasgn_Suffix)
-        llTable.on(StasgnOrFcall(), IdentifierTerminal::class).useRHS(::IdentifierTerminal, ::StasgnOrFcall_Suffix)
+        StasgnOrFcall::class[Asterisk::class] = listOf(::Deref_id, ::Stasgn_Suffix)
+        StasgnOrFcall::class[IdentifierTerminal::class] = listOf(::IdentifierTerminal, ::StasgnOrFcall_Suffix)
 
 
-        llTable.on(StasgnOrFcall_Suffix(), LeftBracket::class).useRHS(::Lval_Suffix, ::Stasgn_Suffix)
-        llTable.on(StasgnOrFcall_Suffix(), Equal::class).useRHS(::Lval_Suffix, ::Stasgn_Suffix)
-        llTable.on(StasgnOrFcall_Suffix(), LeftParen::class).useRHS(::PPexprs)
+        StasgnOrFcall_Suffix::class[LeftBracket::class] = listOf(::Lval_Suffix, ::Stasgn_Suffix)
+        StasgnOrFcall_Suffix::class[Equal::class] = listOf(::Lval_Suffix, ::Stasgn_Suffix)
+        StasgnOrFcall_Suffix::class[LeftParen::class] = listOf(::PPexprs)
 
 
-        llTable.on(Stasgn_Suffix(), Equal::class).useRHS(::Equal, ::Expr)
+        Stasgn_Suffix::class[Equal::class] = listOf(::Equal, ::Expr)
 
 
-        llTable.on(Lval_Suffix(), LeftBracket::class).useRHS(::KKexpr)
-        llTable.on(Lval_Suffix(), Equal::class).useRHS()
-        llTable.on(Lval_Suffix(), Asterisk::class).useRHS()
-        llTable.on(Lval_Suffix(), ForwardSlash::class).useRHS()
-        llTable.on(Lval_Suffix(), Caret::class).useRHS()
-        llTable.on(Lval_Suffix(), Plus::class).useRHS()
-        llTable.on(Lval_Suffix(), Minus::class).useRHS()
-        llTable.on(Lval_Suffix(), EqualEqual::class).useRHS()
-        llTable.on(Lval_Suffix(), NotEqual::class).useRHS()
-        llTable.on(Lval_Suffix(), LessThan::class).useRHS()
-        llTable.on(Lval_Suffix(), LessThanOrEqual::class).useRHS()
-        llTable.on(Lval_Suffix(), GreaterThanOrEqual::class).useRHS()
-        llTable.on(Lval_Suffix(), GreaterThan::class).useRHS()
-        llTable.on(Lval_Suffix(), RightBrace::class).useRHS()
-        llTable.on(Lval_Suffix(), RightBracket::class).useRHS()
-        llTable.on(Lval_Suffix(), SemiColon::class).useRHS()
-        llTable.on(Lval_Suffix(), RightParen::class).useRHS()
-        llTable.on(Lval_Suffix(), Comma::class).useRHS()
+        Lval_Suffix::class[LeftBracket::class] = listOf(::KKexpr)
+        Lval_Suffix::class[Equal::class] = listOf()
+        Lval_Suffix::class[Asterisk::class] = listOf()
+        Lval_Suffix::class[ForwardSlash::class] = listOf()
+        Lval_Suffix::class[Caret::class] = listOf()
+        Lval_Suffix::class[Plus::class] = listOf()
+        Lval_Suffix::class[Minus::class] = listOf()
+        Lval_Suffix::class[EqualEqual::class] = listOf()
+        Lval_Suffix::class[NotEqual::class] = listOf()
+        Lval_Suffix::class[LessThan::class] = listOf()
+        Lval_Suffix::class[LessThanOrEqual::class] = listOf()
+        Lval_Suffix::class[GreaterThanOrEqual::class] = listOf()
+        Lval_Suffix::class[GreaterThan::class] = listOf()
+        Lval_Suffix::class[RightBrace::class] = listOf()
+        Lval_Suffix::class[RightBracket::class] = listOf()
+        Lval_Suffix::class[SemiColon::class] = listOf()
+        Lval_Suffix::class[RightParen::class] = listOf()
+        Lval_Suffix::class[Comma::class] = listOf()
 
 
-        llTable.on(KKexpr(), LeftBracket::class).useRHS(::LeftBracket, ::Expr, ::RightBracket)
+        KKexpr::class[LeftBracket::class] = listOf(::LeftBracket, ::Expr, ::RightBracket)
 
 
-        llTable.on(PPexprs(), LeftParen::class).useRHS(::LeftParen, ::Exprlist, ::RightParen)
-        llTable.on(PPexprs()).useRHS(::PPonly)
+        PPexprs::class[LeftParen::class] = listOf(::LeftParen, ::Exprlist, ::RightParen)
 
 
-        llTable.on(Stif(), IfKeyword::class).useRHS(::IfKeyword, ::PPexpr, ::BBlock, ::Elsepart)
+        Stif::class[IfKeyword::class] = listOf(::IfKeyword, ::PPexpr, ::BBlock, ::Elsepart)
 
 
-        llTable.on(Elsepart(), ElseIfKeyword::class).useRHS(::ElseIfKeyword, ::PPexpr, ::BBlock, ::Elsepart)
-        llTable.on(Elsepart(), ElseKeyword::class).useRHS(::ElseKeyword, ::BBlock)
-        llTable.on(Elsepart(), SemiColon::class).useRHS()
+        Elsepart::class[ElseIfKeyword::class] = listOf(::ElseIfKeyword, ::PPexpr, ::BBlock, ::Elsepart)
+        Elsepart::class[ElseKeyword::class] = listOf(::ElseKeyword, ::BBlock)
+        Elsepart::class[SemiColon::class] = listOf()
 
 
-        llTable.on(Stwhile(), WhileKeyword::class).useRHS(::WhileKeyword, ::PPexpr, ::BBlock)
+        Stwhile::class[WhileKeyword::class] = listOf(::WhileKeyword, ::PPexpr, ::BBlock)
 
 
-        llTable.on(Stprint(), PrintKeyword::class).useRHS(::PrintKeyword, ::PPexprs)
+        Stprint::class[PrintKeyword::class] = listOf(::PrintKeyword, ::PPexprs)
 
 
-        llTable.on(Stinput(), InputKeyword::class).useRHS(::InputKeyword, ::PPexprs)
+        Stinput::class[InputKeyword::class] = listOf(::InputKeyword, ::PPexprs)
 
 
-        llTable.on(Strtn(), ReturnKeyword::class).useRHS(::ReturnKeyword, ::Strtn_Suffix)
+        Strtn::class[ReturnKeyword::class] = listOf(::ReturnKeyword, ::Strtn_Suffix)
 
 
-        llTable.on(Strtn_Suffix(), IntegerTerminal::class).useRHS(::Expr)
-        llTable.on(Strtn_Suffix(), FloatTerminal::class).useRHS(::Expr)
-        llTable.on(Strtn_Suffix(), StringTerminal::class).useRHS(::Expr)
-        llTable.on(Strtn_Suffix(), IdentifierTerminal::class).useRHS(::Expr)
-        llTable.on(Strtn_Suffix(), Asterisk::class).useRHS(::Expr)
-        llTable.on(Strtn_Suffix(), Ampersand::class).useRHS(::Expr)
-        llTable.on(Strtn_Suffix(), LeftParen::class).useRHS(::Expr)
-        llTable.on(Strtn_Suffix(), SemiColon::class).useRHS()
+        Strtn_Suffix::class[IntegerTerminal::class] = listOf(::Expr)
+        Strtn_Suffix::class[FloatTerminal::class] = listOf(::Expr)
+        Strtn_Suffix::class[StringTerminal::class] = listOf(::Expr)
+        Strtn_Suffix::class[IdentifierTerminal::class] = listOf(::Expr)
+        Strtn_Suffix::class[Asterisk::class] = listOf(::Expr)
+        Strtn_Suffix::class[Ampersand::class] = listOf(::Expr)
+        Strtn_Suffix::class[LeftParen::class] = listOf(::Expr)
+        Strtn_Suffix::class[SemiColon::class] = listOf()
 
 
-        llTable.on(PPexpr(), LeftParen::class).useRHS(::LeftParen, ::Expr, ::RightParen)
+        PPexpr::class[LeftParen::class] = listOf(::LeftParen, ::Expr, ::RightParen)
 
 
-        llTable.on(Expr(), IntegerTerminal::class).useRHS(::Rterm, ::Expr_Tail)
-        llTable.on(Expr(), FloatTerminal::class).useRHS(::Rterm, ::Expr_Tail)
-        llTable.on(Expr(), StringTerminal::class).useRHS(::Rterm, ::Expr_Tail)
-        llTable.on(Expr(), IdentifierTerminal::class).useRHS(::Rterm, ::Expr_Tail)
-        llTable.on(Expr(), Asterisk::class).useRHS(::Rterm, ::Expr_Tail)
-        llTable.on(Expr(), Ampersand::class).useRHS(::Rterm, ::Expr_Tail)
-        llTable.on(Expr(), LeftParen::class).useRHS(::Rterm, ::Expr_Tail)
-        llTable.on(Expr(), InputKeyword::class).useRHS(::Rterm, ::Expr_Tail)
+        Expr::class[IntegerTerminal::class] = listOf(::Rterm, ::Expr_Tail)
+        Expr::class[FloatTerminal::class] = listOf(::Rterm, ::Expr_Tail)
+        Expr::class[StringTerminal::class] = listOf(::Rterm, ::Expr_Tail)
+        Expr::class[IdentifierTerminal::class] = listOf(::Rterm, ::Expr_Tail)
+        Expr::class[Asterisk::class] = listOf(::Rterm, ::Expr_Tail)
+        Expr::class[Ampersand::class] = listOf(::Rterm, ::Expr_Tail)
+        Expr::class[LeftParen::class] = listOf(::Rterm, ::Expr_Tail)
+        Expr::class[InputKeyword::class] = listOf(::Rterm, ::Expr_Tail)
 
 
-        llTable.on(Expr_Tail(), EqualEqual::class).useRHS(::Oprel, ::Rterm, ::Expr_Tail)
-        llTable.on(Expr_Tail(), NotEqual::class).useRHS(::Oprel, ::Rterm, ::Expr_Tail)
-        llTable.on(Expr_Tail(), LessThan::class).useRHS(::Oprel, ::Rterm, ::Expr_Tail)
-        llTable.on(Expr_Tail(), LessThanOrEqual::class).useRHS(::Oprel, ::Rterm, ::Expr_Tail)
-        llTable.on(Expr_Tail(), GreaterThanOrEqual::class).useRHS(::Oprel, ::Rterm, ::Expr_Tail)
-        llTable.on(Expr_Tail(), GreaterThan::class).useRHS(::Oprel, ::Rterm, ::Expr_Tail)
-        llTable.on(Expr_Tail(), RightBrace::class).useRHS()
-        llTable.on(Expr_Tail(), RightBracket::class).useRHS()
-        llTable.on(Expr_Tail(), SemiColon::class).useRHS()
-        llTable.on(Expr_Tail(), RightParen::class).useRHS()
-        llTable.on(Expr_Tail(), Comma::class).useRHS()
+        Expr_Tail::class[EqualEqual::class] = listOf(::Oprel, ::Rterm, ::Expr_Tail)
+        Expr_Tail::class[NotEqual::class] = listOf(::Oprel, ::Rterm, ::Expr_Tail)
+        Expr_Tail::class[LessThan::class] = listOf(::Oprel, ::Rterm, ::Expr_Tail)
+        Expr_Tail::class[LessThanOrEqual::class] = listOf(::Oprel, ::Rterm, ::Expr_Tail)
+        Expr_Tail::class[GreaterThanOrEqual::class] = listOf(::Oprel, ::Rterm, ::Expr_Tail)
+        Expr_Tail::class[GreaterThan::class] = listOf(::Oprel, ::Rterm, ::Expr_Tail)
+        Expr_Tail::class[RightBrace::class] = listOf()
+        Expr_Tail::class[RightBracket::class] = listOf()
+        Expr_Tail::class[SemiColon::class] = listOf()
+        Expr_Tail::class[RightParen::class] = listOf()
+        Expr_Tail::class[Comma::class] = listOf()
 
 
-        llTable.on(Rterm(), IntegerTerminal::class).useRHS(::Term, ::Rterm_Tail)
-        llTable.on(Rterm(), FloatTerminal::class).useRHS(::Term, ::Rterm_Tail)
-        llTable.on(Rterm(), StringTerminal::class).useRHS(::Term, ::Rterm_Tail)
-        llTable.on(Rterm(), IdentifierTerminal::class).useRHS(::Term, ::Rterm_Tail)
-        llTable.on(Rterm(), Asterisk::class).useRHS(::Term, ::Rterm_Tail)
-        llTable.on(Rterm(), Ampersand::class).useRHS(::Term, ::Rterm_Tail)
-        llTable.on(Rterm(), LeftParen::class).useRHS(::Term, ::Rterm_Tail)
-        llTable.on(Rterm(), InputKeyword::class).useRHS(::Term, ::Rterm_Tail)
+        Rterm::class[IntegerTerminal::class] = listOf(::Term, ::Rterm_Tail)
+        Rterm::class[FloatTerminal::class] = listOf(::Term, ::Rterm_Tail)
+        Rterm::class[StringTerminal::class] = listOf(::Term, ::Rterm_Tail)
+        Rterm::class[IdentifierTerminal::class] = listOf(::Term, ::Rterm_Tail)
+        Rterm::class[Asterisk::class] = listOf(::Term, ::Rterm_Tail)
+        Rterm::class[Ampersand::class] = listOf(::Term, ::Rterm_Tail)
+        Rterm::class[LeftParen::class] = listOf(::Term, ::Rterm_Tail)
+        Rterm::class[InputKeyword::class] = listOf(::Term, ::Rterm_Tail)
 
 
-        llTable.on(Rterm_Tail(), Plus::class).useRHS(::Opadd, ::Term, ::Rterm_Tail)
-        llTable.on(Rterm_Tail(), Minus::class).useRHS(::Opadd, ::Term, ::Rterm_Tail)
-        llTable.on(Rterm_Tail(), EqualEqual::class).useRHS()
-        llTable.on(Rterm_Tail(), NotEqual::class).useRHS()
-        llTable.on(Rterm_Tail(), LessThan::class).useRHS()
-        llTable.on(Rterm_Tail(), LessThanOrEqual::class).useRHS()
-        llTable.on(Rterm_Tail(), GreaterThanOrEqual::class).useRHS()
-        llTable.on(Rterm_Tail(), GreaterThan::class).useRHS()
-        llTable.on(Rterm_Tail(), RightBrace::class).useRHS()
-        llTable.on(Rterm_Tail(), RightBracket::class).useRHS()
-        llTable.on(Rterm_Tail(), SemiColon::class).useRHS()
-        llTable.on(Rterm_Tail(), Comma::class).useRHS()
-        llTable.on(Rterm_Tail(), RightParen::class).useRHS()
+        Rterm_Tail::class[Plus::class] = listOf(::Opadd, ::Term, ::Rterm_Tail)
+        Rterm_Tail::class[Minus::class] = listOf(::Opadd, ::Term, ::Rterm_Tail)
+        Rterm_Tail::class[EqualEqual::class] = listOf()
+        Rterm_Tail::class[NotEqual::class] = listOf()
+        Rterm_Tail::class[LessThan::class] = listOf()
+        Rterm_Tail::class[LessThanOrEqual::class] = listOf()
+        Rterm_Tail::class[GreaterThanOrEqual::class] = listOf()
+        Rterm_Tail::class[GreaterThan::class] = listOf()
+        Rterm_Tail::class[RightBrace::class] = listOf()
+        Rterm_Tail::class[RightBracket::class] = listOf()
+        Rterm_Tail::class[SemiColon::class] = listOf()
+        Rterm_Tail::class[Comma::class] = listOf()
+        Rterm_Tail::class[RightParen::class] = listOf()
 
 
-        llTable.on(Term(), IntegerTerminal::class).useRHS(::Fact, ::Term_Tail)
-        llTable.on(Term(), FloatTerminal::class).useRHS(::Fact, ::Term_Tail)
-        llTable.on(Term(), StringTerminal::class).useRHS(::Fact, ::Term_Tail)
-        llTable.on(Term(), IdentifierTerminal::class).useRHS(::Fact, ::Term_Tail)
-        llTable.on(Term(), Asterisk::class).useRHS(::Fact, ::Term_Tail)
-        llTable.on(Term(), Ampersand::class).useRHS(::Fact, ::Term_Tail)
-        llTable.on(Term(), LeftParen::class).useRHS(::Fact, ::Term_Tail)
-        llTable.on(Term(), InputKeyword::class).useRHS(::Fact, ::Term_Tail)
+        Term::class[IntegerTerminal::class] = listOf(::Fact, ::Term_Tail)
+        Term::class[FloatTerminal::class] = listOf(::Fact, ::Term_Tail)
+        Term::class[StringTerminal::class] = listOf(::Fact, ::Term_Tail)
+        Term::class[IdentifierTerminal::class] = listOf(::Fact, ::Term_Tail)
+        Term::class[Asterisk::class] = listOf(::Fact, ::Term_Tail)
+        Term::class[Ampersand::class] = listOf(::Fact, ::Term_Tail)
+        Term::class[LeftParen::class] = listOf(::Fact, ::Term_Tail)
+        Term::class[InputKeyword::class] = listOf(::Fact, ::Term_Tail)
 
 
-        llTable.on(Term_Tail(), Asterisk::class).useRHS(::Opmul, ::Fact, ::Term_Tail)
-        llTable.on(Term_Tail(), ForwardSlash::class).useRHS(::Opmul, ::Fact, ::Term_Tail)
-        llTable.on(Term_Tail(), Caret::class).useRHS(::Opmul, ::Fact, ::Term_Tail)
-        llTable.on(Term_Tail(), EqualEqual::class).useRHS()
-        llTable.on(Term_Tail(), NotEqual::class).useRHS()
-        llTable.on(Term_Tail(), LessThan::class).useRHS()
-        llTable.on(Term_Tail(), LessThanOrEqual::class).useRHS()
-        llTable.on(Term_Tail(), GreaterThanOrEqual::class).useRHS()
-        llTable.on(Term_Tail(), GreaterThan::class).useRHS()
-        llTable.on(Term_Tail(), RightBrace::class).useRHS()
-        llTable.on(Term_Tail(), RightBracket::class).useRHS()
-        llTable.on(Term_Tail(), SemiColon::class).useRHS()
-        llTable.on(Term_Tail(), Comma::class).useRHS()
-        llTable.on(Term_Tail(), RightParen::class).useRHS()
-        llTable.on(Term_Tail(), Plus::class).useRHS()
-        llTable.on(Term_Tail(), Minus::class).useRHS()
+        Term_Tail::class[Asterisk::class] = listOf(::Opmul, ::Fact, ::Term_Tail)
+        Term_Tail::class[ForwardSlash::class] = listOf(::Opmul, ::Fact, ::Term_Tail)
+        Term_Tail::class[Caret::class] = listOf(::Opmul, ::Fact, ::Term_Tail)
+        Term_Tail::class[EqualEqual::class] = listOf()
+        Term_Tail::class[NotEqual::class] = listOf()
+        Term_Tail::class[LessThan::class] = listOf()
+        Term_Tail::class[LessThanOrEqual::class] = listOf()
+        Term_Tail::class[GreaterThanOrEqual::class] = listOf()
+        Term_Tail::class[GreaterThan::class] = listOf()
+        Term_Tail::class[RightBrace::class] = listOf()
+        Term_Tail::class[RightBracket::class] = listOf()
+        Term_Tail::class[SemiColon::class] = listOf()
+        Term_Tail::class[Comma::class] = listOf()
+        Term_Tail::class[RightParen::class] = listOf()
+        Term_Tail::class[Plus::class] = listOf()
+        Term_Tail::class[Minus::class] = listOf()
 
 
-        llTable.on(Fact(), IntegerTerminal::class).useRHS(::BaseLiteral)
-        llTable.on(Fact(), FloatTerminal::class).useRHS(::BaseLiteral)
-        llTable.on(Fact(), StringTerminal::class).useRHS(::BaseLiteral)
-        llTable.on(Fact(), IdentifierTerminal::class).useRHS(::LvalOrFcall)
-        llTable.on(Fact(), Asterisk::class).useRHS(::LvalOrFcall)
-        llTable.on(Fact(), Ampersand::class).useRHS(::Addrof_id)
-        llTable.on(Fact(), LeftParen::class).useRHS(::PPexpr)
-        llTable.on(Fact(), InputKeyword::class).useRHS(::Stinput)
+        Fact::class[IntegerTerminal::class] = listOf(::BaseLiteral)
+        Fact::class[FloatTerminal::class] = listOf(::BaseLiteral)
+        Fact::class[StringTerminal::class] = listOf(::BaseLiteral)
+        Fact::class[IdentifierTerminal::class] = listOf(::LvalOrFcall)
+        Fact::class[Asterisk::class] = listOf(::LvalOrFcall)
+        Fact::class[Ampersand::class] = listOf(::Addrof_id)
+        Fact::class[LeftParen::class] = listOf(::PPexpr)
+        Fact::class[InputKeyword::class] = listOf(::Stinput)
 
 
-        llTable.on(LvalOrFcall(), Asterisk::class).useRHS(::Deref_id)
-        llTable.on(LvalOrFcall(), IdentifierTerminal::class).useRHS(::IdentifierTerminal, ::LvalOrFcall_Suffix)
+        LvalOrFcall::class[Asterisk::class] = listOf(::Deref_id)
+        LvalOrFcall::class[IdentifierTerminal::class] = listOf(::IdentifierTerminal, ::LvalOrFcall_Suffix)
 
 
-        llTable.on(LvalOrFcall_Suffix(), LeftBracket::class).useRHS(::Lval_Suffix)
-        llTable.on(LvalOrFcall_Suffix(), LeftParen::class).useRHS(::PPexprs)
-        llTable.on(LvalOrFcall_Suffix(), Asterisk::class).useRHS()
-        llTable.on(LvalOrFcall_Suffix(), ForwardSlash::class).useRHS()
-        llTable.on(LvalOrFcall_Suffix(), Caret::class).useRHS()
-        llTable.on(LvalOrFcall_Suffix(), Plus::class).useRHS()
-        llTable.on(LvalOrFcall_Suffix(), Minus::class).useRHS()
-        llTable.on(LvalOrFcall_Suffix(), EqualEqual::class).useRHS()
-        llTable.on(LvalOrFcall_Suffix(), NotEqual::class).useRHS()
-        llTable.on(LvalOrFcall_Suffix(), LessThan::class).useRHS()
-        llTable.on(LvalOrFcall_Suffix(), LessThanOrEqual::class).useRHS()
-        llTable.on(LvalOrFcall_Suffix(), GreaterThan::class).useRHS()
-        llTable.on(LvalOrFcall_Suffix(), GreaterThanOrEqual::class).useRHS()
-        llTable.on(LvalOrFcall_Suffix(), RightBrace::class).useRHS()
-        llTable.on(LvalOrFcall_Suffix(), RightBracket::class).useRHS()
-        llTable.on(LvalOrFcall_Suffix(), SemiColon::class).useRHS()
-        llTable.on(LvalOrFcall_Suffix(), RightParen::class).useRHS()
-        llTable.on(LvalOrFcall_Suffix(), Comma::class).useRHS()
+        LvalOrFcall_Suffix::class[LeftBracket::class] = listOf(::Lval_Suffix)
+        LvalOrFcall_Suffix::class[LeftParen::class] = listOf(::PPexprs)
+        LvalOrFcall_Suffix::class[Asterisk::class] = listOf()
+        LvalOrFcall_Suffix::class[ForwardSlash::class] = listOf()
+        LvalOrFcall_Suffix::class[Caret::class] = listOf()
+        LvalOrFcall_Suffix::class[Plus::class] = listOf()
+        LvalOrFcall_Suffix::class[Minus::class] = listOf()
+        LvalOrFcall_Suffix::class[EqualEqual::class] = listOf()
+        LvalOrFcall_Suffix::class[NotEqual::class] = listOf()
+        LvalOrFcall_Suffix::class[LessThan::class] = listOf()
+        LvalOrFcall_Suffix::class[LessThanOrEqual::class] = listOf()
+        LvalOrFcall_Suffix::class[GreaterThan::class] = listOf()
+        LvalOrFcall_Suffix::class[GreaterThanOrEqual::class] = listOf()
+        LvalOrFcall_Suffix::class[RightBrace::class] = listOf()
+        LvalOrFcall_Suffix::class[RightBracket::class] = listOf()
+        LvalOrFcall_Suffix::class[SemiColon::class] = listOf()
+        LvalOrFcall_Suffix::class[RightParen::class] = listOf()
+        LvalOrFcall_Suffix::class[Comma::class] = listOf()
 
 
-        llTable.on(BaseLiteral(), IntegerTerminal::class).useRHS(::IntegerTerminal)
-        llTable.on(BaseLiteral(), FloatTerminal::class).useRHS(::FloatTerminal)
-        llTable.on(BaseLiteral(), StringTerminal::class).useRHS(::StringTerminal)
+        BaseLiteral::class[IntegerTerminal::class] = listOf(::IntegerTerminal)
+        BaseLiteral::class[FloatTerminal::class] = listOf(::FloatTerminal)
+        BaseLiteral::class[StringTerminal::class] = listOf(::StringTerminal)
 
 
-        llTable.on(Addrof_id(), Ampersand::class).useRHS(::Ampersand, ::IdentifierTerminal)
+        Addrof_id::class[Ampersand::class] = listOf(::Ampersand, ::IdentifierTerminal)
 
 
-        llTable.on(Oprel(), EqualEqual::class).useRHS(::EqualEqual)
-        llTable.on(Oprel(), NotEqual::class).useRHS(::NotEqual)
-        llTable.on(Oprel(), LessThan::class).useRHS(::Lthan)
-        llTable.on(Oprel(), LessThanOrEqual::class).useRHS(::LessThanOrEqual)
-        llTable.on(Oprel(), GreaterThanOrEqual::class).useRHS(::GreaterThanOrEqual)
-        llTable.on(Oprel(), GreaterThan::class).useRHS(::Gthan)
+        Oprel::class[EqualEqual::class] = listOf(::EqualEqual)
+        Oprel::class[NotEqual::class] = listOf(::NotEqual)
+        Oprel::class[LessThan::class] = listOf(::Lthan)
+        Oprel::class[LessThanOrEqual::class] = listOf(::LessThanOrEqual)
+        Oprel::class[GreaterThanOrEqual::class] = listOf(::GreaterThanOrEqual)
+        Oprel::class[GreaterThan::class] = listOf(::Gthan)
 
 
-        llTable.on(Lthan(), LessThan::class).useRHS(::LessThan)
+        Lthan::class[LessThan::class] = listOf(::LessThan)
 
 
-        llTable.on(Gthan(), GreaterThan::class).useRHS(::GreaterThan)
+        Gthan::class[GreaterThan::class] = listOf(::GreaterThan)
 
 
-        llTable.on(Opadd(), Plus::class).useRHS(::Plus)
-        llTable.on(Opadd(), Minus::class).useRHS(::Minus)
+        Opadd::class[Plus::class] = listOf(::Plus)
+        Opadd::class[Minus::class] = listOf(::Minus)
 
 
-        llTable.on(Opmul(), Asterisk::class).useRHS(::Asterisk)
-        llTable.on(Opmul(), ForwardSlash::class).useRHS(::ForwardSlash)
-        llTable.on(Opmul(), Caret::class).useRHS(::Caret)
+        Opmul::class[Asterisk::class] = listOf(::Asterisk)
+        Opmul::class[ForwardSlash::class] = listOf(::ForwardSlash)
+        Opmul::class[Caret::class] = listOf(::Caret)
 
         return llTable
     }
+
+    private operator fun <NT : NonTerminal, T : Terminal> KClass<NT>.set(first: KClass<T>, rhs: List<NodeSupplier>) {
+        llTable.on(this, first).useRHS(rhs)
+    }
+
 }

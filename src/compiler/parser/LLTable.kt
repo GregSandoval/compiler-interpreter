@@ -1,35 +1,32 @@
 package compiler.parser
 
 import compiler.parser.Symbol.NonTerminal
-import java.util.*
 import java.util.stream.Collectors
-import kotlin.collections.HashMap
 import kotlin.collections.set
 import kotlin.reflect.KClass
 
 class LLTable {
     private val LLTable: MutableMap<KClass<out Symbol>, MutableMap<TokenClass, List<NodeSupplier>>> = HashMap()
 
-    fun on(nonTerminal: NonTerminal, vararg first: TokenClass): ProductionBuilder {
+    fun <T : NonTerminal> on(nonTerminal: KClass<out T>, vararg first: TokenClass): ProductionBuilder<T> {
         return ProductionBuilder(nonTerminal, *first)
     }
 
-    inner class ProductionBuilder constructor(private val nonTerminal: NonTerminal, private vararg val tokenClass: TokenClass) {
-        fun useRHS(vararg rest: NodeSupplier) {
-            val rhs = ArrayList(listOf(*rest))
+    inner class ProductionBuilder<out T : NonTerminal>(private val nonTerminal: KClass<T>, private vararg val tokenClass: TokenClass) {
+        fun useRHS(rest: List<NodeSupplier>) {
             for (token in tokenClass) {
-                var table = LLTable[nonTerminal::class]
+                var table = LLTable[nonTerminal]
 
                 if (table === null) {
                     table = HashMap()
-                    LLTable[nonTerminal::class] = table
+                    LLTable[nonTerminal] = table
                 }
 
                 if (table.containsKey(token)) {
-                    throw RuntimeException("Double stuffed LL Table: Rule: " + nonTerminal.javaClass.simpleName + " Token: " + token.simpleName)
+                    throw RuntimeException("Double stuffed LL Table: Rule: " + nonTerminal.simpleName + " Token: " + token.simpleName)
                 }
 
-                table[token] = rhs
+                table[token] = rest
             }
         }
 
