@@ -3,7 +3,7 @@ package compiler.a5.parser
 import compiler.a5.grammar.A5GrammarRules
 import compiler.parser.ParseTree
 import compiler.parser.ParseTreeBuilder
-import compiler.parser.Symbol.NonTerminal.Pgm
+import compiler.parser.Symbol.NonTerminal.Program
 import compiler.parser.Symbol.Terminal
 
 object A7Parser {
@@ -11,7 +11,7 @@ object A7Parser {
         val llTable = A5GrammarRules.build()
 
         return ParseTreeBuilder()
-                .setStartSymbol(Pgm(), llTable)
+                .setStartSymbol(Program(), llTable)
                 .setTerminals(terminals)
                 .build()
     }

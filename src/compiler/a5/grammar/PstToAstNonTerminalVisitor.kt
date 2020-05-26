@@ -11,18 +11,18 @@ import java.util.*
 
 class PstToAstNonTerminalVisitor : NonTerminalVisitor {
 
-    override fun visit(expr: Expr) {
-        if (expr.children.size == 2) {
-            val left = expr.children.pop()
-            val right = expr.children.peek()
-            PstToAstHelpers.hoist(expr)
+    override fun visit(expression: Expression) {
+        if (expression.children.size == 2) {
+            val left = expression.children.pop()
+            val right = expression.children.peek()
+            PstToAstHelpers.hoist(expression)
             left.parent = right
             right.children.addFirst(left)
         }
     }
 
-    override fun visit(exprTail: Expr_Tail) {
-        PstToAstHelpers.hoist(exprTail)
+    override fun visit(expressionSuffix: ExpressionSuffix) {
+        PstToAstHelpers.hoist(expressionSuffix)
     }
 
     override fun visit(term: Term) {
@@ -36,15 +36,15 @@ class PstToAstNonTerminalVisitor : NonTerminalVisitor {
         PstToAstHelpers.hoist(term)
     }
 
-    override fun visit(termTail: Term_Tail) {
-        if (termTail.children.size == 3) {
-            val tail = termTail.children[2]
-            val tailLValue = termTail.children[1]
+    override fun visit(termSuffix: TermSuffix) {
+        if (termSuffix.children.size == 3) {
+            val tail = termSuffix.children[2]
+            val tailLValue = termSuffix.children[1]
             tailLValue.parent = tail
             tail.children.addFirst(tailLValue)
-            termTail.children.remove(tailLValue)
+            termSuffix.children.remove(tailLValue)
         }
-        PstToAstHelpers.hoist(termTail)
+        PstToAstHelpers.hoist(termSuffix)
     }
 
     override fun visit(rterm: Rterm) {
@@ -58,24 +58,24 @@ class PstToAstNonTerminalVisitor : NonTerminalVisitor {
         PstToAstHelpers.hoist(rterm)
     }
 
-    override fun visit(rtermTail: Rterm_Tail) {
-        if (rtermTail.children.size == 3) {
-            val tail = rtermTail.children[2]
-            val tailLValue = rtermTail.children[1]
+    override fun visit(rtermSuffix: RtermSuffix) {
+        if (rtermSuffix.children.size == 3) {
+            val tail = rtermSuffix.children[2]
+            val tailLValue = rtermSuffix.children[1]
             tailLValue.parent = tail
             tail.children.addFirst(tailLValue)
-            rtermTail.children.remove(tailLValue)
+            rtermSuffix.children.remove(tailLValue)
         }
-        PstToAstHelpers.hoist(rtermTail)
+        PstToAstHelpers.hoist(rtermSuffix)
     }
 
-    override fun visit(pPexpr: PPexpr) {
-        pPexpr.children.removeIf { it is RightParen }
-        PstToAstHelpers.hoist(pPexpr)
+    override fun visit(parenthesizedExpression: ParenthesizedExpression) {
+        parenthesizedExpression.children.removeIf { it is RightParen }
+        PstToAstHelpers.hoist(parenthesizedExpression)
     }
 
-    override fun visit(classmom: Classmom) {
-        PstToAstHelpers.hoist(classmom)
+    override fun visit(classParent: ClassParent) {
+        PstToAstHelpers.hoist(classParent)
     }
 
     override fun visit(parseTreeSentinel: ParseTreeSentinel) {
@@ -84,129 +84,129 @@ class PstToAstNonTerminalVisitor : NonTerminalVisitor {
     override fun visit(nullNode: NULL_NODE) {
     }
 
-    override fun visit(pgm: Pgm) {
+    override fun visit(program: Program) {
         var fcndefsIndex = -1
-        var fcndefs: Fcndefs? = null
+        var functionDefinitions: FunctionDefinitions? = null
 
-        for (i in pgm.children.indices) {
-            val child = pgm.children[i]
-            if (child is Fcndefs) {
+        for (i in program.children.indices) {
+            val child = program.children[i]
+            if (child is FunctionDefinitions) {
                 fcndefsIndex = i
-                fcndefs = child
+                functionDefinitions = child
                 break
             }
         }
 
-        if (fcndefs != null) {
-            for (child in fcndefs.children) {
-                pgm.children.add(fcndefsIndex++, child)
-                child.parent = pgm
+        if (functionDefinitions != null) {
+            for (child in functionDefinitions.children) {
+                program.children.add(fcndefsIndex++, child)
+                child.parent = program
             }
         }
 
-        if (fcndefs != null)
-            pgm.children.remove(fcndefs)
-        PstToAstHelpers.hoist(pgm)
+        if (functionDefinitions != null)
+            program.children.remove(functionDefinitions)
+        PstToAstHelpers.hoist(program)
     }
 
     override fun visit(main: Main) {
         PstToAstHelpers.hoist(main)
     }
 
-    override fun visit(bBlock: BBlock) {
-        bBlock.children.removeIf { it is RightBrace }
-        PstToAstHelpers.rightContraction(bBlock)
-        PstToAstHelpers.hoist(bBlock)
+    override fun visit(basicBlock: BasicBlock) {
+        basicBlock.children.removeIf { it is RightBrace }
+        PstToAstHelpers.rightContraction(basicBlock)
+        PstToAstHelpers.hoist(basicBlock)
     }
 
-    override fun visit(vargroup: Vargroup) {
-        PstToAstHelpers.hoist(vargroup)
+    override fun visit(variableGroup: VariableGroup) {
+        PstToAstHelpers.hoist(variableGroup)
     }
 
-    override fun visit(pPvarlist: PPvarlist) {
-        pPvarlist.children.removeIf { it is RightParen }
-        if (pPvarlist.children.size == 2) {
-            val varlist = pPvarlist.children[1]
-            pPvarlist.children.remove(varlist)
+    override fun visit(parenthesizedVariabledList: ParenthesizedVariabledList) {
+        parenthesizedVariabledList.children.removeIf { it is RightParen }
+        if (parenthesizedVariabledList.children.size == 2) {
+            val varlist = parenthesizedVariabledList.children[1]
+            parenthesizedVariabledList.children.remove(varlist)
             varlist.parent = null
-            varlist.children.forEach { pPvarlist.children.addLast(it) }
-            varlist.children.forEach { it.parent = pPvarlist }
+            varlist.children.forEach { parenthesizedVariabledList.children.addLast(it) }
+            varlist.children.forEach { it.parent = parenthesizedVariabledList }
         }
-        PstToAstHelpers.hoist(pPvarlist)
+        PstToAstHelpers.hoist(parenthesizedVariabledList)
     }
 
-    override fun visit(varlist: Varlist) {
-        varlist.children.removeIf { it is SemiColon }
-        if (varlist.children.size == 2) {
-            val otherVarList = varlist.children[1]
-            varlist.children.remove(otherVarList)
-            otherVarList.children.forEach { varlist.children.addLast(it) }
-            otherVarList.children.forEach { it.parent = varlist }
+    override fun visit(variableList: VariableList) {
+        variableList.children.removeIf { it is SemiColon }
+        if (variableList.children.size == 2) {
+            val otherVarList = variableList.children[1]
+            variableList.children.remove(otherVarList)
+            otherVarList.children.forEach { variableList.children.addLast(it) }
+            otherVarList.children.forEach { it.parent = variableList }
             return
         }
     }
 
-    override fun visit(varitem: Varitem) {
-        PstToAstHelpers.reverseHoist(varitem)
+    override fun visit(variableItem: VariableItem) {
+        PstToAstHelpers.reverseHoist(variableItem)
     }
 
-    override fun visit(varitem_Suffix: Varitem_Suffix) {
-        PstToAstHelpers.hoist(varitem_Suffix)
+    override fun visit(variableItem_Suffix: VariableItemSuffix) {
+        PstToAstHelpers.hoist(variableItem_Suffix)
     }
 
-    override fun visit(vardecl: Vardecl) {
-        PstToAstHelpers.hoist(vardecl)
+    override fun visit(variableDecleration: VariableDecleration) {
+        PstToAstHelpers.hoist(variableDecleration)
     }
 
     override fun visit(simplekind: Simplekind) {}
 
     override fun visit(baseKind: BaseKind) {}
 
-    override fun visit(varspec: Varspec) {
-        PstToAstHelpers.hoist(varspec)
+    override fun visit(variableSpec: VariableSpec) {
+        PstToAstHelpers.hoist(variableSpec)
     }
 
-    override fun visit(varid: Varid) {}
+    override fun visit(variableIdentifier: VariableIdentifier) {}
 
-    override fun visit(arrspec: Arrspec) {}
+    override fun visit(arraySpec: ArraySpec) {}
 
     override fun visit(kKint: KKint) {
         kKint.children.removeIf { it is RightBracket }
         PstToAstHelpers.hoist(kKint)
     }
 
-    override fun visit(derefID: Deref_id) {
-        PstToAstHelpers.hoist(derefID)
+    override fun visit(dereferencedIdentifier: DereferencedIdentifier) {
+        PstToAstHelpers.hoist(dereferencedIdentifier)
     }
 
-    override fun visit(deref: Deref) {}
+    override fun visit(dereference: Dereference) {}
 
-    override fun visit(varinit: Varinit) {}
+    override fun visit(variableInitializer: VariableInitializer) {}
 
-    override fun visit(bBexprs: BBexprs) {}
+    override fun visit(bracedExprersions: BracedExprersions) {}
 
-    override fun visit(exprlist: Exprlist) {
-        if (!exprlist.children.isEmpty()) {
-            PstToAstHelpers.rightContraction(exprlist)
+    override fun visit(expressionList: ExpressionList) {
+        if (!expressionList.children.isEmpty()) {
+            PstToAstHelpers.rightContraction(expressionList)
         }
     }
 
-    override fun visit(moreexprs: Moreexprs) {
-        moreexprs.children.removeIf { it is Comma }
-        if (!moreexprs.children.isEmpty()) {
-            PstToAstHelpers.rightContraction(moreexprs)
+    override fun visit(moreExpressions: MoreExpressions) {
+        moreExpressions.children.removeIf { it is Comma }
+        if (!moreExpressions.children.isEmpty()) {
+            PstToAstHelpers.rightContraction(moreExpressions)
         }
     }
 
     override fun visit(classdecl: Classdecl) {}
 
-    override fun visit(classdef: Classdef) {
-        PstToAstHelpers.hoist(classdef)
+    override fun visit(classDefinition: ClassDefinition) {
+        PstToAstHelpers.hoist(classDefinition)
     }
 
-    override fun visit(classDefSuffix: Classdef_Suffix) {}
+    override fun visit(classDefSuffix: ClassDefinitionSuffix) {}
 
-    override fun visit(bBClassitems: BBClassitems) {
+    override fun visit(bBClassitems: BracedClassItems) {
         bBClassitems.children.removeIf { it is RightBrace }
         PstToAstHelpers.rightContraction(bBClassitems)
         val removables = ArrayList<TreeNode>()
@@ -219,185 +219,185 @@ class PstToAstNonTerminalVisitor : NonTerminalVisitor {
                 right.parent = left
             }
         }
-        if (bBClassitems.children.last is Mddecls) {
+        if (bBClassitems.children.last is MethodDeclerations) {
             PstToAstHelpers.rightContraction(bBClassitems)
         }
         bBClassitems.children.removeAll(removables)
         PstToAstHelpers.hoist(bBClassitems)
     }
 
-    override fun visit(classitems: Classitems) {
-        if (!classitems.children.isEmpty() && classitems.children.last is Classitems)
-            PstToAstHelpers.rightContraction(classitems)
+    override fun visit(classItems: ClassItems) {
+        if (!classItems.children.isEmpty() && classItems.children.last is ClassItems)
+            PstToAstHelpers.rightContraction(classItems)
     }
 
-    override fun visit(classgroup: Classgroup) {}
+    override fun visit(classGroup: ClassGroup) {}
 
-    override fun visit(classCtrl: Class_ctrl) {
-        PstToAstHelpers.hoist(classCtrl)
+    override fun visit(classVisibility: ClassVisibility) {
+        PstToAstHelpers.hoist(classVisibility)
     }
 
     override fun visit(interfaces: Interfaces) {
         if (!interfaces.children.isEmpty()) {
             PstToAstHelpers.rightContraction(interfaces)
         }
-        if (interfaces.parent is Classheader) {
+        if (interfaces.parent is ClassHeader) {
             PstToAstHelpers.hoist(interfaces)
         }
         interfaces.children.removeIf { it is Plus }
     }
 
-    override fun visit(mddecls: Mddecls) {
-        if (!mddecls.children.isEmpty())
-            PstToAstHelpers.rightContraction(mddecls)
+    override fun visit(methodDeclerations: MethodDeclerations) {
+        if (!methodDeclerations.children.isEmpty())
+            PstToAstHelpers.rightContraction(methodDeclerations)
     }
 
-    override fun visit(mdheader: Mdheader) {
-        PstToAstHelpers.hoist(mdheader)
+    override fun visit(methodHeader: MethodHeader) {
+        PstToAstHelpers.hoist(methodHeader)
     }
 
-    override fun visit(mdId: Md_id) {
-        mdId.children.add(1, mdId.children.removeFirst())
-        PstToAstHelpers.hoist(mdId)
+    override fun visit(methodIdentifier: MethodIdentifier) {
+        methodIdentifier.children.add(1, methodIdentifier.children.removeFirst())
+        PstToAstHelpers.hoist(methodIdentifier)
     }
 
-    override fun visit(fcndefs: Fcndefs) {}
+    override fun visit(functionDefinitions: FunctionDefinitions) {}
 
-    override fun visit(fcndef: Fcndef) {
-        PstToAstHelpers.hoist(fcndef)
+    override fun visit(functionDefinition: FunctionDefinition) {
+        PstToAstHelpers.hoist(functionDefinition)
     }
 
-    override fun visit(fcnheader: Fcnheader) {
-        PstToAstHelpers.hoist(fcnheader)
+    override fun visit(functionHeader: FunctionHeader) {
+        PstToAstHelpers.hoist(functionHeader)
     }
 
-    override fun visit(fcnid: Fcnid) {}
+    override fun visit(functionIdentifier: FunctionIdentifier) {}
 
-    override fun visit(retkind: Retkind) {}
+    override fun visit(returnKind: ReturnKind) {}
 
-    override fun visit(pParmlist: PParmlist) {
-        pParmlist.children.removeIf { it is RightParen }
-        if (!pParmlist.children.isEmpty())
-            PstToAstHelpers.rightContraction(pParmlist)
-        PstToAstHelpers.hoist(pParmlist)
+    override fun visit(parenthesizedParameterList: ParenthesizedParameterList) {
+        parenthesizedParameterList.children.removeIf { it is RightParen }
+        if (!parenthesizedParameterList.children.isEmpty())
+            PstToAstHelpers.rightContraction(parenthesizedParameterList)
+        PstToAstHelpers.hoist(parenthesizedParameterList)
     }
 
-    override fun visit(varspecs: Varspecs) {
-        if (!varspecs.children.isEmpty())
-            PstToAstHelpers.rightContraction(varspecs)
+    override fun visit(variableSpecs: VariableSpecs) {
+        if (!variableSpecs.children.isEmpty())
+            PstToAstHelpers.rightContraction(variableSpecs)
     }
 
-    override fun visit(moreVarspecs: More_varspecs) {
-        moreVarspecs.children.removeIf { it is Comma }
-        if (!moreVarspecs.children.isEmpty())
-            PstToAstHelpers.rightContraction(moreVarspecs)
+    override fun visit(moreVariableSpecs: MoreVariableSpecs) {
+        moreVariableSpecs.children.removeIf { it is Comma }
+        if (!moreVariableSpecs.children.isEmpty())
+            PstToAstHelpers.rightContraction(moreVariableSpecs)
     }
 
     override fun visit(pPonly: PPonly) {}
 
-    override fun visit(stmts: Stmts) {
-        stmts.children.removeIf { it is SemiColon }
-        if (!stmts.children.isEmpty())
-            PstToAstHelpers.rightContraction(stmts)
+    override fun visit(statements: Statements) {
+        statements.children.removeIf { it is SemiColon }
+        if (!statements.children.isEmpty())
+            PstToAstHelpers.rightContraction(statements)
     }
 
-    override fun visit(stmt: Stmt) {}
+    override fun visit(statement: Statement) {}
 
-    override fun visit(stasgnOrFcall: StasgnOrFcall) {
-        when (stasgnOrFcall.children.last) {
-            is Equal -> PstToAstHelpers.reverseHoist(stasgnOrFcall)
-            is LeftParen -> PstToAstHelpers.hoist(stasgnOrFcall)
+    override fun visit(assignmentOrFunction: AssignmentOrFunction) {
+        when (assignmentOrFunction.children.last) {
+            is Equal -> PstToAstHelpers.reverseHoist(assignmentOrFunction)
+            is LeftParen -> PstToAstHelpers.hoist(assignmentOrFunction)
         }
     }
 
-    override fun visit(stasgnOrFcallSuffix: StasgnOrFcall_Suffix) {}
+    override fun visit(assignmentOrFunctionSuffix: AssignmentOrFunctionSuffix) {}
 
-    override fun visit(stasgnSuffix: Stasgn_Suffix) {
-        PstToAstHelpers.hoist(stasgnSuffix)
+    override fun visit(assignmentSuffix: AssignmentSuffix) {
+        PstToAstHelpers.hoist(assignmentSuffix)
     }
 
-    override fun visit(lvalSuffix: Lval_Suffix) {}
+    override fun visit(leftValueSuffix: LeftValueSuffix) {}
 
     override fun visit(lval: Lval) {}
 
-    override fun visit(lvalOrFcall: LvalOrFcall) {
-        PstToAstHelpers.hoist(lvalOrFcall)
+    override fun visit(leftValueOrFunction: LeftValueOrFunction) {
+        PstToAstHelpers.hoist(leftValueOrFunction)
     }
 
-    override fun visit(lvalOrFcallSuffix: LvalOrFcall_Suffix) {}
+    override fun visit(leftValueOrFunctionSuffix: LeftValueOrFunctionSuffix) {}
 
     override fun visit(lvalTail: Lval_Tail) {}
 
-    override fun visit(kKexpr: KKexpr) {
-        kKexpr.children.removeIf { it is RightBracket }
-        PstToAstHelpers.hoist(kKexpr)
+    override fun visit(bracketedExpression: BracketedExpression) {
+        bracketedExpression.children.removeIf { it is RightBracket }
+        PstToAstHelpers.hoist(bracketedExpression)
     }
 
     override fun visit(fcall: Fcall) {}
-    override fun visit(pPexprs: PPexprs) {
-        pPexprs.children.removeIf { it is RightParen }
-        if (!pPexprs.children.isEmpty()) {
-            PstToAstHelpers.rightContraction(pPexprs)
+    override fun visit(parenthesizedExpressions: ParenthesizedExpressions) {
+        parenthesizedExpressions.children.removeIf { it is RightParen }
+        if (!parenthesizedExpressions.children.isEmpty()) {
+            PstToAstHelpers.rightContraction(parenthesizedExpressions)
         }
-        PstToAstHelpers.hoist(pPexprs)
+        PstToAstHelpers.hoist(parenthesizedExpressions)
     }
 
-    override fun visit(stif: Stif) {
-        PstToAstHelpers.hoist(stif)
+    override fun visit(ifStatement: IfStatement) {
+        PstToAstHelpers.hoist(ifStatement)
     }
 
-    override fun visit(elsepart: Elsepart) {
-        PstToAstHelpers.hoist(elsepart)
+    override fun visit(elsePartialStatement: ElsePartialStatement) {
+        PstToAstHelpers.hoist(elsePartialStatement)
     }
 
-    override fun visit(stwhile: Stwhile) {
-        PstToAstHelpers.hoist(stwhile)
+    override fun visit(whileStatement: WhileStatement) {
+        PstToAstHelpers.hoist(whileStatement)
     }
 
-    override fun visit(stprint: Stprint) {
-        PstToAstHelpers.hoist(stprint)
+    override fun visit(printStatement: PrintStatement) {
+        PstToAstHelpers.hoist(printStatement)
     }
 
-    override fun visit(stinput: Stinput) {
-        PstToAstHelpers.hoist(stinput)
+    override fun visit(inputStatement: InputStatement) {
+        PstToAstHelpers.hoist(inputStatement)
     }
 
-    override fun visit(strtn: Strtn) {
-        if (strtn.children.size <= 1) {
+    override fun visit(returnStatement: ReturnStatement) {
+        if (returnStatement.children.size <= 1) {
             return
         }
-        val returnVal = strtn.children.removeLast()
-        val returnNode = strtn.children.first
+        val returnVal = returnStatement.children.removeLast()
+        val returnNode = returnStatement.children.first
         returnNode.children.addLast(returnVal)
         returnVal.parent = returnNode
-        PstToAstHelpers.hoist(strtn)
+        PstToAstHelpers.hoist(returnStatement)
     }
 
-    override fun visit(strtnSuffix: Strtn_Suffix) {}
+    override fun visit(returnStatementSuffix: ReturnStatementSuffix) {}
 
     override fun visit(fact: Fact) {}
 
     override fun visit(baseLiteral: BaseLiteral) {}
 
-    override fun visit(addrofId: Addrof_id) {
-        PstToAstHelpers.hoist(addrofId)
+    override fun visit(addressOfIdentifier: AddressOfIdentifier) {
+        PstToAstHelpers.hoist(addressOfIdentifier)
     }
 
-    override fun visit(oprel: Oprel) {}
+    override fun visit(relationalOperator: RelationalOperator) {}
 
     override fun visit(lthan: Lthan) {}
 
     override fun visit(gthan: Gthan) {}
 
-    override fun visit(opadd: Opadd) {}
+    override fun visit(plusOrMinus: PlusOrMinus) {}
 
-    override fun visit(opmul: Opmul) {}
+    override fun visit(multiplyOrDivideOrExponentiate: MultiplyOrDivideOrExponentiate) {}
 
     override fun visit(epsilon: Epsilon) {}
 
-    override fun visit(classheader: Classheader) {
-        PstToAstHelpers.hoist(classheader)
+    override fun visit(classHeader: ClassHeader) {
+        PstToAstHelpers.hoist(classHeader)
     }
 
-    override fun visit(classid: Classid) {}
+    override fun visit(classIdentifier: ClassIdentifier) {}
 }
