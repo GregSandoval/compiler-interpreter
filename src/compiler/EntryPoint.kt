@@ -1,5 +1,6 @@
 package compiler
 
+import compiler.a5.grammar.A7Grammar
 import compiler.a5.lexer.A5Lexer
 import compiler.a5.parser.A7Parser
 import compiler.interpreter.Interpreter
@@ -22,6 +23,8 @@ object EntryPoint {
         val parseTree = A7Parser.parse(terminals)
 
         var tree = parseTree.getTree()
+
+        A7Grammar.build()
 
         // Serialize PST to image
         TreeVisualizer.toImage(tree, inputs.pstFileName)
