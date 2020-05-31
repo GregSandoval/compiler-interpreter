@@ -11,11 +11,11 @@ object EpsilonDerivation {
         Processing,
     }
 
-    fun epsilonDerivations(productions: ProductionRules): Map<NonTerminalClass, Boolean> {
+    fun findAll(productions: ProductionRules): Map<NonTerminalClass, Boolean> {
         val derivations = HashMap<NonTerminalClass, State>()
 
         for ((lhs) in productions)
-            derivesEpsilon(lhs, productions, derivations)
+            findAll(lhs, productions, derivations)
 
         val result = HashMap<NonTerminalClass, Boolean>()
         for ((nonTerminal, state) in derivations) {
@@ -25,10 +25,19 @@ object EpsilonDerivation {
                 Processing -> throw Exception("Terminal still processing: $nonTerminal")
             }
         }
+
+        println("=========== Non Terminals deriving epsilon =============")
+        println(result
+                .entries
+                .sortedWith(compareBy { it.key.simpleName })
+                .filter { it.value }
+                .map { it.key.simpleName.toString() }
+                .joinToString("\n"))
+        println("========================================================")
         return result
     }
 
-    fun derivesEpsilon(lhs: NonTerminalClass, productions: ProductionRules, derivations: MutableMap<NonTerminalClass, State>): Boolean {
+    fun findAll(lhs: NonTerminalClass, productions: ProductionRules, derivations: MutableMap<NonTerminalClass, State>): Boolean {
         val derivedEpsilon = derivations[lhs]
 
         when (derivedEpsilon) {
@@ -48,7 +57,7 @@ object EpsilonDerivation {
 
                 val nonTerminal = symbol as NonTerminal
 
-                if (derivesEpsilon(nonTerminal::class, productions, derivations))
+                if (findAll(nonTerminal::class, productions, derivations))
                     continue@nextSymbolInRHS
 
                 continue@nextRHS

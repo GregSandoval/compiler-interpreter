@@ -215,15 +215,6 @@ object A7Grammar {
         productions[MultiplyOrDivideOrExponentiate::class] = listOf(::ForwardSlash)
         productions[MultiplyOrDivideOrExponentiate::class] = listOf(::Caret)
 
-        val derivations = EpsilonDerivation.epsilonDerivations(productions)
-        println("=========== Derives Epsilon =============")
-        println(derivations
-                .entries
-                .sortedWith(compareBy { it.key.simpleName })
-                .filter { it.value }
-                .joinToString("\n")
-                { it.key.simpleName + " = " + it.value })
-        println("=========================================")
         return productions
     }
 }

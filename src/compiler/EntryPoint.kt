@@ -1,6 +1,7 @@
 package compiler
 
 import compiler.a5.grammar.A7Grammar
+import compiler.a5.grammar.EpsilonDerivation
 import compiler.a5.lexer.A5Lexer
 import compiler.a5.parser.A7Parser
 import compiler.interpreter.Interpreter
@@ -24,7 +25,9 @@ object EntryPoint {
 
         var tree = parseTree.getTree()
 
-        A7Grammar.build()
+        val productions = A7Grammar.build()
+
+        val derivations = EpsilonDerivation.findAll(productions)
 
         // Serialize PST to image
         TreeVisualizer.toImage(tree, inputs.pstFileName)
