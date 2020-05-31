@@ -11,27 +11,25 @@ object EpsilonDerivation {
         Processing,
     }
 
-    fun findAll(productions: ProductionRules): Map<NonTerminalClass, Boolean> {
+    fun findAll(productions: ProductionRules): Set<NonTerminalClass> {
         val derivations = HashMap<NonTerminalClass, State>()
 
         for ((lhs) in productions)
             findAll(lhs, productions, derivations)
 
-        val result = HashMap<NonTerminalClass, Boolean>()
-        for ((nonTerminal, state) in derivations) {
+        val result = HashSet<NonTerminalClass>()
+        loop@ for ((nonTerminal, state) in derivations) {
             when (state) {
-                True -> result[nonTerminal] = true
-                False -> result[nonTerminal] = false
+                True -> result += nonTerminal
+                False -> continue@loop
                 Processing -> throw Exception("Terminal still processing: $nonTerminal")
             }
         }
 
         println("=========== Non Terminals deriving epsilon =============")
         println(result
-                .entries
-                .sortedWith(compareBy { it.key.simpleName })
-                .filter { it.value }
-                .map { it.key.simpleName.toString() }
+                .map { it.simpleName }
+                .sortedWith(compareBy { it })
                 .joinToString("\n"))
         println("========================================================")
         return result

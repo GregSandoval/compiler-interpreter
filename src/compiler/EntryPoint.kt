@@ -4,6 +4,7 @@ import compiler.a5.grammar.A7Grammar
 import compiler.a5.grammar.EpsilonDerivation
 import compiler.a5.lexer.A5Lexer
 import compiler.a5.parser.A7Parser
+import compiler.a5.parser.FirstSet
 import compiler.interpreter.Interpreter
 import compiler.interpreter.SymbolTableBuilder
 import compiler.interpreter.TypeChecker
@@ -27,7 +28,10 @@ object EntryPoint {
 
         val productions = A7Grammar.build()
 
-        val derivations = EpsilonDerivation.findAll(productions)
+        val derivesEpsilon = EpsilonDerivation.findAll(productions)
+
+        val first = FirstSet.findAll(productions, derivesEpsilon)
+
 
         // Serialize PST to image
         TreeVisualizer.toImage(tree, inputs.pstFileName)
