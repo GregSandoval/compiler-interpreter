@@ -2,6 +2,7 @@ package compiler.a5.parser
 
 import compiler.a5.grammar.NonTerminalClass
 import compiler.a5.grammar.ProductionRules
+import compiler.parser.NodeSupplier
 import compiler.parser.Symbol.NonTerminal
 import compiler.parser.Symbol.Terminal
 import kotlin.reflect.KClass
@@ -27,6 +28,39 @@ object FirstSet {
         println("================================================")
 
         return result
+    }
+
+    fun first(
+            productionSequence: Sequence<NodeSupplier>,
+            derivesEpsilon: Set<NonTerminalClass>,
+            first: Map<NonTerminalClass, Set<TerminalClass>>
+    ): Set<TerminalClass> {
+        val subsequenceFirst = HashSet<TerminalClass>()
+
+        if (productionSequence.none()) {
+            return subsequenceFirst
+        }
+
+        for (symbolFn in productionSequence) {
+            val symbol = symbolFn()
+
+            if (symbol is Terminal) {
+                subsequenceFirst.add((symbol as Terminal)::class)
+                break
+            }
+
+            val nonTerminal = symbol as NonTerminal
+
+            val nonTerminalFirst = first[nonTerminal::class]
+
+            if (nonTerminalFirst !== null)
+                subsequenceFirst.addAll(nonTerminalFirst)
+
+            if (nonTerminal::class !in derivesEpsilon) {
+                break
+            }
+        }
+        return subsequenceFirst
     }
 
     fun findAll(
