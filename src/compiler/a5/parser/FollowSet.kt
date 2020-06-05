@@ -24,6 +24,13 @@ object FollowSet {
             result[lhs] = lhsFollow
         }
 
+        println("================ Follow Set =====================")
+        println(result
+                .map { "${it.key.simpleName}=${it.value.map { clazz -> "${clazz.simpleName}" }.sorted()}" }
+                .sorted()
+                .joinToString("\n")
+        )
+        println("=================================================")
         return result
     }
 

@@ -35,14 +35,6 @@ object EntryPoint {
 
         val follow = FollowSet.findAll(productions, derivesEpsilon, first)
 
-        println("================ Follow Set =====================")
-        println(follow
-                .map { "${it.key.simpleName}=${it.value.map { clazz -> "${clazz.simpleName}" }.sorted()}" }
-                .sorted()
-                .joinToString("\n")
-        )
-        println("=================================================")
-
         // Serialize PST to image
         TreeVisualizer.toImage(tree, inputs.pstFileName)
 
