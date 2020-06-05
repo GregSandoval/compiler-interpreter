@@ -26,7 +26,7 @@ object FollowSet {
 
         println("================ Follow Set =====================")
         println(result
-                .map { "${it.key.simpleName}=${it.value.map { clazz -> "${clazz.simpleName}" }.sorted()}" }
+                .map { "${it.key.simpleName}=${it.value.map { clazz -> clazz.simpleName ?: "No Class Name" }.sorted()}" }
                 .sorted()
                 .joinToString("\n")
         )
