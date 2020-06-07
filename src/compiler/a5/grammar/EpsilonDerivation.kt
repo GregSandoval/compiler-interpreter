@@ -13,8 +13,12 @@ object EpsilonDerivation {
 
     fun findAll(productions: ProductionRules): Set<NonTerminalClass> {
         val derivations = HashMap<NonTerminalClass, State>()
+        val lhss = HashSet<NonTerminalClass>()
 
-        for ((lhs) in productions)
+        for((lhs) in productions.getProductions())
+            lhss.add(lhs)
+
+        for (lhs in lhss)
             findAll(lhs, productions, derivations)
 
         val result = HashSet<NonTerminalClass>()

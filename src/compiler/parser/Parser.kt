@@ -69,7 +69,7 @@ class Parser(
         val token = tokens.peek()
         val rhs = this.llTable.getRHS(top, token::class)
 
-        if (rhs == null) {
+        if (rhs === null) {
             onPredictionNotFoundError(top, token)
             throw PredictiveParserException(top, token, this.llTable)
         }

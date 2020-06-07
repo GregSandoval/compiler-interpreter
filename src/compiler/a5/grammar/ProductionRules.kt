@@ -1,9 +1,8 @@
 package compiler.a5.grammar
 
 import compiler.parser.NodeSupplier
-import compiler.parser.Symbol
 import compiler.parser.Symbol.NonTerminal
-import kotlin.collections.MutableMap.MutableEntry
+import compiler.parser.Symbol.Terminal
 import kotlin.reflect.KClass
 
 typealias NonTerminalClass = KClass<out NonTerminal>
@@ -11,22 +10,28 @@ typealias ProductionRHS = List<NodeSupplier>
 typealias ProductionRHSs = MutableList<ProductionRHS>
 typealias Productions = MutableMap<NonTerminalClass, ProductionRHSs>
 
-class ProductionRules : Iterable<MutableEntry<NonTerminalClass, ProductionRHSs>> {
-    private val productions: Productions = HashMap()
-    private val reverseProductions: MutableMap<KClass<out NonTerminal>, MutableSet<KClass<out NonTerminal>>> = HashMap()
+class ProductionRules {
+    private val reverseProductions: MutableMap<KClass<out NonTerminal>, MutableSet<KClass<out NonTerminal>>>
+    private val productions: Productions
+
+    init {
+        this.reverseProductions = HashMap()
+        this.productions = HashMap()
+    }
 
     operator fun <NT : NonTerminal> set(lhs: KClass<NT>, rhs: List<NodeSupplier>) {
         var nonTerminalProductions = this.productions[lhs]
 
-        if (nonTerminalProductions == null) {
+        if (nonTerminalProductions === null) {
             nonTerminalProductions = ArrayList()
             this.productions[lhs] = nonTerminalProductions
         }
 
+        nonTerminalProductions.add(rhs)
         for (symbolFn in rhs) {
             val symbol = symbolFn()
 
-            if (symbol is Symbol.Terminal) {
+            if (symbol is Terminal) {
                 continue
             }
 
@@ -40,18 +45,17 @@ class ProductionRules : Iterable<MutableEntry<NonTerminalClass, ProductionRHSs>>
 
             reverseLLTable.add(lhs)
         }
-        nonTerminalProductions.add(rhs)
     }
 
     operator fun <NT : NonTerminal> get(nonTerminal: KClass<NT>): ProductionRHSs {
         var rhs = this.productions[nonTerminal]
 
-        if (rhs == null) {
-            rhs = mutableListOf()
+        if (rhs === null) {
+            rhs = ArrayList()
             this.productions[nonTerminal] = rhs
         }
 
-        return rhs
+        return ArrayList(rhs)
     }
 
     fun getLHS(nonTerminal: NonTerminalClass): Set<NonTerminalClass> {
@@ -62,11 +66,11 @@ class ProductionRules : Iterable<MutableEntry<NonTerminalClass, ProductionRHSs>>
             reverseProductions[nonTerminal] = lhsSet
         }
 
-        return lhsSet
+        return HashSet(lhsSet)
     }
 
-    override fun iterator(): Iterator<MutableEntry<NonTerminalClass, ProductionRHSs>> {
-        return productions.iterator()
+    fun getProductions(): Productions {
+        return HashMap(productions)
     }
 
 }

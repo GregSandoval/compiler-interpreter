@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 object LeftRecursionChecker {
 
     fun checkForLeftRecursion(productions: ProductionRules): Boolean {
-        for ((lhs) in productions) {
+        for ((lhs) in productions.getProductions()) {
             if (checkForLeftRecursion(lhs, productions)) {
                 return true
             }

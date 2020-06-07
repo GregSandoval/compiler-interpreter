@@ -15,7 +15,7 @@ object FirstSet {
         val visited = HashSet<NonTerminalClass>()
         val result = HashMap<NonTerminalClass, MutableSet<TerminalClass>>()
 
-        for ((lhs) in productions) {
+        for ((lhs) in productions.getProductions()) {
             findAll(lhs, productions, derivesEpsilon, result, visited)
         }
 
@@ -31,7 +31,7 @@ object FirstSet {
     }
 
     fun first(
-            productionSequence: Sequence<NodeSupplier>,
+            productionSequence: Iterable<NodeSupplier>,
             derivesEpsilon: Set<NonTerminalClass>,
             first: Map<NonTerminalClass, Set<TerminalClass>>
     ): Set<TerminalClass> {
@@ -78,7 +78,7 @@ object FirstSet {
         }
 
         if (lhs in visited)
-            return firstOfLHS
+            return HashSet(firstOfLHS)
 
         visited.add(lhs)
         nextProduction@ for (rhs in productions[lhs]) {
@@ -102,7 +102,7 @@ object FirstSet {
             }
         }
 
-        return firstOfLHS
+        return HashSet(firstOfLHS)
     }
 
 

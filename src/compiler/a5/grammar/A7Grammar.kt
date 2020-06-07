@@ -20,6 +20,7 @@ object A7Grammar {
         productions[BasicBlock::class] = listOf(::LeftBrace, ::VariableGroup, ::Statements, ::RightBrace)
 
         productions[VariableGroup::class] = listOf(::VarKeyword, ::ParenthesizedVariabledList)
+        productions[VariableGroup::class] = listOf()
 
         productions[ParenthesizedVariabledList::class] = listOf(::LeftParen, ::VariableList, ::RightParen)
 
@@ -27,7 +28,7 @@ object A7Grammar {
         productions[VariableList::class] = listOf()
 
         productions[VariableItem::class] = listOf(::VariableDecleration, ::VariableItemSuffix)
-        productions[VariableItem::class] = listOf(::ClassDefinition)
+        // productions[VariableItem::class] = listOf(::ClassDefinition)
 
         productions[VariableItemSuffix::class] = listOf(::Equal, ::VariableInitializer)
         productions[VariableItemSuffix::class] = listOf()
@@ -35,13 +36,11 @@ object A7Grammar {
         productions[VariableDecleration::class] = listOf(::Simplekind, ::VariableSpec)
 
         productions[Simplekind::class] = listOf(::BaseKind)
-        productions[Simplekind::class] = listOf(::ClassIdentifier)
+        //productions[Simplekind::class] = listOf(::ClassIdentifier)
 
         productions[BaseKind::class] = listOf(::IntegerKeyword)
         productions[BaseKind::class] = listOf(::FloatKeyword)
         productions[BaseKind::class] = listOf(::StringKeyword)
-
-        productions[ClassIdentifier::class] = listOf(::IdentifierTerminal)
 
         productions[VariableSpec::class] = listOf(::VariableIdentifier, ::ArraySpec)
         productions[VariableSpec::class] = listOf(::DereferencedIdentifier)
@@ -68,36 +67,37 @@ object A7Grammar {
         productions[MoreExpressions::class] = listOf(::Comma, ::ExpressionList)
         productions[MoreExpressions::class] = listOf()
 
-        productions[ClassDefinition::class] = listOf(::ClassHeader, ::ClassDefinitionSuffix)
 
-        productions[ClassDefinitionSuffix::class] = listOf(::BracedClassItems)
-        productions[ClassDefinitionSuffix::class] = listOf(::IfKeyword, ::BracedClassItems)
+      //productions[ClassIdentifier::class] = listOf(::IdentifierTerminal)
+      //productions[ClassDefinition::class] = listOf(::ClassHeader, ::ClassDefinitionSuffix)
 
-        productions[BracedClassItems::class] = listOf(::LeftBrace, ::ClassItems, ::RightBrace)
+      //productions[ClassDefinitionSuffix::class] = listOf(::BracedClassItems)
+      //productions[ClassDefinitionSuffix::class] = listOf(::IfKeyword, ::BracedClassItems)
 
-        productions[ClassHeader::class] = listOf(::ClassKeyword, ::ClassIdentifier, ::ClassParent, ::Interfaces)
+      //productions[BracedClassItems::class] = listOf(::LeftBrace, ::ClassItems, ::RightBrace)
 
-        productions[ClassParent::class] = listOf(::Colon, ::ClassIdentifier)
-        productions[ClassParent::class] = listOf()
+      //productions[ClassHeader::class] = listOf(::ClassKeyword, ::ClassIdentifier, ::ClassParent, ::Interfaces)
 
-        productions[ClassItems::class] = listOf(::ClassGroup, ::ClassItems)
-        productions[ClassItems::class] = listOf()
+      //productions[ClassParent::class] = listOf(::Colon, ::ClassIdentifier)
+      //productions[ClassParent::class] = listOf()
 
-        productions[ClassGroup::class] = listOf(::ClassVisibility)
-        productions[ClassGroup::class] = listOf(::VariableGroup)
-        productions[ClassGroup::class] = listOf(::MethodDeclerations)
+      //productions[ClassItems::class] = listOf(::ClassGroup, ::ClassItems)
+      //productions[ClassItems::class] = listOf()
 
-        productions[ClassVisibility::class] = listOf(::Colon, ::IdentifierTerminal)
+      //productions[ClassGroup::class] = listOf(::ClassVisibility)
+      //productions[ClassGroup::class] = listOf(::VariableGroup)
+      //productions[ClassGroup::class] = listOf(::MethodDeclerations)
 
-        productions[Interfaces::class] = listOf(::Plus, ::ClassIdentifier, ::Interfaces)
-        productions[Interfaces::class] = listOf()
+      //productions[ClassVisibility::class] = listOf(::Colon, ::IdentifierTerminal)
 
-        productions[MethodDeclerations::class] = listOf(::MethodHeader, ::MethodDeclerations)
-        productions[MethodDeclerations::class] = listOf()
+      //productions[Interfaces::class] = listOf(::Plus, ::ClassIdentifier, ::Interfaces)
+      //productions[Interfaces::class] = listOf()
 
-        productions[MethodHeader::class] = listOf(::FunctionKeyword, ::MethodIdentifier, ::ParenthesizedParameterList, ::ReturnKind)
+      //productions[MethodDeclerations::class] = listOf(::MethodHeader)
 
-        productions[MethodIdentifier::class] = listOf(::ClassIdentifier, ::Colon, ::FunctionIdentifier)
+      //productions[MethodHeader::class] = listOf(::FunctionKeyword, ::MethodIdentifier, ::ParenthesizedParameterList, ::ReturnKind)
+
+      //productions[MethodIdentifier::class] = listOf(::ClassIdentifier, ::Colon, ::FunctionIdentifier)
 
         productions[FunctionDefinitions::class] = listOf(::FunctionDefinition, ::FunctionDefinitions)
         productions[FunctionDefinitions::class] = listOf()

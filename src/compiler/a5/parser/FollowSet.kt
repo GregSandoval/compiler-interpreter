@@ -9,29 +9,33 @@ object FollowSet {
             derivesEpsilon: Set<NonTerminalClass>,
             first: Map<NonTerminalClass, Set<TerminalClass>>
     ): Map<NonTerminalClass, Set<TerminalClass>> {
-        val result = HashMap<NonTerminalClass, MutableSet<TerminalClass>>()
+        val followSets = HashMap<NonTerminalClass, MutableSet<TerminalClass>>()
         val visited = HashSet<NonTerminalClass>()
+        val lhss = HashSet<NonTerminalClass>()
 
-        for ((lhs) in productionsByLHS) {
+        for((lhs) in productionsByLHS.getProductions())
+            lhss.add(lhs)
+
+        for (lhs in lhss) {
             val lhsFollow = findAll(
                     lhs,
                     productionsByLHS,
                     first,
                     derivesEpsilon,
-                    result,
+                    followSets,
                     visited
             )
-            result[lhs] = lhsFollow
+            followSets[lhs] = lhsFollow
         }
 
         println("================ Follow Set =====================")
-        println(result
+        println(followSets
                 .map { "${it.key.simpleName}=${it.value.map { clazz -> clazz.simpleName ?: "No Class Name" }.sorted()}" }
                 .sorted()
                 .joinToString("\n")
         )
         println("=================================================")
-        return result
+        return followSets
     }
 
     private fun findAll(
@@ -39,26 +43,28 @@ object FollowSet {
             productions: ProductionRules,
             first: Map<NonTerminalClass, Set<TerminalClass>>,
             derivesEpsilon: Set<NonTerminalClass>,
-            follows: HashMap<NonTerminalClass, MutableSet<TerminalClass>>,
+            followSets: HashMap<NonTerminalClass, MutableSet<TerminalClass>>,
             visited: MutableSet<NonTerminalClass>
 
     ): MutableSet<TerminalClass> {
-        var follow = follows[lhs]
+        var follow = followSets[lhs]
 
         if (follow === null) {
             follow = HashSet()
-            follows[lhs] = follow
+            followSets[lhs] = follow
         }
 
         if (lhs in visited) {
-            return follow
+            return HashSet(follow)
         }
 
         visited += lhs
         for (reverseLHS in productions.getLHS(lhs)) {
             for (reverseRHS in productions[reverseLHS]) {
+                if (reverseRHS.none { it()::class === lhs })
+                    continue
+
                 val nonTerminalSubSequence = reverseRHS
-                        .asSequence()
                         .dropWhile { it()::class !== lhs }
                         .drop(1)
 
@@ -74,13 +80,13 @@ object FollowSet {
                             productions,
                             first,
                             derivesEpsilon,
-                            follows,
+                            followSets,
                             visited
                     ))
                 }
             }
         }
-        return follow
+        return HashSet(follow)
     }
 
 }

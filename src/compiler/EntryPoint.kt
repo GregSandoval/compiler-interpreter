@@ -11,6 +11,7 @@ import compiler.interpreter.SymbolTableBuilder
 import compiler.interpreter.TypeChecker
 import compiler.parser.ASTValidator
 import compiler.parser.AbstractSyntaxTreeBuilder
+import compiler.parser.LLTable
 import compiler.parser.Symbol.Terminal
 import visualization.TreeVisualizer
 
@@ -26,14 +27,6 @@ object EntryPoint {
         val parseTree = A7Parser.parse(terminals)
 
         var tree = parseTree.getTree()
-
-        val productions = A7Grammar.build()
-
-        val derivesEpsilon = EpsilonDerivation.findAll(productions)
-
-        val first = FirstSet.findAll(productions, derivesEpsilon)
-
-        val follow = FollowSet.findAll(productions, derivesEpsilon, first)
 
         // Serialize PST to image
         TreeVisualizer.toImage(tree, inputs.pstFileName)
