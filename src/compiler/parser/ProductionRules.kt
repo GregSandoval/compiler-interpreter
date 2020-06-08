@@ -1,6 +1,5 @@
-package compiler.a5.grammar
+package compiler.parser
 
-import compiler.parser.NodeSupplier
 import compiler.parser.Symbol.NonTerminal
 import compiler.parser.Symbol.Terminal
 import kotlin.reflect.KClass
@@ -11,13 +10,8 @@ typealias ProductionRHSs = MutableList<ProductionRHS>
 typealias Productions = MutableMap<NonTerminalClass, ProductionRHSs>
 
 class ProductionRules {
-    private val reverseProductions: MutableMap<KClass<out NonTerminal>, MutableSet<KClass<out NonTerminal>>>
-    private val productions: Productions
-
-    init {
-        this.reverseProductions = HashMap()
-        this.productions = HashMap()
-    }
+    private val productions: Productions = HashMap()
+    private val reverseProductions: MutableMap<NonTerminalClass, MutableSet<NonTerminalClass>> = HashMap()
 
     operator fun <NT : NonTerminal> set(lhs: KClass<NT>, rhs: List<NodeSupplier>) {
         var nonTerminalProductions = this.productions[lhs]

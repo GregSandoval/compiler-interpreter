@@ -1,5 +1,6 @@
 package compiler.a5.grammar
 
+import compiler.parser.ProductionRules
 import compiler.parser.Symbol.NonTerminal.*
 import compiler.parser.Symbol.Terminal.Keyword.*
 import compiler.parser.Symbol.Terminal.Keyword.Type.*

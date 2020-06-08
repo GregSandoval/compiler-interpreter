@@ -1,5 +1,6 @@
 package compiler.a5.grammar
 
+import compiler.parser.NonTerminalVisitor
 import compiler.parser.PstToAstHelpers
 import compiler.parser.Symbol.NonTerminal.*
 import compiler.parser.Symbol.Terminal.Keyword.VarKeyword

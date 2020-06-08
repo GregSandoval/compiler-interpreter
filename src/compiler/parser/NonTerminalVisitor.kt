@@ -1,4 +1,4 @@
-package compiler.a5.grammar
+package compiler.parser
 
 import compiler.parser.Symbol.NonTerminal
 import compiler.parser.Symbol.NonTerminal.*

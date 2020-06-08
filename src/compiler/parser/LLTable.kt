@@ -1,11 +1,8 @@
 package compiler.parser
 
-import compiler.a5.grammar.NonTerminalClass
-import compiler.a5.grammar.ProductionRules
 import compiler.a5.parser.FirstSet
 import compiler.a5.parser.TerminalClass
 import compiler.parser.Symbol.NonTerminal
-import java.util.stream.Collectors
 import kotlin.collections.set
 import kotlin.reflect.KClass
 
@@ -54,31 +51,6 @@ class LLTable() {
         }
     }
 
-
-    fun <T : NonTerminal> on(nonTerminal: KClass<out T>, vararg first: TokenClass): ProductionBuilder<T> {
-        return ProductionBuilder(nonTerminal, *first)
-    }
-
-    inner class ProductionBuilder<out T : NonTerminal>(private val nonTerminal: KClass<T>, private vararg val tokenClass: TokenClass) {
-        fun useRHS(rest: List<NodeSupplier>) {
-            for (token in tokenClass) {
-                var table = llTable[nonTerminal]
-
-                if (table === null) {
-                    table = HashMap()
-                    llTable[nonTerminal] = table
-                }
-
-                if (token in table) {
-                    throw RuntimeException("Double stuffed LL Table: Rule: " + nonTerminal.simpleName + " Token: " + token.simpleName)
-                }
-
-                table[token] = rest
-            }
-        }
-
-    }
-
     fun getRHS(nonTerminal: NonTerminal): Set<TokenClass> {
         var table = llTable[nonTerminal::class]
 
@@ -91,12 +63,16 @@ class LLTable() {
     }
 
     fun getRHS(nonTerminal: NonTerminal, token: TokenClass): List<Symbol>? {
-        val table = llTable.getOrDefault(nonTerminal::class, emptyMap<TokenClass, List<NodeSupplier>>())
+        var table = llTable[nonTerminal::class]
+
+        if (table === null) {
+            table = HashMap()
+            llTable[nonTerminal::class] = table
+        }
+
         val simpleRules = table[token] ?: return null
 
         return simpleRules
-                .stream()
                 .map { it() }
-                .collect(Collectors.toUnmodifiableList())
     }
 }

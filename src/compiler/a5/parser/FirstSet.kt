@@ -1,7 +1,7 @@
 package compiler.a5.parser
 
-import compiler.a5.grammar.NonTerminalClass
-import compiler.a5.grammar.ProductionRules
+import compiler.parser.NonTerminalClass
+import compiler.parser.ProductionRules
 import compiler.parser.NodeSupplier
 import compiler.parser.Symbol.NonTerminal
 import compiler.parser.Symbol.Terminal
@@ -14,8 +14,12 @@ object FirstSet {
     fun findAll(productions: ProductionRules, derivesEpsilon: Set<NonTerminalClass>): Map<NonTerminalClass, Set<TerminalClass>> {
         val visited = HashSet<NonTerminalClass>()
         val result = HashMap<NonTerminalClass, MutableSet<TerminalClass>>()
+        val lhss = HashSet<NonTerminalClass>()
 
-        for ((lhs) in productions.getProductions()) {
+        for((lhs) in productions.getProductions())
+            lhss.add(lhs)
+
+        for (lhs in lhss) {
             findAll(lhs, productions, derivesEpsilon, result, visited)
         }
 

@@ -1,17 +1,12 @@
 package compiler
 
-import compiler.a5.grammar.A7Grammar
-import compiler.a5.grammar.EpsilonDerivation
 import compiler.a5.lexer.A5Lexer
 import compiler.a5.parser.A7Parser
-import compiler.a5.parser.FirstSet
-import compiler.a5.parser.FollowSet
 import compiler.interpreter.Interpreter
 import compiler.interpreter.SymbolTableBuilder
 import compiler.interpreter.TypeChecker
 import compiler.parser.ASTValidator
 import compiler.parser.AbstractSyntaxTreeBuilder
-import compiler.parser.LLTable
 import compiler.parser.Symbol.Terminal
 import visualization.TreeVisualizer
 

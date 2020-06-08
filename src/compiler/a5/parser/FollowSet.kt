@@ -1,7 +1,7 @@
 package compiler.a5.parser
 
-import compiler.a5.grammar.NonTerminalClass
-import compiler.a5.grammar.ProductionRules
+import compiler.parser.NonTerminalClass
+import compiler.parser.ProductionRules
 
 object FollowSet {
     fun findAll(
@@ -13,11 +13,11 @@ object FollowSet {
         val visited = HashSet<NonTerminalClass>()
         val lhss = HashSet<NonTerminalClass>()
 
-        for((lhs) in productionsByLHS.getProductions())
+        for ((lhs) in productionsByLHS.getProductions())
             lhss.add(lhs)
 
         for (lhs in lhss) {
-            val lhsFollow = findAll(
+            followSets[lhs] = findAll(
                     lhs,
                     productionsByLHS,
                     first,
@@ -25,7 +25,6 @@ object FollowSet {
                     followSets,
                     visited
             )
-            followSets[lhs] = lhsFollow
         }
 
         println("================ Follow Set =====================")

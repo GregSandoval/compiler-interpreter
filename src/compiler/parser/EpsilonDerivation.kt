@@ -1,6 +1,6 @@
-package compiler.a5.grammar
+package compiler.parser
 
-import compiler.a5.grammar.EpsilonDerivation.State.*
+import compiler.parser.EpsilonDerivation.State.*
 import compiler.parser.Symbol.NonTerminal
 import compiler.parser.Symbol.Terminal
 
