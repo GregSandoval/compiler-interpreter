@@ -1,7 +1,4 @@
-package compiler.a5.parser
-
-import compiler.parser.NonTerminalClass
-import compiler.parser.ProductionRules
+package compiler.parser
 
 object FollowSet {
     fun findAll(

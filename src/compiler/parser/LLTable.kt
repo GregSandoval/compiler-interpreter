@@ -1,7 +1,5 @@
 package compiler.parser
 
-import compiler.a5.parser.FirstSet
-import compiler.a5.parser.TerminalClass
 import compiler.parser.Symbol.NonTerminal
 import kotlin.collections.set
 import kotlin.reflect.KClass

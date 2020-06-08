@@ -9,11 +9,7 @@ typealias EdgeFunction = (Char) -> Optional<LexicalNode>
 typealias Transitions = MutableList<EdgeFunction>
 typealias DFATable = MutableMap<LexicalNode, Transitions>
 
-abstract class DFA(
-        val start: LexicalNode,
-        private val dfa: DFATable = HashMap()
-) {
-
+abstract class DFA(val start: LexicalNode, private val dfa: DFATable = HashMap()) {
 
     operator fun get(start: LexicalNode, character: Char): LexicalNode {
         val transitions = this.dfa.getOrElse(start, ::mutableListOf)

@@ -1,10 +1,7 @@
 package compiler.a5.parser
 
 import compiler.a5.grammar.A7Grammar
-import compiler.parser.EpsilonDerivation
-import compiler.parser.LLTable
-import compiler.parser.ParseTree
-import compiler.parser.ParseTreeBuilder
+import compiler.parser.*
 import compiler.parser.Symbol.NonTerminal.Program
 import compiler.parser.Symbol.Terminal
 
