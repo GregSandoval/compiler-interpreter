@@ -1,5 +1,9 @@
 package compiler.interpreter
 
+import compiler.interpreter.symboltable.IdentifierUsedBeforeInitializationException
+import compiler.interpreter.symboltable.OperatorUsageUndefined
+import compiler.interpreter.symboltable.SymbolTable
+import compiler.interpreter.symboltable.undefined
 import compiler.parser.Symbol.Terminal
 import compiler.parser.Symbol.Terminal.Keyword
 import compiler.parser.Symbol.Terminal.Keyword.*

@@ -3,6 +3,7 @@ package compiler.parser
 import compiler.parser.Symbol.NonTerminal
 import compiler.parser.Symbol.Terminal
 import compiler.parser.Symbol.Terminal.Ignorable.EOFTerminal
+import compiler.parser.lltable.LLTable
 
 class ParseTree(startSymbol: NonTerminal, llTable: LLTable, terminals: List<Terminal>) {
     private val tree: TreeNode = NonTerminal.ParseTreeSentinel()

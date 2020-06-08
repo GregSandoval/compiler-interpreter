@@ -1,8 +1,9 @@
 package compiler.a5.lexicon
 
-import compiler.lexer.LexicalNode.FinalState.FinalStateNoArg.*
-import compiler.lexer.LexicalNode.FinalState.FinalStateSingleArg.*
-import compiler.lexer.LexicalNode.NonFinalState.*
+import compiler.dfa.DFA
+import compiler.dfa.LexicalNode.FinalState.FinalStateNoArg.*
+import compiler.dfa.LexicalNode.FinalState.FinalStateSingleArg.*
+import compiler.dfa.LexicalNode.NonFinalState.*
 
 /**
  * This file creates the DFA nodes and edges

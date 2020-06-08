@@ -2,6 +2,7 @@ package compiler.parser
 
 import compiler.parser.Symbol.NonTerminal
 import compiler.parser.Symbol.Terminal
+import compiler.parser.lltable.LLTable
 
 class ParseTreeBuilder {
     private lateinit var startSymbol: NonTerminal

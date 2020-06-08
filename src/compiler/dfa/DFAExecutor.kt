@@ -1,7 +1,6 @@
-package compiler.lexer
+package compiler.dfa
 
-import compiler.a5.lexicon.DFA
-import compiler.lexer.LexicalNode.ERROR
+import compiler.dfa.LexicalNode.ERROR
 import compiler.utils.TextCursor
 
 typealias TransitionListener = (LexicalNode, Char, LexicalNode) -> Unit

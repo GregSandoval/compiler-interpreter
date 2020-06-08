@@ -1,4 +1,4 @@
-package compiler.interpreter
+package compiler.interpreter.symboltable
 
 import compiler.parser.Symbol.Terminal
 import compiler.parser.Symbol.Terminal.Keyword.Type

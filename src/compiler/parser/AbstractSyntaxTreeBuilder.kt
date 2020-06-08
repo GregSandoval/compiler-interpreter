@@ -1,7 +1,7 @@
 package compiler.parser
 
-import compiler.a5.grammar.PstToAstNonTerminalVisitor
-import compiler.a5.grammar.PstToAstTokenVisitor
+import compiler.a5.pst.PstToAstNonTerminalVisitor
+import compiler.a5.pst.PstToAstTokenVisitor
 import compiler.parser.Symbol.*
 
 

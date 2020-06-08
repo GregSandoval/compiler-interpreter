@@ -1,7 +1,7 @@
-package compiler.a5.lexicon
+package compiler.dfa
 
-import compiler.lexer.LexicalNode
-import compiler.lexer.LexicalNode.ERROR
+import compiler.a5.lexicon.Predicate
+import compiler.dfa.LexicalNode.ERROR
 import java.util.*
 
 typealias EdgeFunction = (Char) -> Optional<LexicalNode>

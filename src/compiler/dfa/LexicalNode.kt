@@ -1,4 +1,4 @@
-package compiler.lexer
+package compiler.dfa
 
 import compiler.lexer.token.LineInfo
 import compiler.parser.Symbol.Terminal

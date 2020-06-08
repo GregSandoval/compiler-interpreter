@@ -1,6 +1,7 @@
 package compiler.parser
 
 import compiler.parser.Symbol.NonTerminal
+import compiler.parser.lltable.LLTable
 
 class ParserBuilder {
     private var nonTerminalReplacedListener: NonTerminalReplacedListener = { _, _, _ -> }

@@ -1,4 +1,9 @@
-package compiler.parser
+package compiler.parser.follow
+
+import compiler.parser.first.FirstSet
+import compiler.parser.NonTerminalClass
+import compiler.parser.ProductionRules
+import compiler.parser.first.TerminalClass
 
 object FollowSet {
     fun findAll(

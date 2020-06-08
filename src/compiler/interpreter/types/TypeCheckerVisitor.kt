@@ -1,5 +1,6 @@
-package compiler.interpreter
+package compiler.interpreter.types
 
+import compiler.interpreter.symboltable.SymbolTable
 import compiler.parser.Symbol.Terminal
 import compiler.parser.Symbol.Terminal.Keyword.*
 import compiler.parser.Symbol.Terminal.Keyword.Type.*

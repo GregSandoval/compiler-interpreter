@@ -1,5 +1,8 @@
-package compiler.parser
+package compiler.parser.first
 
+import compiler.parser.NodeSupplier
+import compiler.parser.NonTerminalClass
+import compiler.parser.ProductionRules
 import compiler.parser.Symbol.NonTerminal
 import compiler.parser.Symbol.Terminal
 import kotlin.reflect.KClass

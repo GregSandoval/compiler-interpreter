@@ -1,6 +1,9 @@
 package compiler.lexer
 
-import compiler.a5.lexicon.DFA
+import compiler.dfa.DFA
+import compiler.dfa.FinalStateListener
+import compiler.dfa.NonFinalStateListener
+import compiler.dfa.TransitionListener
 import compiler.parser.andThen
 
 class LexerBuilder {

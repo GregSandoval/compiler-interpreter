@@ -1,4 +1,4 @@
-package compiler.interpreter
+package compiler.interpreter.symboltable
 
 import compiler.parser.Symbol.Terminal.TypedTerminal.IdentifierTerminal
 import compiler.parser.UserException

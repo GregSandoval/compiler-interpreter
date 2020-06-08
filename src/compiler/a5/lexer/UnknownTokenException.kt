@@ -1,4 +1,4 @@
-package compiler.lexer
+package compiler.a5.lexer
 
 import compiler.parser.UserException
 import compiler.utils.TextCursor

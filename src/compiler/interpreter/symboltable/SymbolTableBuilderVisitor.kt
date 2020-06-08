@@ -1,5 +1,7 @@
-package compiler.interpreter
+package compiler.interpreter.symboltable
 
+import compiler.interpreter.Undefined
+import compiler.interpreter.types.UnknownDataTypeException
 import compiler.parser.Symbol.Terminal
 import compiler.parser.Symbol.Terminal.Keyword.Type
 import compiler.parser.Symbol.Terminal.Keyword.Type.*

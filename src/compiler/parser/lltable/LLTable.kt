@@ -1,6 +1,9 @@
-package compiler.parser
+package compiler.parser.lltable
 
+import compiler.parser.*
 import compiler.parser.Symbol.NonTerminal
+import compiler.parser.first.FirstSet
+import compiler.parser.first.TerminalClass
 import kotlin.collections.set
 import kotlin.reflect.KClass
 

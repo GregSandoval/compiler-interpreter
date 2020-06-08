@@ -2,6 +2,7 @@ package compiler.parser
 
 import compiler.parser.Symbol.NonTerminal
 import compiler.parser.Symbol.Terminal
+import compiler.parser.lltable.LLTable
 import java.util.stream.Collectors
 
 class PredictiveParserException(nonTerminalNode: NonTerminal, terminal: Terminal, llTable: LLTable) :

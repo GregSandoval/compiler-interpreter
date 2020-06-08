@@ -1,4 +1,4 @@
-package compiler.a5.grammar
+package compiler.a5.pst
 
 import compiler.parser.NonTerminalVisitor
 import compiler.parser.PstToAstHelpers

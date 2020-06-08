@@ -1,5 +1,6 @@
 package compiler.interpreter
 
+import compiler.interpreter.symboltable.SymbolTable
 import compiler.parser.Symbol.Terminal
 
 object Interpreter {

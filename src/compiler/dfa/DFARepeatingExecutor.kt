@@ -1,9 +1,8 @@
-package compiler.lexer
+package compiler.dfa
 
-import compiler.a5.lexicon.DFA
-import compiler.lexer.LexicalNode.FinalState
-import compiler.lexer.LexicalNode.NonFinalState
-import compiler.lexer.LexicalNode.NonFinalState.START
+import compiler.dfa.LexicalNode.FinalState
+import compiler.dfa.LexicalNode.NonFinalState
+import compiler.dfa.LexicalNode.NonFinalState.START
 import compiler.utils.TextCursor
 
 typealias FinalStateListener = (FinalState) -> Unit
