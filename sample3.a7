@@ -1,0 +1,22 @@
+prog
+
+main {
+    var (
+        int curr  = 1;
+        int total = 100;
+    )
+
+    while(curr <= total){
+        if(curr % 15 == 0){
+            print("FizzBuzz", "\n");
+        } elseif(curr % 5 == 0){
+            print("Buzz", "\n");
+        } elseif(curr % 3 == 0){
+            print("Fizz", "\n");
+        } else{
+            print(curr, "\n");
+        };
+
+        curr = curr + 1;
+    };
+}
