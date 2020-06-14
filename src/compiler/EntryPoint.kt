@@ -18,9 +18,13 @@ object EntryPoint {
         val inputs = CommandLine.processInputs(args)
         inputName = inputs.sourceFileName
 
+        // Lex the source material
         val terminals = A5Lexer.lex(inputs.sourceText)
+
+        // Build parse tree from terminals
         val parseTree = A7Parser.parse(terminals)
 
+        // Get root of the parse tree
         var tree = parseTree.getTree()
 
         // Serialize PST to image

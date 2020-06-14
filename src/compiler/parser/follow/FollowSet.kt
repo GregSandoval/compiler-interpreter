@@ -22,12 +22,8 @@ object FollowSet {
     ): Map<NonTerminalClass, Set<TerminalClass>> {
         val followSets = HashMap<NonTerminalClass, MutableSet<TerminalClass>>()
         val visited = HashMap<NonTerminalClass, VisitedState>()
-        val lhss = HashSet<NonTerminalClass>()
 
-        for ((lhs) in productionsByLHS.getProductions())
-            lhss.add(lhs)
-
-        for (lhs in lhss) {
+        for ((lhs) in productionsByLHS.getProductions()) {
 
             if (visited[lhs] === Processing)
                 visited[lhs] = Unvisited
@@ -104,7 +100,7 @@ object FollowSet {
                 }
             }
         }
-        return HashSet(follow)
+        return follow
     }
 
 }

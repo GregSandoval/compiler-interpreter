@@ -60,7 +60,7 @@ class LLTable() {
             llTable[nonTerminal::class] = table
         }
 
-        return HashSet(table.keys)
+        return table.keys
     }
 
     fun getRHS(nonTerminal: NonTerminal, token: TokenClass): List<Symbol>? {
