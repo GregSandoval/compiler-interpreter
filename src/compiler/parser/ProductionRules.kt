@@ -49,7 +49,7 @@ class ProductionRules {
             this.productions[nonTerminal] = rhs
         }
 
-        return ArrayList(rhs)
+        return rhs
     }
 
     fun getLHS(nonTerminal: NonTerminalClass): Set<NonTerminalClass> {
@@ -60,11 +60,11 @@ class ProductionRules {
             reverseProductions[nonTerminal] = lhsSet
         }
 
-        return HashSet(lhsSet)
+        return lhsSet
     }
 
     fun getProductions(): Productions {
-        return HashMap(productions)
+        return productions
     }
 
 }
