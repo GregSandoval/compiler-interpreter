@@ -1,8 +1,8 @@
 package compiler.a5.lexer
 
 import compiler.a5.lexicon.A5LexiconDFA
-import compiler.lexer.LexerBuilder
 import compiler.dfa.LexicalNode
+import compiler.lexer.LexerBuilder
 import compiler.parser.Symbol.Terminal
 import compiler.utils.TextCursor
 

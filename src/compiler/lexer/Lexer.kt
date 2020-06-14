@@ -1,10 +1,6 @@
 package compiler.lexer
 
-import compiler.dfa.DFA
-import compiler.dfa.DFARepeatingExecutor
-import compiler.dfa.FinalStateListener
-import compiler.dfa.NonFinalStateListener
-import compiler.dfa.TransitionListener
+import compiler.dfa.*
 import compiler.lexer.token.KeywordTokenRecognizer
 import compiler.parser.Symbol.Terminal
 import compiler.parser.Symbol.Terminal.Ignorable

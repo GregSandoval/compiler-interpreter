@@ -2,7 +2,8 @@ package compiler.parser
 
 import compiler.a5.pst.PstToAstNonTerminalVisitor
 import compiler.a5.pst.PstToAstTokenVisitor
-import compiler.parser.Symbol.*
+import compiler.parser.Symbol.NonTerminal
+import compiler.parser.Symbol.Terminal
 
 
 object AbstractSyntaxTreeBuilder {

@@ -9,10 +9,9 @@ import compiler.parser.Symbol.Terminal.Punctuation.*
 import compiler.parser.Symbol.Terminal.TypedTerminal.*
 
 object A7Grammar {
-    private lateinit var productions: ProductionRules
 
     fun build(): ProductionRules {
-        this.productions = ProductionRules()
+        val productions = ProductionRules()
 
         productions[Program::class] = listOf(::ProgramKeyword, ::VariableGroup, ::FunctionDefinitions, ::Main)
 
@@ -69,36 +68,36 @@ object A7Grammar {
         productions[MoreExpressions::class] = listOf()
 
 
-      //productions[ClassIdentifier::class] = listOf(::IdentifierTerminal)
-      //productions[ClassDefinition::class] = listOf(::ClassHeader, ::ClassDefinitionSuffix)
-
-      //productions[ClassDefinitionSuffix::class] = listOf(::BracedClassItems)
-      //productions[ClassDefinitionSuffix::class] = listOf(::IfKeyword, ::BracedClassItems)
-
-      //productions[BracedClassItems::class] = listOf(::LeftBrace, ::ClassItems, ::RightBrace)
-
-      //productions[ClassHeader::class] = listOf(::ClassKeyword, ::ClassIdentifier, ::ClassParent, ::Interfaces)
-
-      //productions[ClassParent::class] = listOf(::Colon, ::ClassIdentifier)
-      //productions[ClassParent::class] = listOf()
-
-      //productions[ClassItems::class] = listOf(::ClassGroup, ::ClassItems)
-      //productions[ClassItems::class] = listOf()
-
-      //productions[ClassGroup::class] = listOf(::ClassVisibility)
-      //productions[ClassGroup::class] = listOf(::VariableGroup)
-      //productions[ClassGroup::class] = listOf(::MethodDeclerations)
-
-      //productions[ClassVisibility::class] = listOf(::Colon, ::IdentifierTerminal)
-
-      //productions[Interfaces::class] = listOf(::Plus, ::ClassIdentifier, ::Interfaces)
-      //productions[Interfaces::class] = listOf()
-
-      //productions[MethodDeclerations::class] = listOf(::MethodHeader)
-
-      //productions[MethodHeader::class] = listOf(::FunctionKeyword, ::MethodIdentifier, ::ParenthesizedParameterList, ::ReturnKind)
-
-      //productions[MethodIdentifier::class] = listOf(::ClassIdentifier, ::Colon, ::FunctionIdentifier)
+//        productions[ClassIdentifier::class] = listOf(::IdentifierTerminal)
+//        productions[ClassDefinition::class] = listOf(::ClassHeader, ::ClassDefinitionSuffix)
+//
+//        productions[ClassDefinitionSuffix::class] = listOf(::BracedClassItems)
+//        productions[ClassDefinitionSuffix::class] = listOf(::IfKeyword, ::BracedClassItems)
+//
+//        productions[BracedClassItems::class] = listOf(::LeftBrace, ::ClassItems, ::RightBrace)
+//
+//        productions[ClassHeader::class] = listOf(::ClassKeyword, ::ClassIdentifier, ::ClassParent, ::Interfaces)
+//
+//        productions[ClassParent::class] = listOf(::Colon, ::ClassIdentifier)
+//        productions[ClassParent::class] = listOf()
+//
+//        productions[ClassItems::class] = listOf(::ClassGroup, ::ClassItems)
+//        productions[ClassItems::class] = listOf()
+//
+//        productions[ClassGroup::class] = listOf(::ClassVisibility)
+//        productions[ClassGroup::class] = listOf(::VariableGroup)
+//        productions[ClassGroup::class] = listOf(::MethodDeclerations)
+//
+//        productions[ClassVisibility::class] = listOf(::Colon, ::IdentifierTerminal)
+//
+//        productions[Interfaces::class] = listOf(::Plus, ::ClassIdentifier, ::Interfaces)
+//        productions[Interfaces::class] = listOf()
+//
+//        productions[MethodDeclerations::class] = listOf(::MethodHeader)
+//
+//        productions[MethodHeader::class] = listOf(::FunctionKeyword, ::MethodIdentifier, ::ParenthesizedParameterList, ::ReturnKind)
+//
+//        productions[MethodIdentifier::class] = listOf(::ClassIdentifier, ::Colon, ::FunctionIdentifier)
 
         productions[FunctionDefinitions::class] = listOf(::FunctionDefinition, ::FunctionDefinitions)
         productions[FunctionDefinitions::class] = listOf()

@@ -1,7 +1,8 @@
 package compiler.a5.parser
 
 import compiler.a5.grammar.A7Grammar
-import compiler.parser.*
+import compiler.parser.ParseTree
+import compiler.parser.ParseTreeBuilder
 import compiler.parser.Symbol.NonTerminal.Program
 import compiler.parser.Symbol.Terminal
 import compiler.parser.epsilon.EpsilonDerivation
@@ -17,7 +18,7 @@ object A7Parser {
 
         val first = FirstSet.findAll(productions, derivesEpsilon)
 
-        val follow = FollowSet.findAll(productions, derivesEpsilon, first)
+        val follow = FollowSet.findFollowSet(productions, derivesEpsilon, first)
 
         val llTable = LLTable(productions, first, follow, derivesEpsilon)
 

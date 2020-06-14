@@ -2,9 +2,9 @@ package compiler.parser.epsilon
 
 import compiler.parser.NonTerminalClass
 import compiler.parser.ProductionRules
-import compiler.parser.epsilon.EpsilonDerivation.State.*
 import compiler.parser.Symbol.NonTerminal
 import compiler.parser.Symbol.Terminal
+import compiler.parser.epsilon.EpsilonDerivation.State.*
 
 object EpsilonDerivation {
     enum class State {
@@ -17,7 +17,7 @@ object EpsilonDerivation {
         val derivations = HashMap<NonTerminalClass, State>()
         val lhss = HashSet<NonTerminalClass>()
 
-        for((lhs) in productions.getProductions())
+        for ((lhs) in productions.getProductions())
             lhss.add(lhs)
 
         for (lhs in lhss)

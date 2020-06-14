@@ -16,7 +16,7 @@ object FirstSet {
         val result = HashMap<NonTerminalClass, MutableSet<TerminalClass>>()
         val lhss = HashSet<NonTerminalClass>()
 
-        for((lhs) in productions.getProductions())
+        for ((lhs) in productions.getProductions())
             lhss.add(lhs)
 
         for (lhs in lhss) {
