@@ -10,7 +10,6 @@ import java.io.PrintWriter
 import java.util.*
 
 object TreeDotFileSerializer {
-    @Throws(IOException::class)
     fun serialize(tree: TreeNode, filename: String) {
         val NullSentienal = NULL_NODE()
         NullSentienal.children.add(tree)

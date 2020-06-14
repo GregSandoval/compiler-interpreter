@@ -63,223 +63,171 @@ interface TokenEvaluator {
     }
 
     // Primitives
-    @Throws(Exception::class)
     fun visit(token: FloatTerminal): Float
 
-    @Throws(Exception::class)
     fun visit(token: IntegerTerminal): Int
 
-    @Throws(Exception::class)
     fun visit(token: StringTerminal): String
 
     // Relational
-    @Throws(Exception::class)
     fun visit(token: LessThan): Boolean
 
-    @Throws(Exception::class)
     fun visit(token: GreaterThan): Boolean
 
-    @Throws(Exception::class)
     fun visit(token: EqualEqual): Boolean
 
-    @Throws(Exception::class)
     fun visit(token: NotEqual): Boolean
 
-    @Throws(Exception::class)
     fun visit(token: LessThanOrEqual): Boolean
 
-    @Throws(Exception::class)
     fun visit(token: GreaterThanOrEqual): Boolean
 
     // Operators
-    @Throws(Exception::class)
     fun visit(token: Asterisk): Any
 
-    @Throws(Exception::class)
     fun visit(token: Minus): Number
 
-    @Throws(Exception::class)
     fun visit(token: Plus): Number
 
-    @Throws(Exception::class)
     fun visit(token: Ampersand): Any
 
-    @Throws(Exception::class)
     fun visit(token: BitShiftLeft): Number
 
-    @Throws(Exception::class)
     fun visit(token: BitShiftRight): Number
 
-    @Throws(Exception::class)
     fun visit(token: Caret): Number
 
-    @Throws(Exception::class)
     fun visit(token: ForwardSlash): Number
 
-    @Throws(Exception::class)
     fun visit(token: StringKeyword) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(node: TokenNodeElement) {
     }
 
-    @Throws(Exception::class)
     fun visit(token: CommentTerminal) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: EOFTerminal) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: IdentifierTerminal): Any
 
-    @Throws(Exception::class)
     fun visit(token: ProgramKeyword) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: MainKeyword) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: FunctionKeyword) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: ClassKeyword) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: FloatKeyword) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: IntegerKeyword) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: IfKeyword) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: ElseIfKeyword) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: ElseKeyword) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: WhileKeyword) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: InputKeyword): String
 
-    @Throws(Exception::class)
     fun visit(token: PrintKeyword) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: NewKeyword) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: ReturnKeyword) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: VarKeyword) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: Equal) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: Arrow) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: Comma) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: SemiColon) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: LeftBrace) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: RightBrace) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: LeftBracket) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: RightBracket) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: LeftParen): List<Any>
 
-    @Throws(Exception::class)
     fun visit(token: RightParen) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: Colon) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: Period) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: WhitespaceTerminal) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visit(token: Void) {
         visitChildren(token)
     }
 
-    @Throws(Exception::class)
     fun visitChildren(terminal: Terminal) {
         for (child in terminal.children) {
             if (child !is Terminal) {

@@ -11,7 +11,6 @@ data class UserInput(var pstFileName: String = "pst",
 
 object CommandLine {
 
-    @Throws(IOException::class)
     fun processInputs(args: Array<String>): UserInput {
         var pstFileName = "pst"
         var astFileName = "ast"

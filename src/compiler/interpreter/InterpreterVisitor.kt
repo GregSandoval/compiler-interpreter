@@ -19,12 +19,10 @@ import kotlin.math.pow
 class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
     private val scanner = Scanner(System.`in`)
 
-    @Throws(Exception::class)
     override fun visit(token: InputKeyword): String {
         return scanner.nextLine()
     }
 
-    @Throws(Exception::class)
     override fun visit(token: WhileKeyword) {
         val paren = token.children[0] as LeftParen
         val body = token.children[1] as LeftBrace
@@ -33,7 +31,6 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         }
     }
 
-    @Throws(Exception::class)
     override fun visit(token: IfKeyword) {
         val paren = token.children[0] as LeftParen
         val body = token.children[1] as LeftBrace
@@ -47,7 +44,6 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         this.accept(token.children[2] as Terminal)
     }
 
-    @Throws(Exception::class)
     override fun visit(token: ElseIfKeyword) {
         val paren = token.children[0] as LeftParen
         val body = token.children[1] as LeftBrace
@@ -61,14 +57,12 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         this.accept(token.children[2] as Terminal)
     }
 
-    @Throws(Exception::class)
     override fun visit(token: ElseKeyword) {
         val body = token.children[0] as LeftBrace
         this.accept(body)
         return
     }
 
-    @Throws(Exception::class)
     override fun visit(token: IdentifierTerminal): Any {
         if (token.parent is Type) {
             return token
@@ -82,7 +76,6 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         return value
     }
 
-    @Throws(Exception::class)
     override fun visit(token: Equal) {
         val identifier: Terminal
         val identifierOrType = token.children[0] as Terminal
@@ -101,7 +94,6 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         symtab.setSymbolValue(identifier, value)
     }
 
-    @Throws(Exception::class)
     override fun visit(token: LeftParen): List<Any> {
         val result: MutableList<Any> = ArrayList()
         for (child in token.children) {
@@ -110,7 +102,6 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         return result
     }
 
-    @Throws(Exception::class)
     override fun visit(token: PrintKeyword) {
         val evaluatedParameters = this.accept(token.children[0] as LeftParen);
 
@@ -127,23 +118,19 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
     }
 
     // Primitives
-    @Throws(Exception::class)
     override fun visit(token: FloatTerminal): Float {
         return token.value
     }
 
-    @Throws(Exception::class)
     override fun visit(token: IntegerTerminal): Int {
         return token.value
     }
 
-    @Throws(Exception::class)
     override fun visit(token: StringTerminal): String {
         return token.str
     }
 
     // Relations
-    @Throws(Exception::class)
     override fun visit(token: LessThan): Boolean {
         return comparePrimitiveTokens(
                 token.children[0],
@@ -152,7 +139,6 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         )
     }
 
-    @Throws(Exception::class)
     override fun visit(token: GreaterThan): Boolean {
         return comparePrimitiveTokens(
                 token.children[0],
@@ -161,7 +147,6 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         )
     }
 
-    @Throws(Exception::class)
     override fun visit(token: EqualEqual): Boolean {
         return comparePrimitiveTokens(
                 token.children[0],
@@ -170,7 +155,6 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         )
     }
 
-    @Throws(Exception::class)
     override fun visit(token: NotEqual): Boolean {
         return comparePrimitiveTokens(
                 token.children[0],
@@ -179,7 +163,6 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         )
     }
 
-    @Throws(Exception::class)
     override fun visit(token: LessThanOrEqual): Boolean {
         return comparePrimitiveTokens(
                 token.children[0],
@@ -188,7 +171,6 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         )
     }
 
-    @Throws(Exception::class)
     override fun visit(token: GreaterThanOrEqual): Boolean {
         return comparePrimitiveTokens(
                 token.children[0],
@@ -198,7 +180,6 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
     }
 
     // Operators
-    @Throws(Exception::class)
     override fun visit(token: Asterisk): Any {
         if (token.children.size == 1) {
             val pointer = token.children[0] as Terminal
@@ -216,7 +197,6 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         )!!
     }
 
-    @Throws(Exception::class)
     override fun visit(token: Minus): Number {
         val leftToken = token.children[0] as Terminal
         val rightToken = token.children[1] as Terminal
@@ -229,7 +209,6 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         )!!
     }
 
-    @Throws(Exception::class)
     override fun visit(token: Plus): Number {
         val leftToken = token.children[0] as Terminal
         val rightToken = token.children[1] as Terminal
@@ -242,7 +221,6 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         )!!
     }
 
-    @Throws(Exception::class)
     override fun visit(token: BitShiftLeft): Number {
         val leftToken = token.children[0] as Terminal
         val rightToken = token.children[1] as Terminal
@@ -255,7 +233,6 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         )!!
     }
 
-    @Throws(Exception::class)
     override fun visit(token: BitShiftRight): Number {
         val leftToken = token.children[0] as Terminal
         val rightToken = token.children[1] as Terminal
@@ -268,7 +245,6 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         )!!
     }
 
-    @Throws(Exception::class)
     override fun visit(token: Caret): Number {
         val leftToken = token.children[0] as Terminal
         val rightToken = token.children[1] as Terminal
@@ -281,7 +257,6 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         )!!
     }
 
-    @Throws(Exception::class)
     override fun visit(token: ForwardSlash): Number {
         val leftToken = token.children[0] as Terminal
         val rightToken = token.children[1] as Terminal
@@ -294,17 +269,14 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         )!!
     }
 
-    @Throws(Exception::class)
     override fun visit(token: Ampersand): Any {
         return symtab.getAddress((token.children[0] as Terminal))
     }
 
-    @Throws(Exception::class)
     fun comparePrimitiveTokens(leftToken: TreeNode, rightToken: TreeNode, comparator: (Int) -> Boolean): Boolean {
         return comparator(comparePrimitiveTokens(leftToken, rightToken))
     }
 
-    @Throws(Exception::class)
     fun comparePrimitiveTokens(
             leftToken: TreeNode,
             rightToken: TreeNode
@@ -319,7 +291,6 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         )!!
     }
 
-    @Throws(Exception::class)
     fun <T> primitiveBiFunction(
             leftToken: TreeNode,
             rightToken: TreeNode,
@@ -358,7 +329,6 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         return null
     }
 
-    @Throws(Exception::class)
     fun <T> numberBiFunction(
             leftToken: TreeNode,
             rightToken: TreeNode,
@@ -389,13 +359,11 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         return null
     }
 
-    @Throws(Exception::class)
     fun <T> evaluate(valueType: Class<T>, node: TreeNode): T {
         val token = assertClass(Terminal::class.java, node)
         return assertClass(valueType, this.accept(token))
     }
 
-    @Throws(Exception::class)
     fun <T> assertClass(clazz: Class<T>, obj: Any): T {
         if (clazz.isInstance(obj)) {
             return clazz.cast(obj)
