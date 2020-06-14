@@ -14,7 +14,6 @@ import compiler.parser.Symbol.Terminal.TypedTerminal.*
 import compiler.parser.TokenEvaluator
 import compiler.parser.TreeNode
 import java.util.*
-import java.util.stream.Collectors
 import kotlin.math.pow
 
 class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
@@ -75,9 +74,11 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
             return token
         }
         val value = symtab.getValue(token)
+
         if (value === undefined) {
             throw IdentifierUsedBeforeInitializationException(token)
         }
+
         return value
     }
 
@@ -90,10 +91,13 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         } else {
             token.children[0] as Terminal
         }
+
         val value = this.accept(token.children[1] as Terminal)
+
         if (!symtab.hasSymbol(identifier)) {
             throw Exception(identifier.str + " is not defined")
         }
+
         symtab.setSymbolValue(identifier, value)
     }
 
@@ -108,13 +112,18 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
 
     @Throws(Exception::class)
     override fun visit(token: PrintKeyword) {
-        print(
-                (this.accept(token.children[0] as LeftParen) as List<Any>)
-                        .stream()
-                        .map { obj: Any -> obj.toString() }
-                        .collect(Collectors.joining(""))
-                        .replace("\\\\n".toRegex(), System.lineSeparator())
-        )
+        val evaluatedParameters = this.accept(token.children[0] as LeftParen);
+
+        if (evaluatedParameters !is List<*>) {
+            throw Exception("Expected print() to return a list of values, instead found ${evaluatedParameters::class.simpleName}")
+        }
+
+        val text = evaluatedParameters
+                .map { it.toString() }
+                .joinToString("")
+                .replace("\\\\n".toRegex(), System.lineSeparator())
+
+        print(text)
     }
 
     // Primitives
