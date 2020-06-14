@@ -66,6 +66,7 @@ class A5LexiconDFA : DFA(START) {
         START to FORWARD_SLASH on AForwardSlash
         START to AND on AAnd
         START to EXCLAMATION_MARK on AExclamationMark
+        START to MODULUS on APercent
 
         // MULTI CHARACTER OPERATORS
         MINUS to OP_ARROW on AGreaterThan

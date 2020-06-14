@@ -21,8 +21,10 @@ interface OperatorTypedVisitor<T> {
         is BitShiftRight -> visit(token)
         is Caret -> visit(token)
         is ForwardSlash -> visit(token)
+        is Modulus -> visit(token)
     }
 
+    fun visit(token: Modulus): T
     fun visit(token: LessThan): T
     fun visit(token: GreaterThan): T
     fun visit(token: Asterisk): T

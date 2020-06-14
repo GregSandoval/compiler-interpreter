@@ -60,6 +60,7 @@ interface TokenEvaluator {
         is FloatTerminal -> visit(terminal)
         is IdentifierTerminal -> visit(terminal)
         is IntegerTerminal -> visit(terminal)
+        is Modulus -> visit(terminal)
     }
 
     // Primitives
@@ -83,6 +84,8 @@ interface TokenEvaluator {
     fun visit(token: GreaterThanOrEqual): Boolean
 
     // Operators
+    fun visit(token: Modulus): Int
+
     fun visit(token: Asterisk): Any
 
     fun visit(token: Minus): Number

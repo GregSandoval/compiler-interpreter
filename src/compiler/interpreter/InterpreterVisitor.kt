@@ -204,6 +204,18 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         )
     }
 
+    override fun visit(token: Modulus): Int {
+        val leftToken = token.children[0].expectedClass(Terminal::class)
+        val rightToken = token.children[1].expectedClass(Terminal::class)
+        return strictNumberBiFunction(
+                leftToken,
+                rightToken,
+                { left, right -> throw OperatorUsageUndefined(token, left, right) },
+                { left, right -> left % right },
+                { left, right -> OperatorUsageUndefined(token, left, right) }
+        )
+    }
+
     override fun visit(token: Minus): Number {
         val leftToken = token.children[0].expectedClass(Terminal::class)
         val rightToken = token.children[1].expectedClass(Terminal::class)

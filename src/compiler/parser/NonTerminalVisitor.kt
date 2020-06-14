@@ -84,7 +84,7 @@ interface NonTerminalVisitor {
         is Lthan -> visit(node)
         is Gthan -> visit(node)
         is PlusOrMinus -> visit(node)
-        is MultiplyOrDivideOrExponentiate -> visit(node)
+        is MultiplyOrDivideOrExponentiateOrModulus -> visit(node)
         is Epsilon -> visit(node)
         is NULL_NODE -> visit(node)
         is ParseTreeSentinel -> visit(node)
@@ -170,6 +170,6 @@ interface NonTerminalVisitor {
     fun visit(lthan: Lthan)
     fun visit(gthan: Gthan)
     fun visit(plusOrMinus: PlusOrMinus)
-    fun visit(multiplyOrDivideOrExponentiate: MultiplyOrDivideOrExponentiate)
+    fun visit(multiplyOrDivideOrExponentiate: MultiplyOrDivideOrExponentiateOrModulus)
     fun visit(epsilon: Epsilon)
 }

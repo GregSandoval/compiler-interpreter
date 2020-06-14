@@ -119,6 +119,10 @@ interface TokenTypedAdapterVisitor<T> : TokenVisitor<T> {
         return visitChildren(token)
     }
 
+    override fun visit(token: Modulus): T {
+        return visitChildren(token)
+    }
+
     override fun visit(token: Ampersand): T {
         return visitChildren(token)
     }

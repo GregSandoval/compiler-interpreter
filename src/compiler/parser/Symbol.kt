@@ -90,7 +90,7 @@ sealed class Symbol : TreeNode() {
         class Lthan : NonTerminal()
         class Gthan : NonTerminal()
         class PlusOrMinus : NonTerminal()
-        class MultiplyOrDivideOrExponentiate : NonTerminal()
+        class MultiplyOrDivideOrExponentiateOrModulus : NonTerminal()
         class Epsilon : NonTerminal()
     }
 
@@ -123,6 +123,7 @@ sealed class Symbol : TreeNode() {
             class LessThan : Operator("<")
             class GreaterThan : Operator(">")
             class Asterisk : Operator("*")
+            class Modulus : Operator("%")
             class Equal : Operator("=")
             class Minus : Operator("-")
             class Plus : Operator("+")

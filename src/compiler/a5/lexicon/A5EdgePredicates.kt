@@ -51,6 +51,7 @@ val AAnd = isSymbol('&')
 val AQuote = isSymbol('"')
 val AUnderscore = isSymbol('_')
 val AExclamationMark = isSymbol('!')
+val APercent = isSymbol('%')
 
 // EVERYTHING EXCEPT LINE FEED
 val ANotNewline = ALineSeparator.not()

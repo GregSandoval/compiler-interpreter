@@ -174,7 +174,7 @@ object A7Grammar {
 
         productions[Term::class] = listOf(::Fact, ::TermSuffix)
 
-        productions[TermSuffix::class] = listOf(::MultiplyOrDivideOrExponentiate, ::Fact, ::TermSuffix)
+        productions[TermSuffix::class] = listOf(::MultiplyOrDivideOrExponentiateOrModulus, ::Fact, ::TermSuffix)
         productions[TermSuffix::class] = listOf()
 
         productions[Fact::class] = listOf(::BaseLiteral)
@@ -211,9 +211,10 @@ object A7Grammar {
         productions[PlusOrMinus::class] = listOf(::Plus)
         productions[PlusOrMinus::class] = listOf(::Minus)
 
-        productions[MultiplyOrDivideOrExponentiate::class] = listOf(::Asterisk)
-        productions[MultiplyOrDivideOrExponentiate::class] = listOf(::ForwardSlash)
-        productions[MultiplyOrDivideOrExponentiate::class] = listOf(::Caret)
+        productions[MultiplyOrDivideOrExponentiateOrModulus::class] = listOf(::Asterisk)
+        productions[MultiplyOrDivideOrExponentiateOrModulus::class] = listOf(::ForwardSlash)
+        productions[MultiplyOrDivideOrExponentiateOrModulus::class] = listOf(::Caret)
+        productions[MultiplyOrDivideOrExponentiateOrModulus::class] = listOf(::Modulus)
 
         return productions
     }

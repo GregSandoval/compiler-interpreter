@@ -52,6 +52,7 @@ sealed class LexicalNode {
             object OP_GREATER_THAN : FinalStateNoArg(::GreaterThanOrEqual)
             object OP_SHIFT_LEFT : FinalStateNoArg(::BitShiftLeft)
             object OP_SHIFT_RIGHT : FinalStateNoArg(::BitShiftRight)
+            object MODULUS : FinalStateNoArg(::Modulus)
         }
 
         sealed class FinalStateSingleArg(constructor: SingleArgConstructor) : FinalState(constructor) {

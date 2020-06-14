@@ -392,7 +392,7 @@ class PstToAstNonTerminalVisitor : NonTerminalVisitor {
 
     override fun visit(plusOrMinus: PlusOrMinus) {}
 
-    override fun visit(multiplyOrDivideOrExponentiate: MultiplyOrDivideOrExponentiate) {}
+    override fun visit(multiplyOrDivideOrExponentiate: MultiplyOrDivideOrExponentiateOrModulus) {}
 
     override fun visit(epsilon: Epsilon) {}
 

@@ -90,6 +90,9 @@ class PstToAstTokenVisitor : TokenVisitor<Unit> {
     override fun visit(token: Plus) {
     }
 
+    override fun visit(token: Modulus) {
+    }
+
     override fun visit(token: Ampersand) {
     }
 
