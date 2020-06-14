@@ -12,6 +12,6 @@ object TreeVisualizer {
         p = ProcessBuilder("rm", "$fileName.dot")
                 .start()
         p.waitFor()
-        println("Generated parse tree image, file name: $fileName.png")
+        println("Generated tree image, file name: $fileName.png")
     }
 }
