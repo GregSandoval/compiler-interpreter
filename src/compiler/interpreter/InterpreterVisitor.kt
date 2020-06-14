@@ -15,6 +15,7 @@ import compiler.parser.TokenEvaluator
 import compiler.parser.TreeNode
 import java.util.*
 import kotlin.math.pow
+import kotlin.reflect.KClass
 
 class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
     private val scanner = Scanner(System.`in`)
@@ -24,49 +25,59 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
     }
 
     override fun visit(token: WhileKeyword) {
-        val paren = token.children[0] as LeftParen
-        val body = token.children[1] as LeftBrace
-        while ((this.accept(paren) as List<Boolean>)[0]) {
-            this.accept(body)
+        val paren = token.children[0].expectedClass(LeftParen::class)
+        val body = token.children[1].expectedClass(LeftBrace::class)
+
+        while (paren.evaluateToList(Boolean::class)[0]) {
+            body.evaluate()
         }
     }
 
     override fun visit(token: IfKeyword) {
-        val paren = token.children[0] as LeftParen
-        val body = token.children[1] as LeftBrace
-        if ((this.accept(paren) as List<Boolean>)[0]) {
-            this.accept(body)
+        val paren = token.children[0].expectedClass(LeftParen::class)
+        val body = token.children[1].expectedClass(LeftBrace::class)
+        val condition = paren.evaluateToList(Boolean::class)
+
+        if (condition[0]) {
+            body.evaluate()
             return
         }
+
         if (token.children.size < 3) {
             return
         }
+
         this.accept(token.children[2] as Terminal)
     }
 
     override fun visit(token: ElseIfKeyword) {
-        val paren = token.children[0] as LeftParen
-        val body = token.children[1] as LeftBrace
-        if ((this.accept(paren) as List<Boolean>)[0]) {
-            this.accept(body)
+        val paren = token.children[0].expectedClass(LeftParen::class)
+        val body = token.children[1].expectedClass(LeftBrace::class)
+        val condition = paren.evaluateToList(Boolean::class)
+
+        if (condition[0]) {
+            body.evaluate()
             return
         }
+
         if (token.children.size < 3) {
             return
         }
+
         this.accept(token.children[2] as Terminal)
     }
 
     override fun visit(token: ElseKeyword) {
-        val body = token.children[0] as LeftBrace
-        this.accept(body)
-        return
+        token.children[0]
+                .expectedClass(LeftBrace::class)
+                .evaluate()
     }
 
     override fun visit(token: IdentifierTerminal): Any {
         if (token.parent is Type) {
             return token
         }
+
         val value = symtab.getValue(token)
 
         if (value === undefined) {
@@ -77,12 +88,11 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
     }
 
     override fun visit(token: Equal) {
-        val identifier: Terminal
-        val identifierOrType = token.children[0] as Terminal
-        identifier = if (identifierOrType is Keyword) {
-            token.children[0].children[0] as Terminal
-        } else {
-            token.children[0] as Terminal
+        val identifierOrType = token.children[0].expectedClass(Terminal::class)
+
+        val identifier = when (identifierOrType) {
+            is Keyword -> token.children[0].children[0].expectedClass(Terminal::class)
+            else -> token.children[0].expectedClass(Terminal::class)
         }
 
         val value = this.accept(token.children[1] as Terminal)
@@ -182,12 +192,12 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
     // Operators
     override fun visit(token: Asterisk): Any {
         if (token.children.size == 1) {
-            val pointer = token.children[0] as Terminal
-            val address = symtab.getValue(pointer) as String
+            val pointer = token.children[0].expectedClass(Terminal::class)
+            val address = symtab.getValue(pointer).expectedClass(String::class)
             return symtab.getValueAtAddress(address)!!
         }
-        val leftToken = token.children[0] as Terminal
-        val rightToken = token.children[1] as Terminal
+        val leftToken = token.children[0].expectedClass(Terminal::class)
+        val rightToken = token.children[1].expectedClass(Terminal::class)
         return numberBiFunction(
                 leftToken,
                 rightToken,
@@ -198,8 +208,8 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
     }
 
     override fun visit(token: Minus): Number {
-        val leftToken = token.children[0] as Terminal
-        val rightToken = token.children[1] as Terminal
+        val leftToken = token.children[0].expectedClass(Terminal::class)
+        val rightToken = token.children[1].expectedClass(Terminal::class)
         return numberBiFunction(
                 leftToken,
                 rightToken,
@@ -210,8 +220,8 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
     }
 
     override fun visit(token: Plus): Number {
-        val leftToken = token.children[0] as Terminal
-        val rightToken = token.children[1] as Terminal
+        val leftToken = token.children[0].expectedClass(Terminal::class)
+        val rightToken = token.children[1].expectedClass(Terminal::class)
         return numberBiFunction(
                 leftToken,
                 rightToken,
@@ -222,8 +232,8 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
     }
 
     override fun visit(token: BitShiftLeft): Number {
-        val leftToken = token.children[0] as Terminal
-        val rightToken = token.children[1] as Terminal
+        val leftToken = token.children[0].expectedClass(Terminal::class)
+        val rightToken = token.children[1].expectedClass(Terminal::class)
         return numberBiFunction(
                 leftToken,
                 rightToken,
@@ -234,8 +244,8 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
     }
 
     override fun visit(token: BitShiftRight): Number {
-        val leftToken = token.children[0] as Terminal
-        val rightToken = token.children[1] as Terminal
+        val leftToken = token.children[0].expectedClass(Terminal::class)
+        val rightToken = token.children[1].expectedClass(Terminal::class)
         return numberBiFunction(
                 leftToken,
                 rightToken,
@@ -246,8 +256,8 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
     }
 
     override fun visit(token: Caret): Number {
-        val leftToken = token.children[0] as Terminal
-        val rightToken = token.children[1] as Terminal
+        val leftToken = token.children[0].expectedClass(Terminal::class)
+        val rightToken = token.children[1].expectedClass(Terminal::class)
         return numberBiFunction(
                 leftToken,
                 rightToken,
@@ -258,8 +268,8 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
     }
 
     override fun visit(token: ForwardSlash): Number {
-        val leftToken = token.children[0] as Terminal
-        val rightToken = token.children[1] as Terminal
+        val leftToken = token.children[0].expectedClass(Terminal::class)
+        val rightToken = token.children[1].expectedClass(Terminal::class)
         return numberBiFunction(
                 leftToken,
                 rightToken,
@@ -299,8 +309,8 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
             onString: (String, String) -> T,
             onError: (Any, Any) -> Exception?
     ): T? {
-        var left = evaluate(Any::class.java, leftToken)
-        var right = evaluate(Any::class.java, rightToken)
+        var left = leftToken.evaluateTo(Any::class)
+        var right = rightToken.evaluateTo(Any::class)
         val result = numberBiFunction(
                 leftToken,
                 rightToken,
@@ -336,8 +346,9 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
             onInt: (Int, Int) -> T,
             onError: (Any, Any) -> Exception?
     ): T? {
-        var left = evaluate(Any::class.java, leftToken)
-        var right = evaluate(Any::class.java, rightToken)
+        var left = leftToken.evaluateTo(Any::class)
+        var right = rightToken.evaluateTo(Any::class)
+
         while (left is List<*>) {
             left = left[0]!!
         }
@@ -359,16 +370,25 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         return null
     }
 
-    fun <T> evaluate(valueType: Class<T>, node: TreeNode): T {
-        val token = assertClass(Terminal::class.java, node)
-        return assertClass(valueType, this.accept(token))
+    fun <T : Any> Any.evaluateTo(expectedType: KClass<out T>): T {
+        val token = this.expectedClass(Terminal::class)
+        return this@InterpreterVisitor.accept(token).expectedClass(expectedType)
     }
 
-    fun <T> assertClass(clazz: Class<T>, obj: Any): T {
-        if (clazz.isInstance(obj)) {
-            return clazz.cast(obj)
+    fun Any.evaluate() {
+        val token = this.expectedClass(Terminal::class)
+        this@InterpreterVisitor.accept(token)
+    }
+
+    fun <T : Any> Any.evaluateToList(expectedType: KClass<out T>): List<T> {
+        val token = this.expectedClass(Terminal::class)
+        val value = this@InterpreterVisitor.accept(token).expectedClass(List::class)
+
+        if (value.all { expectedType.isInstance(it) }) {
+            return value as List<T>
         }
-        throw Exception("${clazz.simpleName} expected but found${obj.javaClass.simpleName}")
+
+        throw Exception("Expected List<${expectedType.simpleName}> but found List<%> where % = ${value.map {it!!::class}}")
     }
 
     fun classNotCompatibleException(left: Any, right: Any): Exception {
@@ -376,3 +396,12 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
     }
 
 }
+
+fun <T : Any> Any.expectedClass(clazz: KClass<out T>): T {
+    if (clazz.isInstance(this)) {
+        return this as T
+    }
+
+    throw Exception("Expected ${clazz.simpleName} but found${this::class.simpleName}.")
+}
+
