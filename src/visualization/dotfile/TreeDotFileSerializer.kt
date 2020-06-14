@@ -88,7 +88,7 @@ object TreeDotFileSerializer {
     fun formatWithValue(rule: TreeNode): String {
         return when (rule) {
             is EOFTerminal -> "EOF"
-            is StringTerminal -> "\'\'${rule.str}\'\'"
+            is StringTerminal -> "\'\'${rule.str.replace("\\n", "\\\\n")}\'\'"
             is Terminal -> rule.str
             else -> rule.toString()
         }

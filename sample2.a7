@@ -6,11 +6,11 @@ main {
         string guess;
     )
     print("===================================== Unit tests =====================================\n");
-    print("eval(2 + 3)                  expected = 5    recieved =",    2 + 3,                  "\n");
-    print("eval(2 * 3)                  expected = 6    recieved =",    2 * 3,                  "\n");
-    print("eval(2 ^ 3)                  expected = 8    recieved =",    2 ^ 3,                  "\n");
-    print("eval((2 ^ 3) ^ 2))           expected = 64   recieved =",    (2 ^ 3) ^ 2,            "\n");
-    print("eval(((1 + 9) / 10) * 2 + 3) expected = 5    recieved =",    ((1 + 9) / 10) * 2 + 3, "\n");
+    print("eval(2 + 3)                  expected = 5    received =",    2 + 3,                  "\n");
+    print("eval(2 * 3)                  expected = 6    received =",    2 * 3,                  "\n");
+    print("eval(2 ^ 3)                  expected = 8    received =",    2 ^ 3,                  "\n");
+    print("eval((2 ^ 3) ^ 2))           expected = 64   received =",    (2 ^ 3) ^ 2,            "\n");
+    print("eval(((1 + 9) / 10) * 2 + 3) expected = 5    received =",    ((1 + 9) / 10) * 2 + 3, "\n");
     print("======================================================================================\n");
 
     print("Hey buddy, what's your name? ");

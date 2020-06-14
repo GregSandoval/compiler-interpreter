@@ -222,8 +222,8 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         return strictNumberBiFunction(
                 leftToken,
                 rightToken,
-                { a, b -> java.lang.Float.sum(a, b) },
-                { a, b -> Integer.sum(a, b) },
+                { a, b -> a + b },
+                { a, b -> a + b },
                 { left, right -> OperatorUsageUndefined(token, left, right) }
         )
     }
@@ -234,7 +234,7 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         return strictNumberBiFunction(
                 leftToken,
                 rightToken,
-                { left, _ -> left },
+                { left, right -> throw OperatorUsageUndefined(token, left, right) },
                 { left, right -> left shl right },
                 { left, right -> OperatorUsageUndefined(token, left, right) }
         )
@@ -246,7 +246,7 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         return strictNumberBiFunction(
                 leftToken,
                 rightToken,
-                { left, _ -> left },
+                { left, right -> throw OperatorUsageUndefined(token, left, right) },
                 { left, right -> left shr right },
                 { left, right -> OperatorUsageUndefined(token, left, right) }
         )
@@ -258,7 +258,7 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
         return strictNumberBiFunction(
                 leftToken,
                 rightToken,
-                { a, b -> a.toDouble().pow(b.toDouble()) },
+                { a, b -> a.pow(b) },
                 { a, b -> a.toDouble().pow(b.toDouble()) },
                 { left, right -> OperatorUsageUndefined(token, left, right) }
         )
