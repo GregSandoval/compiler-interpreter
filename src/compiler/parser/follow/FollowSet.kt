@@ -75,39 +75,6 @@ object FollowSet {
             else -> visited[lhs] = Processing
         }
 
-        if (lhs === MoreExpressions::class) {
-            println(MoreExpressions::class.simpleName)
-            for (reverseLHS in productions.getLHS(lhs)) {
-                for (reverseRHS in productions[reverseLHS]) {
-                    if (reverseRHS.none { it()::class === lhs })
-                        continue
-                    val nonTerminalSubSequence = reverseRHS
-                            .dropWhile { it()::class !== lhs }
-                            .drop(1)
-
-                    println("${reverseLHS.simpleName}->${nonTerminalSubSequence.map { it()::class.simpleName ?: "SimpleName" }}")
-                }
-            }
-            println()
-        }
-
-        if (lhs === ExpressionList::class) {
-            println(ExpressionList::class.simpleName)
-            for (reverseLHS in productions.getLHS(lhs)) {
-                for (reverseRHS in productions[reverseLHS]) {
-                    if (reverseRHS.none { it()::class === lhs })
-                        continue
-
-                    val nonTerminalSubSequence = reverseRHS
-                            .dropWhile { it()::class !== lhs }
-                            .drop(1)
-
-                    println("${reverseLHS.simpleName}->${nonTerminalSubSequence.map { it()::class.simpleName ?: "SimpleName" }}")
-                }
-            }
-            println()
-        }
-
         for (reverseLHS in productions.getLHS(lhs)) {
             for (reverseRHS in productions[reverseLHS]) {
                 if (reverseRHS.none { it()::class === lhs })
@@ -123,11 +90,6 @@ object FollowSet {
                         first
                 )
 
-                if (lhs === ExpressionList::class || lhs === MoreExpressions::class) {
-                    println("First: " + lhs.simpleName)
-                    println(f.map { it.simpleName ?: "Simple" }.sorted())
-                    println()
-                }
                 follow.addAll(f)
 
                 if (nonTerminalSubSequence.all { it()::class in derivesEpsilon }) {
