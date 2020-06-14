@@ -29,7 +29,11 @@ object CommandLine {
                 "--ast-name" -> astFileName = value
                 "--file" -> {
                     sourceFileName = value
-                    sourceText = Files.readString(Path.of(sourceFileName))
+                    val sourcePath = Path.of(sourceFileName).toAbsolutePath()
+                    println("============ Sources =================")
+                    println("Loaded source file: ${sourcePath}")
+                    println("======================================")
+                    sourceText = Files.readString(sourcePath)
                 }
             }
         }
