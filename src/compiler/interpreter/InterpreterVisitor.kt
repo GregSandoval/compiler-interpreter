@@ -106,25 +106,21 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
 
     override fun visit(token: LeftParen): List<Any> {
         val result: MutableList<Any> = ArrayList()
+
         for (child in token.children) {
             result.add(this.accept(child as Terminal))
         }
+
         return result
     }
 
     override fun visit(token: PrintKeyword) {
-        val evaluatedParameters = this.accept(token.children[0] as LeftParen);
-
-        if (evaluatedParameters !is List<*>) {
-            throw Exception("Expected print() to return a list of values, instead found ${evaluatedParameters::class.simpleName}")
-        }
-
-        val text = evaluatedParameters
+        print(token.children[0]
+                .evaluateToList(Any::class)
                 .map { it.toString() }
                 .joinToString("")
                 .replace("\\\\n".toRegex(), System.lineSeparator())
-
-        print(text)
+        )
     }
 
     // Primitives
@@ -388,7 +384,7 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
             return value as List<T>
         }
 
-        throw Exception("Expected List<${expectedType.simpleName}> but found List<%> where % = ${value.map {it!!::class}}")
+        throw Exception("Expected List<${expectedType.simpleName}> but found List<%> where % = ${value.map { it!!::class }}")
     }
 
     fun classNotCompatibleException(left: Any, right: Any): Exception {
@@ -397,7 +393,7 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
 
 }
 
-fun <T : Any> Any.expectedClass(clazz: KClass<out T>): T {
+private fun <T : Any> Any.expectedClass(clazz: KClass<out T>): T {
     if (clazz.isInstance(this)) {
         return this as T
     }
