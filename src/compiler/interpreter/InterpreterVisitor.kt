@@ -192,87 +192,88 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
             val address = symtab.getValue(pointer).expectedClass(String::class)
             return symtab.getValueAtAddress(address)!!
         }
+
         val leftToken = token.children[0].expectedClass(Terminal::class)
         val rightToken = token.children[1].expectedClass(Terminal::class)
-        return numberBiFunction(
+        return strictNumberBiFunction(
                 leftToken,
                 rightToken,
                 { left, right -> left * right },
                 { left, right -> left * right },
                 { left, right -> OperatorUsageUndefined(token, left, right) }
-        )!!
+        )
     }
 
     override fun visit(token: Minus): Number {
         val leftToken = token.children[0].expectedClass(Terminal::class)
         val rightToken = token.children[1].expectedClass(Terminal::class)
-        return numberBiFunction(
+        return strictNumberBiFunction(
                 leftToken,
                 rightToken,
                 { left, right -> left - right },
                 { left, right -> left - right },
                 { left, right -> OperatorUsageUndefined(token, left, right) }
-        )!!
+        )
     }
 
     override fun visit(token: Plus): Number {
         val leftToken = token.children[0].expectedClass(Terminal::class)
         val rightToken = token.children[1].expectedClass(Terminal::class)
-        return numberBiFunction(
+        return strictNumberBiFunction(
                 leftToken,
                 rightToken,
                 { a, b -> java.lang.Float.sum(a, b) },
                 { a, b -> Integer.sum(a, b) },
                 { left, right -> OperatorUsageUndefined(token, left, right) }
-        )!!
+        )
     }
 
     override fun visit(token: BitShiftLeft): Number {
         val leftToken = token.children[0].expectedClass(Terminal::class)
         val rightToken = token.children[1].expectedClass(Terminal::class)
-        return numberBiFunction(
+        return strictNumberBiFunction(
                 leftToken,
                 rightToken,
                 { left, _ -> left },
                 { left, right -> left shl right },
                 { left, right -> OperatorUsageUndefined(token, left, right) }
-        )!!
+        )
     }
 
     override fun visit(token: BitShiftRight): Number {
         val leftToken = token.children[0].expectedClass(Terminal::class)
         val rightToken = token.children[1].expectedClass(Terminal::class)
-        return numberBiFunction(
+        return strictNumberBiFunction(
                 leftToken,
                 rightToken,
                 { left, _ -> left },
                 { left, right -> left shr right },
                 { left, right -> OperatorUsageUndefined(token, left, right) }
-        )!!
+        )
     }
 
     override fun visit(token: Caret): Number {
         val leftToken = token.children[0].expectedClass(Terminal::class)
         val rightToken = token.children[1].expectedClass(Terminal::class)
-        return numberBiFunction(
+        return strictNumberBiFunction(
                 leftToken,
                 rightToken,
                 { a, b -> a.toDouble().pow(b.toDouble()) },
                 { a, b -> a.toDouble().pow(b.toDouble()) },
                 { left, right -> OperatorUsageUndefined(token, left, right) }
-        )!!
+        )
     }
 
     override fun visit(token: ForwardSlash): Number {
         val leftToken = token.children[0].expectedClass(Terminal::class)
         val rightToken = token.children[1].expectedClass(Terminal::class)
-        return numberBiFunction(
+        return strictNumberBiFunction(
                 leftToken,
                 rightToken,
                 { left, right -> left / right },
                 { left, right -> left / right },
                 { left, right -> OperatorUsageUndefined(token, left, right) }
-        )!!
+        )
     }
 
     override fun visit(token: Ampersand): Any {
@@ -287,60 +288,110 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
             leftToken: TreeNode,
             rightToken: TreeNode
     ): Int {
-        return primitiveBiFunction(
+        return strictPrimitiveBiFunction(
                 leftToken,
                 rightToken,
                 { f1, f2 -> f1.compareTo(f2) },
                 { x, y -> x.compareTo(y) },
                 { obj, anotherString -> obj.compareTo(anotherString) },
                 { left, right -> classNotCompatibleException(left, right) }
-        )!!
+        )
     }
+
+    fun <T> strictPrimitiveBiFunction(
+            leftToken: TreeNode,
+            rightToken: TreeNode,
+            onFloat: (Float, Float) -> T,
+            onInt: (Int, Int) -> T,
+            onString: (String, String) -> T,
+            onError: (Any, Any) -> Exception
+    ): T {
+        val result = primitiveBiFunction(leftToken, rightToken, onFloat, onInt, onString)
+
+        if (result != null)
+            return result
+
+        var left = leftToken.evaluateTo(Any::class)
+        var right = rightToken.evaluateTo(Any::class)
+
+        while (left is List<*>) {
+            left = left[0]!!
+        }
+
+        while (right is List<*>) {
+            right = right[0]!!
+        }
+
+        throw onError(left, right)
+    }
+
 
     fun <T> primitiveBiFunction(
             leftToken: TreeNode,
             rightToken: TreeNode,
             onFloat: (Float, Float) -> T,
             onInt: (Int, Int) -> T,
-            onString: (String, String) -> T,
-            onError: (Any, Any) -> Exception?
+            onString: (String, String) -> T
     ): T? {
         var left = leftToken.evaluateTo(Any::class)
         var right = rightToken.evaluateTo(Any::class)
+
         val result = numberBiFunction(
                 leftToken,
                 rightToken,
                 onFloat,
-                onInt,
-                { _, _ -> null }
+                onInt
         )
+
         if (result != null) {
             return result
         }
+
+        while (left is List<*>) {
+            left = left[0]!!
+        }
+
+        while (right is List<*>) {
+            right = right[0]!!
+        }
+
+        if (left is String && right is String) {
+            return onString(left, right)
+        }
+
+        return null
+    }
+
+    fun <T> strictNumberBiFunction(
+            leftToken: TreeNode,
+            rightToken: TreeNode,
+            onFloat: (Float, Float) -> T,
+            onInt: (Int, Int) -> T,
+            onError: (Any, Any) -> Exception
+    ): T {
+        val result = numberBiFunction(leftToken, rightToken, onFloat, onInt)
+
+        if (result !== null)
+            return result
+
+        var left = leftToken.evaluateTo(Any::class)
+        var right = rightToken.evaluateTo(Any::class)
+
         while (left is List<*>) {
             left = left[0]!!
         }
         while (right is List<*>) {
             right = right[0]!!
         }
-        if (left is String && right is String) {
-            return onString(left, right)
-        }
-        val exception = onError(left, right)
 
-        if (exception != null) {
-            throw exception
-        }
-
-        return null
+        throw onError(left, right)
     }
 
     fun <T> numberBiFunction(
             leftToken: TreeNode,
             rightToken: TreeNode,
             onFloat: (Float, Float) -> T,
-            onInt: (Int, Int) -> T,
-            onError: (Any, Any) -> Exception?
+            onInt: (Int, Int) -> T
     ): T? {
         var left = leftToken.evaluateTo(Any::class)
         var right = rightToken.evaluateTo(Any::class)
@@ -359,10 +410,7 @@ class InterpreterVisitor(private val symtab: SymbolTable) : TokenEvaluator {
                 return onInt(left.toInt(), right.toInt())
             }
         }
-        val exception = onError(left, right)
-        if (exception != null) {
-            throw exception
-        }
+
         return null
     }
 

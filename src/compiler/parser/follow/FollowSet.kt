@@ -2,8 +2,6 @@ package compiler.parser.follow
 
 import compiler.parser.NonTerminalClass
 import compiler.parser.ProductionRules
-import compiler.parser.Symbol.NonTerminal.ExpressionList
-import compiler.parser.Symbol.NonTerminal.MoreExpressions
 import compiler.parser.first.FirstSet
 import compiler.parser.first.TerminalClass
 import compiler.parser.follow.VisitedState.*

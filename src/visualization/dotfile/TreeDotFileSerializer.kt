@@ -5,7 +5,6 @@ import compiler.parser.Symbol.Terminal
 import compiler.parser.Symbol.Terminal.Ignorable.EOFTerminal
 import compiler.parser.Symbol.Terminal.TypedTerminal.StringTerminal
 import compiler.parser.TreeNode
-import java.io.IOException
 import java.io.PrintWriter
 import java.util.*
 
