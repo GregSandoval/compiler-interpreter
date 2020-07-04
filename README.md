@@ -1,9 +1,10 @@
-# A5 Programming Language Lexer
+# A7 Programming Language
+This README is outdated. The project has since been converted to Kotlin, 
+and combined into a complete interpreter.
 
-### Team
-Gregory A. Sandoval
+### A7 Programming Language Lexer
 
-## Introduction 
+#### Introduction 
 The objective of this assignment is to write a lexer for the A5 language
 lexicon: its tokens (i.e., legal ''words''). The lexer transforms an A5
 high-level program sequence of characters into a list of tokens for that
@@ -26,7 +27,7 @@ field that you use to determine what type the value is, which is not ideal.
 Although the code hasn't reached the full goal, it's enough to 
 complete this assignment. 
  
-## The Graph
+### The Graph
 To model the DFA, I needed a way to model a graph. Rather than taking the 
 traditional approach of an adjacency list, I opted for just nodes. There is
 no 'Graph' class, rather a node holds a reference to a list of
@@ -35,7 +36,7 @@ predicate function, which takes some parameter and returns whether we
 should `walk' to the other node. Walking the graph can be done by
 repeatedly finding the next node to walk to giving a particular object.
 
-## The Lexer
+### The Lexer
 Given the graph abstraction, we can create a deterministic finite
 automata using a graph. Each graph node represents a state in the DFA;
 Each graph edge has a predicate function that determines if a letter
@@ -51,7 +52,7 @@ letters, numbers, white space, etc. I could've used a regular expression for
 detecting character classes, but that's cheating! 
 You wouldn't write a hash table using a hash table right? :)
 
-### Example Code
+#### Example Code
 Although the code for parsing is somewhat readable, it's a far cry from 
 perfect. From a high level perspective, I wanted the code to read like the
 grammar itself. Unfortunately, we must define states before they're used,
@@ -96,7 +97,7 @@ class MyHeavyHitterClass {
 }
 ```
 
-## A5 Grammar
+### A5 Grammar
 The grammar for the A5 programming language is defined using the normal
 regular expression syntax found in most programming languages. The numbers 
 next to production rule is the token ID. The token ID is part of the produced 
@@ -178,32 +179,7 @@ edges, including every edge would be a horrible mess.
 
 ![image](LexerDFADiagram.png)
 
-## Dependencies
-Ant is an optional dependency, I've included a prebuilt jar file, so you
-can skip that step.
-
-```shell script
-brew install java
-brew install ant
-```
-
-
-## How to run
-In the root directory, run the following commands. 
-
-
-### Building it from source
-The first command builds the java code. The second passes a text 
-file to the lexer. The lexer outputs the results to standard out, 
-in `.alex` format.
-
-```
-ant
-java -cp ./out/production/Lexer compiler.Main < TestInput.txt
-```
-
-
-### Running the prebuilt jar
+#### Running the prebuilt jar
 ```
 java -jar Lexer.jar < TestInput.txt
 ```
@@ -298,7 +274,7 @@ Accepted token value: "{"
 ```
 
 
-## Features
+### Features
 - Ability to log every transition in the DFA.
 - Tracks line number and position.
 - On error, logs problem line with bad character highlighted
@@ -307,18 +283,18 @@ Accepted token value: "{"
 - Easy to debug DFA, turn on the transition logger and just worry about transitions!
 - Hides all character manipulations from the client.
 
-# A7 Programming Language Parser
+## A7 Programming Language Parser
 
-### Team
+#### Team
 Gregory A. Sandoval
 
-## Introduction 
+### Introduction 
 The objective of this assignment is to write a parser for the A7 language.
 The parser transforms an A7 source file into a parse tree, then an abstract syntax
 tree. The application then serializes the trees into images. The application
 accepts source code, or a token stream (in serialized alex format).
 
-## The Parser
+### The Parser
 The parser is a LL(1) non-recursive predictive parser. The parser is hand
 built, I've written every grammar rule and transition within the deterministic push
 down automata by hand. This is not a compiler compiler (I wish!). I represent 
@@ -329,7 +305,7 @@ The benefits aren't so clear now, but later compiler phases would benefit greatl
 from this decision. This application is not performant, optimizations have not been
 made to make things _dead_ simple.
 
-## A7 Grammar
+### A7 Grammar
 Below is the unedited context free grammar for the A7 programming language. In order
 to be processed by the parser I had to remove all the left recursion, and the left common
 prefixes. 
@@ -767,7 +743,7 @@ Opmul                       = slash
 Opmul                       = caret
 ```
 
-## Dependencies
+### Dependencies
 Ant is an optional dependency, I've included a prebuilt jar file, so you
 can skip that step. Java 13 is *_required_*. The A5 Lexer is also a requirement,
 but i've included a prebuilt jar as well. 
@@ -778,11 +754,11 @@ brew install ant
 ```
 
 
-## How to run
+### How to run
 In the root directory, run the following commands. 
 
 
-### Building it from source
+#### Building it from source
 The first command builds the java code. The second passes a text 
 file to the parser. The parser outputs the results images named
 `pst.png` and `ast.png`. These are MacOS build instructions only.
@@ -793,7 +769,7 @@ java --enable-preview -cp ./Lexer.jar:./out/production/Parser Main --file=sample
 ```
 
 
-### Running the prebuilt jar
+#### Running the prebuilt jar
 I've included a sample test file, the expected result after running the
 java code should be as follows.
 
@@ -848,12 +824,14 @@ java --enable-preview -jar Parser.jar --alex < sample-alex-stream.txt
 ```
 
 Parse Tree:
+
 ![image](./pst-alex-stream.png)
 
 Abstract Syntax Tree:
+
 ![image](./ast-alex-stream.png)
 
-## Sample app with all language features 
+### Sample app with all language features 
 The below command runs a fully featured sample program:
 
 ```
@@ -866,7 +844,7 @@ Parse Tree:
 Abstract Syntax Tree:
 ![image](./ast-full.png)
 
-## Features
+### Features
 - Converts source to full PST and AST representations
 - Logs error with line numbers and expected output (requires the use
 of a file).
