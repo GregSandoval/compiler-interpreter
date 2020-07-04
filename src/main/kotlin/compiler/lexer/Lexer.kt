@@ -1,40 +1,29 @@
 package compiler.lexer
 
-import compiler.dfa.*
+import compiler.dfa.DFA
+import compiler.dfa.DFARepeatingExecutor
 import compiler.lexer.token.KeywordTokenRecognizer
 import compiler.parser.Symbol.Terminal
 import compiler.parser.Symbol.Terminal.Ignorable
-import compiler.parser.andThen
 import compiler.utils.TextCursor
 import java.util.*
 import java.util.stream.Collectors
 
 typealias TokenCreatedListener = (Terminal, TextCursor) -> Unit
 
-class Lexer(
-        private var dfa: DFA,
-        private var transitionListeners: TransitionListener,
-        private var finalStateListeners: FinalStateListener,
-        private var nonFinalStateListeners: NonFinalStateListener,
-        private var tokenCreatedListeners: TokenCreatedListener
-) {
-
+class Lexer(private var dfa: DFA, private val listener: LexerListener) {
     fun lex(text: String): List<Terminal> {
         val tokens = ArrayList<Terminal>()
         val cursor = TextCursor(text)
 
-        finalStateListeners = finalStateListeners.andThen {
+        val listener = this.listener.onFinalState {
             val token = it.getToken(cursor)
             tokens.add(token)
-            tokenCreatedListeners(token, cursor)
+            this.listener.onTokenCreated(token, cursor)
         }
 
-        DFARepeatingExecutor(
-                dfa,
-                transitionListeners,
-                finalStateListeners,
-                nonFinalStateListeners
-        ).execute(cursor)
+        val executor = DFARepeatingExecutor(dfa, listener)
+        executor.execute(cursor)
 
         return tokens
                 .stream()

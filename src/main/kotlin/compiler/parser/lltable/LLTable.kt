@@ -4,6 +4,15 @@ import compiler.parser.*
 import compiler.parser.Symbol.NonTerminal
 import compiler.parser.first.FirstSet
 import compiler.parser.first.TerminalClass
+import kotlin.collections.HashMap
+import kotlin.collections.List
+import kotlin.collections.Map
+import kotlin.collections.MutableMap
+import kotlin.collections.Set
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.iterator
+import kotlin.collections.map
 import kotlin.collections.set
 import kotlin.reflect.KClass
 

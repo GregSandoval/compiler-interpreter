@@ -1,13 +1,13 @@
 package compiler.dfa
 
 import compiler.dfa.LexicalNode.ERROR
+import compiler.lexer.LexerListener
 import compiler.utils.TextCursor
 
 typealias TransitionListener = (LexicalNode, Char, LexicalNode) -> Unit
 
-open class DFAExecutor(private val dfa: DFA, private val listeners: TransitionListener) {
-
-    open fun execute(input: TextCursor): LexicalNode {
+open class DFAExecutor(private val dfa: DFA, private val listener: LexerListener) {
+    fun execute(input: TextCursor): LexicalNode {
         var current = dfa.start
         while (input.hasNext()) {
             val next = current on input.peek()
@@ -15,7 +15,7 @@ open class DFAExecutor(private val dfa: DFA, private val listeners: TransitionLi
             if (next == ERROR)
                 break
 
-            listeners(current, input.next(), next)
+            listener.onTransition(current, input.next(), next)
             current = next
         }
         return current
