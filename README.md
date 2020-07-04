@@ -807,10 +807,10 @@ main {
 ```
 
 Parse Tree:
-![image](./pst.png)
+![image](./pst-readme.png)
 
 Abstract Syntax Tree:
-![image](./ast.png)
+![image](./ast-readme.png)
 
 Using the jar emits the same output, but requires no build steps:
 
