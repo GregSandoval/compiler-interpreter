@@ -2,10 +2,26 @@ prog
 
 main {
     var(
-        int test = 0;
+        string name;
+        string favoriteLanguage;
     )
-    while(test < 10){
-        print(test);
-        test = test + 1;
+
+    print("Hey buddy, what's your name? ");
+    name = input();
+
+    print("Nice to meet you ", name, "! what's your favorite programming language? ");
+    favoriteLanguage = input();
+
+    if (favoriteLanguage == "golang"){
+        print("Ah, does that have generics yet?");
+    } elseif(favoriteLanguage == "go") {
+        print("Ah, does that have generics yet?");
+    } elseif(favoriteLanguage == "java") {
+        print("Shall we pray to thy holy java?");
+    } else {
+        // 99% accurate
+        print("Nice! That language has generics. ");
+        print("Can you believe golang still lacks generics?");
     };
+
 }
