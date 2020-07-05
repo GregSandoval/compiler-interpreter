@@ -12,72 +12,72 @@ import compiler.utils.or
  * This file creates the DFA nodes and edges
  */
 
-class A5LexiconDFA : DFA(START) {
+class A5LexiconDFA : DFA(START()) {
     init {
         // WHITESPACE STATE
-        START to WHITESPACE on (AWhitespace or ALineSeparator)
-        WHITESPACE to WHITESPACE on (AWhitespace or ANewline)
+        START::class to ::WHITESPACE on (AWhitespace or ALineSeparator)
+        WHITESPACE::class to ::WHITESPACE on (AWhitespace or ANewline)
 
         // IDENTIFIER
-        START to IDENTIFIER on (ALetter or AUnderscore)
-        IDENTIFIER to IDENTIFIER on (AUnderscore or ADigit or ALetter)
+        START::class to ::IDENTIFIER on (ALetter or AUnderscore)
+        IDENTIFIER::class to ::IDENTIFIER on (AUnderscore or ADigit or ALetter)
 
         // INTEGER
-        START to INTEGER on ADigit
-        INTEGER to INTEGER on ADigit
-        PLUS to INTEGER on ADigit
-        MINUS to INTEGER on ADigit
+        START::class to ::INTEGER on ADigit
+        INTEGER::class to ::INTEGER on ADigit
+        PLUS::class to ::INTEGER on ADigit
+        MINUS::class to ::INTEGER on ADigit
 
         // FLOAT
-        INTEGER to MAYBE_FLOAT on APeriod
-        MAYBE_FLOAT to FLOAT on ADigit
-        FLOAT to FLOAT on ADigit
+        INTEGER::class to ::MAYBE_FLOAT on APeriod
+        MAYBE_FLOAT::class to ::FLOAT on ADigit
+        FLOAT::class to ::FLOAT on ADigit
 
         // STRING
-        START to OPENING_STRING on AQuote
-        OPENING_STRING to STRING_CONTENTS on (ANotNewline and !AQuote)
-        OPENING_STRING to CLOSING_STRING on AQuote
-        STRING_CONTENTS to STRING_CONTENTS on (ANotNewline and !AQuote)
-        STRING_CONTENTS to CLOSING_STRING on AQuote
+        START::class to ::OPENING_STRING on AQuote
+        OPENING_STRING::class to ::STRING_CONTENTS on (ANotNewline and !AQuote)
+        OPENING_STRING::class to ::CLOSING_STRING on AQuote
+        STRING_CONTENTS::class to ::STRING_CONTENTS on (ANotNewline and !AQuote)
+        STRING_CONTENTS::class to ::CLOSING_STRING on AQuote
 
         // COMMENT
-        FORWARD_SLASH to COMMENT on AForwardSlash
-        COMMENT to COMMENT on ANotNewline
+        FORWARD_SLASH::class to ::COMMENT on AForwardSlash
+        COMMENT::class to ::COMMENT on ANotNewline
 
         // UNPAIRED DELIMITERS
-        START to COMMA on AComma
-        START to SEMI_COLON on ASemiColon
+        START::class to ::COMMA on AComma
+        START::class to ::SEMI_COLON on ASemiColon
 
         // PAIRED DELIMITERS
-        START to LESS_THAN on ALessThan
-        START to GREATER_THAN on AGreaterThan
-        START to LEFT_BRACE on ALeftBrace
-        START to RIGHT_BRACE on ARightBrace
-        START to LEFT_BRACKET on ALeftBracket
-        START to RIGHT_BRACKET on ARightBracket
-        START to LEFT_PAREN on ALeftParen
-        START to RIGHT_PAREN on ARightParen
+        START::class to ::LESS_THAN on ALessThan
+        START::class to ::GREATER_THAN on AGreaterThan
+        START::class to ::LEFT_BRACE on ALeftBrace
+        START::class to ::RIGHT_BRACE on ARightBrace
+        START::class to ::LEFT_BRACKET on ALeftBracket
+        START::class to ::RIGHT_BRACKET on ARightBracket
+        START::class to ::LEFT_PAREN on ALeftParen
+        START::class to ::RIGHT_PAREN on ARightParen
 
         // OTHER PUNCTUATION
-        START to ASTERISK on AAsterisk
-        START to CARET on ACaret
-        START to COLON on AColon
-        START to PERIOD on APeriod
-        START to EQUAL on AEqual
-        START to MINUS on AMinus
-        START to PLUS on APlus
-        START to FORWARD_SLASH on AForwardSlash
-        START to AND on AAnd
-        START to EXCLAMATION_MARK on AExclamationMark
-        START to MODULUS on APercent
+        START::class to ::ASTERISK on AAsterisk
+        START::class to ::CARET on ACaret
+        START::class to ::COLON on AColon
+        START::class to ::PERIOD on APeriod
+        START::class to ::EQUAL on AEqual
+        START::class to ::MINUS on AMinus
+        START::class to ::PLUS on APlus
+        START::class to ::FORWARD_SLASH on AForwardSlash
+        START::class to ::AND on AAnd
+        START::class to ::EXCLAMATION_MARK on AExclamationMark
+        START::class to ::MODULUS on APercent
 
         // MULTI CHARACTER OPERATORS
-        MINUS to OP_ARROW on AGreaterThan
-        EQUAL to OP_EQUAL on AEqual
-        EXCLAMATION_MARK to OP_NEGATE on AEqual
-        LESS_THAN to OP_LESS_THAN on AEqual
-        GREATER_THAN to OP_GREATER_THAN on AEqual
-        LESS_THAN to OP_SHIFT_LEFT on ALessThan
-        GREATER_THAN to OP_SHIFT_RIGHT on AGreaterThan
+        MINUS::class to ::OP_ARROW on AGreaterThan
+        EQUAL::class to ::OP_EQUAL on AEqual
+        EXCLAMATION_MARK::class to ::OP_NEGATE on AEqual
+        LESS_THAN::class to ::OP_LESS_THAN on AEqual
+        GREATER_THAN::class to ::OP_GREATER_THAN on AEqual
+        LESS_THAN::class to ::OP_SHIFT_LEFT on ALessThan
+        GREATER_THAN::class to ::OP_SHIFT_RIGHT on AGreaterThan
     }
 }

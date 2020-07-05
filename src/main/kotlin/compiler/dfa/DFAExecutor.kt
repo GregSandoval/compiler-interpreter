@@ -12,7 +12,7 @@ open class DFAExecutor(private val dfa: DFA, private val listener: LexerListener
         while (input.hasNext()) {
             val next = current on input.peek()
 
-            if (next == ERROR)
+            if (next is ERROR)
                 break
 
             listener.onTransition(current, input.next(), next)

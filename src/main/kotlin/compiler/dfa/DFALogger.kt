@@ -1,11 +1,12 @@
 package compiler.dfa
 
+import compiler.dfa.LexicalNode.ERROR
 import compiler.parser.Symbol.Terminal
 import compiler.utils.TextCursor
 
 object DFALogger {
     fun logTransition(start: LexicalNode, character: Char, end: LexicalNode) {
-        if (end != LexicalNode.ERROR)
+        if (end !is ERROR)
             System.out.printf("%-19s = %-5s=> %-15s\n", start, "'${escape(character)}'", end);
     }
 
