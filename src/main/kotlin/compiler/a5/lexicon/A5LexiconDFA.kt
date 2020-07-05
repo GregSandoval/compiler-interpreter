@@ -4,6 +4,9 @@ import compiler.dfa.DFA
 import compiler.dfa.LexicalNode.FinalState.FinalStateNoArg.*
 import compiler.dfa.LexicalNode.FinalState.FinalStateSingleArg.*
 import compiler.dfa.LexicalNode.NonFinalState.*
+import compiler.utils.and
+import compiler.utils.not
+import compiler.utils.or
 
 /**
  * This file creates the DFA nodes and edges

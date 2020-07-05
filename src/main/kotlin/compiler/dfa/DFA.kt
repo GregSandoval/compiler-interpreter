@@ -1,7 +1,7 @@
 package compiler.dfa
 
-import compiler.a5.lexicon.Predicate
 import compiler.dfa.LexicalNode.ERROR
+import compiler.utils.Predicate
 import java.util.*
 
 typealias EdgeFunction = (Char) -> Optional<LexicalNode>

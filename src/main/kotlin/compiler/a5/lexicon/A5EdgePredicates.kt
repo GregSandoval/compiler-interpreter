@@ -1,12 +1,8 @@
 package compiler.a5.lexicon
 
-
-/**
- * A grouping of commonly used functions for detecting character classes.
- * Used to define the conditions for when the lexer should transition
- * to a different state.
- */
-typealias Predicate<T> = (T) -> Boolean
+import compiler.utils.Predicate
+import compiler.utils.not
+import compiler.utils.or
 
 fun isSymbol(char: Char): Predicate<Char> = { char == it }
 
@@ -55,16 +51,3 @@ val APercent = isSymbol('%')
 
 // EVERYTHING EXCEPT LINE FEED
 val ANotNewline = ALineSeparator.not()
-
-infix fun <T> Predicate<T>.or(other: Predicate<in T>): Predicate<T> {
-    return { input: T -> this(input) || other(input) }
-}
-
-infix fun <T> Predicate<T>.and(other: Predicate<in T>): Predicate<T> {
-    return { input: T -> this(input) && other(input) }
-}
-
-operator fun <T> Predicate<T>.not(): Predicate<T> {
-    return { input: T -> !this(input) }
-}
-

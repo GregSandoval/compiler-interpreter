@@ -3,7 +3,7 @@ package compiler.lexer
 import compiler.dfa.FinalStateListener
 import compiler.dfa.NonFinalStateListener
 import compiler.dfa.TransitionListener
-import compiler.parser.andThen
+import compiler.utils.andThen
 
 class LexerListener(
         val onTransition: TransitionListener = { _, _, _ -> },
