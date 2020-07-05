@@ -25,10 +25,7 @@ fun <P1, P2, P3> ((P1, P2, P3) -> Unit).andThen(next: (P1, P2, P3) -> Unit): ((P
 
 class Parser(
         private val startSymbol: NonTerminal,
-        private val beforeRuleApplication: BeforeRuleListerner,
-        private val onUnexpectedToken: UnexpectedRuleListener,
-        private val onPredictionNotFoundError: PredictionNotFoundListener,
-        private val onGrammarRuleApplication: NonTerminalReplacedListener,
+        private val listener: ParserListener,
         private val llTable: LLTable
 ) {
 
@@ -38,7 +35,7 @@ class Parser(
         stack.push(startSymbol)
 
         while (!tokens.isEmpty() && !stack.isEmpty()) {
-            beforeRuleApplication(stack, tokens.peek())
+            listener.onBeforeRule(stack, tokens.peek())
 
             val rhs = when (val top = stack.pop()) {
                 is Terminal -> matchTerminal(top, tokens)
@@ -71,11 +68,11 @@ class Parser(
         val rhs = this.llTable.getRHS(top, token::class)
 
         if (rhs === null) {
-            onPredictionNotFoundError(top, token)
+            this.listener.onPredictionNotFound(top, token)
             throw PredictiveParserException(top, token, this.llTable)
         }
 
-        onGrammarRuleApplication(top, token, rhs)
+        this.listener.onNonTerminalReplaced(top, token, rhs)
 
         return rhs
     }
@@ -84,11 +81,11 @@ class Parser(
         val token = tokens.pop()
 
         if (isEqual(token, top)) {
-            onGrammarRuleApplication(top, token, emptyList())
+            this.listener.onNonTerminalReplaced(top, token, emptyList())
             return emptyList()
         }
 
-        onUnexpectedToken(top, token)
+        this.listener.onUnexpectedRule(top, token)
         throw UnexpectedToken(top, token)
     }
 
