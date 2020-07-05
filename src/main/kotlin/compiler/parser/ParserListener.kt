@@ -1,5 +1,12 @@
 package compiler.parser
 
+import compiler.utils.andThen
+
+typealias BeforeRuleListerner = (List<TreeNode>, Symbol.Terminal) -> Unit
+typealias UnexpectedRuleListener = (TreeNode, Symbol.Terminal) -> Unit
+typealias PredictionNotFoundListener = UnexpectedRuleListener
+typealias NonTerminalReplacedListener = (TreeNode, Symbol.Terminal, List<TreeNode>) -> Unit
+
 class ParserListener(
         val onNonTerminalReplaced: NonTerminalReplacedListener = { _, _, _ -> },
         val onPredictionNotFound: PredictionNotFoundListener = { _, _ -> },
