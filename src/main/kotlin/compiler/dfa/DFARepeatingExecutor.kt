@@ -19,7 +19,7 @@ class DFARepeatingExecutor(dfa: DFA, private val listener: LexerListener) {
                 is NonFinalState -> listener.onNonFinalState(input, state)
             }
         }
-        return START
+        return START()
     }
 
 }

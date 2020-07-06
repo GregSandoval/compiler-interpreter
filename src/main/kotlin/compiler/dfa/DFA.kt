@@ -3,26 +3,30 @@ package compiler.dfa
 import compiler.dfa.LexicalNode.ERROR
 import compiler.utils.Predicate
 import java.util.*
+import kotlin.reflect.KClass
 
-typealias EdgeFunction = (Char) -> Optional<LexicalNode>
+typealias StateConstructor = () -> LexicalNode
+typealias EdgeFunction = (Char) -> Optional<StateConstructor>
 
 typealias Transitions = MutableList<EdgeFunction>
-typealias DFATable = MutableMap<LexicalNode, Transitions>
+typealias DFATable = MutableMap<KClass<out LexicalNode>, Transitions>
 
-abstract class DFA(val start: LexicalNode, private val dfa: DFATable = HashMap()) {
+abstract class DFA(val start: StateConstructor) {
+    private val dfa: DFATable = HashMap()
 
     operator fun get(start: LexicalNode, character: Char): LexicalNode {
-        val transitions = this.dfa.getOrElse(start, ::mutableListOf)
+        val transitions = this.dfa.getOrElse(start::class, ::mutableListOf)
         return transitions
                 .stream()
                 .map { it(character) }
                 .filter { it.isPresent }
                 .findFirst()
-                .orElseGet { Optional.of(ERROR) }
+                .orElseGet { Optional.of(::ERROR) }
                 .get()
+                .invoke()
     }
 
-    protected infix fun LexicalNode.to(end: LexicalNode): EdgeBuilderAlt {
+    protected infix fun KClass<out LexicalNode>.to(end: StateConstructor): EdgeBuilderAlt {
         return object : EdgeBuilderAlt {
             override fun on(predicate: Predicate<Char>) {
                 val edges = dfa.getOrPut(this@to, ::mutableListOf)
