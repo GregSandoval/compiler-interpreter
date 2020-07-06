@@ -12,7 +12,7 @@ import compiler.utils.or
  * This file creates the DFA nodes and edges
  */
 
-class A5LexiconDFA : DFA(START()) {
+class A5LexiconDFA : DFA(::START) {
     init {
         // WHITESPACE STATE
         START::class to ::WHITESPACE on (AWhitespace or ALineSeparator)

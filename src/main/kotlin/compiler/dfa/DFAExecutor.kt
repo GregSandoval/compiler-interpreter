@@ -8,7 +8,7 @@ typealias TransitionListener = (LexicalNode, Char, LexicalNode) -> Unit
 
 open class DFAExecutor(private val dfa: DFA, private val listener: LexerListener) {
     fun execute(input: TextCursor): LexicalNode {
-        var current = dfa.start
+        var current = dfa.start()
         while (input.hasNext()) {
             val next = current on input.peek()
 
