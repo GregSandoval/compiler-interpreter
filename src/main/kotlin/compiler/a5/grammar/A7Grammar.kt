@@ -8,214 +8,210 @@ import compiler.parser.Symbol.Terminal.Operator.*
 import compiler.parser.Symbol.Terminal.Punctuation.*
 import compiler.parser.Symbol.Terminal.TypedTerminal.*
 
-object A7Grammar {
+class A7Grammar: ProductionRules() {
 
-    fun build(): ProductionRules {
-        val productions = ProductionRules()
+    init {
+        this[Program::class] = listOf(::ProgramKeyword, ::VariableGroup, ::FunctionDefinitions, ::Main)
 
-        productions[Program::class] = listOf(::ProgramKeyword, ::VariableGroup, ::FunctionDefinitions, ::Main)
+        this[Main::class] = listOf(::MainKeyword, ::BasicBlock)
 
-        productions[Main::class] = listOf(::MainKeyword, ::BasicBlock)
+        this[BasicBlock::class] = listOf(::LeftBrace, ::VariableGroup, ::Statements, ::RightBrace)
 
-        productions[BasicBlock::class] = listOf(::LeftBrace, ::VariableGroup, ::Statements, ::RightBrace)
+        this[VariableGroup::class] = listOf(::VarKeyword, ::ParenthesizedVariabledList)
+        this[VariableGroup::class] = listOf()
 
-        productions[VariableGroup::class] = listOf(::VarKeyword, ::ParenthesizedVariabledList)
-        productions[VariableGroup::class] = listOf()
+        this[ParenthesizedVariabledList::class] = listOf(::LeftParen, ::VariableList, ::RightParen)
 
-        productions[ParenthesizedVariabledList::class] = listOf(::LeftParen, ::VariableList, ::RightParen)
+        this[VariableList::class] = listOf(::VariableItem, ::SemiColon, ::VariableList)
+        this[VariableList::class] = listOf()
 
-        productions[VariableList::class] = listOf(::VariableItem, ::SemiColon, ::VariableList)
-        productions[VariableList::class] = listOf()
+        this[VariableItem::class] = listOf(::VariableDecleration, ::VariableItemSuffix)
+        // this[VariableItem::class] = listOf(::ClassDefinition)
 
-        productions[VariableItem::class] = listOf(::VariableDecleration, ::VariableItemSuffix)
-        // productions[VariableItem::class] = listOf(::ClassDefinition)
+        this[VariableItemSuffix::class] = listOf(::Equal, ::VariableInitializer)
+        this[VariableItemSuffix::class] = listOf()
 
-        productions[VariableItemSuffix::class] = listOf(::Equal, ::VariableInitializer)
-        productions[VariableItemSuffix::class] = listOf()
+        this[VariableDecleration::class] = listOf(::Simplekind, ::VariableSpec)
 
-        productions[VariableDecleration::class] = listOf(::Simplekind, ::VariableSpec)
+        this[Simplekind::class] = listOf(::BaseKind)
+        //this[Simplekind::class] = listOf(::ClassIdentifier)
 
-        productions[Simplekind::class] = listOf(::BaseKind)
-        //productions[Simplekind::class] = listOf(::ClassIdentifier)
+        this[BaseKind::class] = listOf(::IntegerKeyword)
+        this[BaseKind::class] = listOf(::FloatKeyword)
+        this[BaseKind::class] = listOf(::StringKeyword)
 
-        productions[BaseKind::class] = listOf(::IntegerKeyword)
-        productions[BaseKind::class] = listOf(::FloatKeyword)
-        productions[BaseKind::class] = listOf(::StringKeyword)
+        this[VariableSpec::class] = listOf(::VariableIdentifier, ::ArraySpec)
+        this[VariableSpec::class] = listOf(::DereferencedIdentifier)
 
-        productions[VariableSpec::class] = listOf(::VariableIdentifier, ::ArraySpec)
-        productions[VariableSpec::class] = listOf(::DereferencedIdentifier)
+        this[VariableIdentifier::class] = listOf(::IdentifierTerminal)
 
-        productions[VariableIdentifier::class] = listOf(::IdentifierTerminal)
+        this[ArraySpec::class] = listOf(::KKint)
+        this[ArraySpec::class] = listOf()
 
-        productions[ArraySpec::class] = listOf(::KKint)
-        productions[ArraySpec::class] = listOf()
+        this[KKint::class] = listOf(::LeftBracket, ::IntegerTerminal, ::RightBracket)
 
-        productions[KKint::class] = listOf(::LeftBracket, ::IntegerTerminal, ::RightBracket)
+        this[DereferencedIdentifier::class] = listOf(::Dereference, ::IdentifierTerminal)
 
-        productions[DereferencedIdentifier::class] = listOf(::Dereference, ::IdentifierTerminal)
+        this[Dereference::class] = listOf(::Asterisk)
 
-        productions[Dereference::class] = listOf(::Asterisk)
+        this[VariableInitializer::class] = listOf(::Expression)
+        this[VariableInitializer::class] = listOf(::BracedExprersions)
 
-        productions[VariableInitializer::class] = listOf(::Expression)
-        productions[VariableInitializer::class] = listOf(::BracedExprersions)
+        this[BracedExprersions::class] = listOf(::LeftBrace, ::ExpressionList, ::RightBrace)
 
-        productions[BracedExprersions::class] = listOf(::LeftBrace, ::ExpressionList, ::RightBrace)
+        this[ExpressionList::class] = listOf(::Expression, ::MoreExpressions)
+        this[ExpressionList::class] = listOf()
 
-        productions[ExpressionList::class] = listOf(::Expression, ::MoreExpressions)
-        productions[ExpressionList::class] = listOf()
-
-        productions[MoreExpressions::class] = listOf(::Comma, ::ExpressionList)
-        productions[MoreExpressions::class] = listOf()
+        this[MoreExpressions::class] = listOf(::Comma, ::ExpressionList)
+        this[MoreExpressions::class] = listOf()
 
 
-//        productions[ClassIdentifier::class] = listOf(::IdentifierTerminal)
-//        productions[ClassDefinition::class] = listOf(::ClassHeader, ::ClassDefinitionSuffix)
+//        this[ClassIdentifier::class] = listOf(::IdentifierTerminal)
+//        this[ClassDefinition::class] = listOf(::ClassHeader, ::ClassDefinitionSuffix)
 //
-//        productions[ClassDefinitionSuffix::class] = listOf(::BracedClassItems)
-//        productions[ClassDefinitionSuffix::class] = listOf(::IfKeyword, ::BracedClassItems)
+//        this[ClassDefinitionSuffix::class] = listOf(::BracedClassItems)
+//        this[ClassDefinitionSuffix::class] = listOf(::IfKeyword, ::BracedClassItems)
 //
-//        productions[BracedClassItems::class] = listOf(::LeftBrace, ::ClassItems, ::RightBrace)
+//        this[BracedClassItems::class] = listOf(::LeftBrace, ::ClassItems, ::RightBrace)
 //
-//        productions[ClassHeader::class] = listOf(::ClassKeyword, ::ClassIdentifier, ::ClassParent, ::Interfaces)
+//        this[ClassHeader::class] = listOf(::ClassKeyword, ::ClassIdentifier, ::ClassParent, ::Interfaces)
 //
-//        productions[ClassParent::class] = listOf(::Colon, ::ClassIdentifier)
-//        productions[ClassParent::class] = listOf()
+//        this[ClassParent::class] = listOf(::Colon, ::ClassIdentifier)
+//        this[ClassParent::class] = listOf()
 //
-//        productions[ClassItems::class] = listOf(::ClassGroup, ::ClassItems)
-//        productions[ClassItems::class] = listOf()
+//        this[ClassItems::class] = listOf(::ClassGroup, ::ClassItems)
+//        this[ClassItems::class] = listOf()
 //
-//        productions[ClassGroup::class] = listOf(::ClassVisibility)
-//        productions[ClassGroup::class] = listOf(::VariableGroup)
-//        productions[ClassGroup::class] = listOf(::MethodDeclerations)
+//        this[ClassGroup::class] = listOf(::ClassVisibility)
+//        this[ClassGroup::class] = listOf(::VariableGroup)
+//        this[ClassGroup::class] = listOf(::MethodDeclerations)
 //
-//        productions[ClassVisibility::class] = listOf(::Colon, ::IdentifierTerminal)
+//        this[ClassVisibility::class] = listOf(::Colon, ::IdentifierTerminal)
 //
-//        productions[Interfaces::class] = listOf(::Plus, ::ClassIdentifier, ::Interfaces)
-//        productions[Interfaces::class] = listOf()
+//        this[Interfaces::class] = listOf(::Plus, ::ClassIdentifier, ::Interfaces)
+//        this[Interfaces::class] = listOf()
 //
-//        productions[MethodDeclerations::class] = listOf(::MethodHeader)
+//        this[MethodDeclerations::class] = listOf(::MethodHeader)
 //
-//        productions[MethodHeader::class] = listOf(::FunctionKeyword, ::MethodIdentifier, ::ParenthesizedParameterList, ::ReturnKind)
+//        this[MethodHeader::class] = listOf(::FunctionKeyword, ::MethodIdentifier, ::ParenthesizedParameterList, ::ReturnKind)
 //
-//        productions[MethodIdentifier::class] = listOf(::ClassIdentifier, ::Colon, ::FunctionIdentifier)
+//        this[MethodIdentifier::class] = listOf(::ClassIdentifier, ::Colon, ::FunctionIdentifier)
 
-        productions[FunctionDefinitions::class] = listOf(::FunctionDefinition, ::FunctionDefinitions)
-        productions[FunctionDefinitions::class] = listOf()
+        this[FunctionDefinitions::class] = listOf(::FunctionDefinition, ::FunctionDefinitions)
+        this[FunctionDefinitions::class] = listOf()
 
-        productions[FunctionDefinition::class] = listOf(::FunctionHeader, ::BasicBlock)
+        this[FunctionDefinition::class] = listOf(::FunctionHeader, ::BasicBlock)
 
-        productions[FunctionHeader::class] = listOf(::FunctionKeyword, ::FunctionIdentifier, ::ParenthesizedParameterList, ::ReturnKind)
+        this[FunctionHeader::class] = listOf(::FunctionKeyword, ::FunctionIdentifier, ::ParenthesizedParameterList, ::ReturnKind)
 
-        productions[FunctionIdentifier::class] = listOf(::IdentifierTerminal)
+        this[FunctionIdentifier::class] = listOf(::IdentifierTerminal)
 
-        productions[ReturnKind::class] = listOf(::BaseKind)
+        this[ReturnKind::class] = listOf(::BaseKind)
 
-        productions[ParenthesizedParameterList::class] = listOf(::LeftParen, ::VariableSpecs, ::RightParen)
+        this[ParenthesizedParameterList::class] = listOf(::LeftParen, ::VariableSpecs, ::RightParen)
 
-        productions[VariableSpecs::class] = listOf(::VariableSpec, ::MoreVariableSpecs)
-        productions[VariableSpecs::class] = listOf()
+        this[VariableSpecs::class] = listOf(::VariableSpec, ::MoreVariableSpecs)
+        this[VariableSpecs::class] = listOf()
 
-        productions[MoreVariableSpecs::class] = listOf(::Comma, ::VariableSpecs)
-        productions[MoreVariableSpecs::class] = listOf()
+        this[MoreVariableSpecs::class] = listOf(::Comma, ::VariableSpecs)
+        this[MoreVariableSpecs::class] = listOf()
 
-        productions[Statements::class] = listOf(::Statement, ::SemiColon, ::Statements)
-        productions[Statements::class] = listOf()
+        this[Statements::class] = listOf(::Statement, ::SemiColon, ::Statements)
+        this[Statements::class] = listOf()
 
-        productions[Statement::class] = listOf(::AssignmentOrFunction)
-        productions[Statement::class] = listOf(::IfStatement)
-        productions[Statement::class] = listOf(::WhileStatement)
-        productions[Statement::class] = listOf(::PrintStatement)
-        productions[Statement::class] = listOf(::InputStatement)
-        productions[Statement::class] = listOf(::ReturnStatement)
+        this[Statement::class] = listOf(::AssignmentOrFunction)
+        this[Statement::class] = listOf(::IfStatement)
+        this[Statement::class] = listOf(::WhileStatement)
+        this[Statement::class] = listOf(::PrintStatement)
+        this[Statement::class] = listOf(::InputStatement)
+        this[Statement::class] = listOf(::ReturnStatement)
 
-        productions[AssignmentOrFunction::class] = listOf(::DereferencedIdentifier, ::AssignmentSuffix)
-        productions[AssignmentOrFunction::class] = listOf(::IdentifierTerminal, ::AssignmentOrFunctionSuffix)
+        this[AssignmentOrFunction::class] = listOf(::DereferencedIdentifier, ::AssignmentSuffix)
+        this[AssignmentOrFunction::class] = listOf(::IdentifierTerminal, ::AssignmentOrFunctionSuffix)
 
-        productions[AssignmentOrFunctionSuffix::class] = listOf(::LeftValueSuffix, ::AssignmentSuffix)
-        productions[AssignmentOrFunctionSuffix::class] = listOf(::ParenthesizedExpressions)
+        this[AssignmentOrFunctionSuffix::class] = listOf(::LeftValueSuffix, ::AssignmentSuffix)
+        this[AssignmentOrFunctionSuffix::class] = listOf(::ParenthesizedExpressions)
 
-        productions[AssignmentSuffix::class] = listOf(::Equal, ::Expression)
+        this[AssignmentSuffix::class] = listOf(::Equal, ::Expression)
 
-        productions[LeftValueSuffix::class] = listOf(::BracketedExpression)
-        productions[LeftValueSuffix::class] = listOf()
+        this[LeftValueSuffix::class] = listOf(::BracketedExpression)
+        this[LeftValueSuffix::class] = listOf()
 
-        productions[BracketedExpression::class] = listOf(::LeftBracket, ::Expression, ::RightBracket)
+        this[BracketedExpression::class] = listOf(::LeftBracket, ::Expression, ::RightBracket)
 
-        productions[ParenthesizedExpressions::class] = listOf(::LeftParen, ::ExpressionList, ::RightParen)
+        this[ParenthesizedExpressions::class] = listOf(::LeftParen, ::ExpressionList, ::RightParen)
 
-        productions[IfStatement::class] = listOf(::IfKeyword, ::ParenthesizedExpression, ::BasicBlock, ::ElsePartialStatement)
+        this[IfStatement::class] = listOf(::IfKeyword, ::ParenthesizedExpression, ::BasicBlock, ::ElsePartialStatement)
 
-        productions[ElsePartialStatement::class] = listOf(::ElseIfKeyword, ::ParenthesizedExpression, ::BasicBlock, ::ElsePartialStatement)
-        productions[ElsePartialStatement::class] = listOf(::ElseKeyword, ::BasicBlock)
-        productions[ElsePartialStatement::class] = listOf()
+        this[ElsePartialStatement::class] = listOf(::ElseIfKeyword, ::ParenthesizedExpression, ::BasicBlock, ::ElsePartialStatement)
+        this[ElsePartialStatement::class] = listOf(::ElseKeyword, ::BasicBlock)
+        this[ElsePartialStatement::class] = listOf()
 
-        productions[WhileStatement::class] = listOf(::WhileKeyword, ::ParenthesizedExpression, ::BasicBlock)
+        this[WhileStatement::class] = listOf(::WhileKeyword, ::ParenthesizedExpression, ::BasicBlock)
 
-        productions[PrintStatement::class] = listOf(::PrintKeyword, ::ParenthesizedExpressions)
+        this[PrintStatement::class] = listOf(::PrintKeyword, ::ParenthesizedExpressions)
 
-        productions[InputStatement::class] = listOf(::InputKeyword, ::ParenthesizedExpressions)
+        this[InputStatement::class] = listOf(::InputKeyword, ::ParenthesizedExpressions)
 
-        productions[ReturnStatement::class] = listOf(::ReturnKeyword, ::ReturnStatementSuffix)
+        this[ReturnStatement::class] = listOf(::ReturnKeyword, ::ReturnStatementSuffix)
 
-        productions[ReturnStatementSuffix::class] = listOf(::Expression)
-        productions[ReturnStatementSuffix::class] = listOf()
+        this[ReturnStatementSuffix::class] = listOf(::Expression)
+        this[ReturnStatementSuffix::class] = listOf()
 
-        productions[ParenthesizedExpression::class] = listOf(::LeftParen, ::Expression, ::RightParen)
+        this[ParenthesizedExpression::class] = listOf(::LeftParen, ::Expression, ::RightParen)
 
-        productions[Expression::class] = listOf(::Rterm, ::ExpressionSuffix)
+        this[Expression::class] = listOf(::Rterm, ::ExpressionSuffix)
 
-        productions[ExpressionSuffix::class] = listOf(::RelationalOperator, ::Rterm, ::ExpressionSuffix)
-        productions[ExpressionSuffix::class] = listOf()
+        this[ExpressionSuffix::class] = listOf(::RelationalOperator, ::Rterm, ::ExpressionSuffix)
+        this[ExpressionSuffix::class] = listOf()
 
-        productions[Rterm::class] = listOf(::Term, ::RtermSuffix)
+        this[Rterm::class] = listOf(::Term, ::RtermSuffix)
 
-        productions[RtermSuffix::class] = listOf(::PlusOrMinus, ::Term, ::RtermSuffix)
-        productions[RtermSuffix::class] = listOf()
+        this[RtermSuffix::class] = listOf(::PlusOrMinus, ::Term, ::RtermSuffix)
+        this[RtermSuffix::class] = listOf()
 
-        productions[Term::class] = listOf(::Fact, ::TermSuffix)
+        this[Term::class] = listOf(::Fact, ::TermSuffix)
 
-        productions[TermSuffix::class] = listOf(::MultiplyOrDivideOrExponentiateOrModulus, ::Fact, ::TermSuffix)
-        productions[TermSuffix::class] = listOf()
+        this[TermSuffix::class] = listOf(::MultiplyOrDivideOrExponentiateOrModulus, ::Fact, ::TermSuffix)
+        this[TermSuffix::class] = listOf()
 
-        productions[Fact::class] = listOf(::BaseLiteral)
-        productions[Fact::class] = listOf(::LeftValueOrFunction)
-        productions[Fact::class] = listOf(::LeftValueOrFunction)
-        productions[Fact::class] = listOf(::AddressOfIdentifier)
-        productions[Fact::class] = listOf(::ParenthesizedExpression)
-        productions[Fact::class] = listOf(::InputStatement)
+        this[Fact::class] = listOf(::BaseLiteral)
+        this[Fact::class] = listOf(::LeftValueOrFunction)
+        this[Fact::class] = listOf(::LeftValueOrFunction)
+        this[Fact::class] = listOf(::AddressOfIdentifier)
+        this[Fact::class] = listOf(::ParenthesizedExpression)
+        this[Fact::class] = listOf(::InputStatement)
 
-        productions[LeftValueOrFunction::class] = listOf(::DereferencedIdentifier)
-        productions[LeftValueOrFunction::class] = listOf(::IdentifierTerminal, ::LeftValueOrFunctionSuffix)
+        this[LeftValueOrFunction::class] = listOf(::DereferencedIdentifier)
+        this[LeftValueOrFunction::class] = listOf(::IdentifierTerminal, ::LeftValueOrFunctionSuffix)
 
-        productions[LeftValueOrFunctionSuffix::class] = listOf(::LeftValueSuffix)
-        productions[LeftValueOrFunctionSuffix::class] = listOf(::ParenthesizedExpressions)
-        productions[LeftValueOrFunctionSuffix::class] = listOf()
+        this[LeftValueOrFunctionSuffix::class] = listOf(::LeftValueSuffix)
+        this[LeftValueOrFunctionSuffix::class] = listOf(::ParenthesizedExpressions)
+        this[LeftValueOrFunctionSuffix::class] = listOf()
 
-        productions[BaseLiteral::class] = listOf(::IntegerTerminal)
-        productions[BaseLiteral::class] = listOf(::FloatTerminal)
-        productions[BaseLiteral::class] = listOf(::StringTerminal)
+        this[BaseLiteral::class] = listOf(::IntegerTerminal)
+        this[BaseLiteral::class] = listOf(::FloatTerminal)
+        this[BaseLiteral::class] = listOf(::StringTerminal)
 
-        productions[AddressOfIdentifier::class] = listOf(::Ampersand, ::IdentifierTerminal)
+        this[AddressOfIdentifier::class] = listOf(::Ampersand, ::IdentifierTerminal)
 
-        productions[RelationalOperator::class] = listOf(::EqualEqual)
-        productions[RelationalOperator::class] = listOf(::NotEqual)
-        productions[RelationalOperator::class] = listOf(::Lthan)
-        productions[RelationalOperator::class] = listOf(::LessThanOrEqual)
-        productions[RelationalOperator::class] = listOf(::GreaterThanOrEqual)
-        productions[RelationalOperator::class] = listOf(::Gthan)
+        this[RelationalOperator::class] = listOf(::EqualEqual)
+        this[RelationalOperator::class] = listOf(::NotEqual)
+        this[RelationalOperator::class] = listOf(::Lthan)
+        this[RelationalOperator::class] = listOf(::LessThanOrEqual)
+        this[RelationalOperator::class] = listOf(::GreaterThanOrEqual)
+        this[RelationalOperator::class] = listOf(::Gthan)
 
-        productions[Lthan::class] = listOf(::LessThan)
+        this[Lthan::class] = listOf(::LessThan)
 
-        productions[Gthan::class] = listOf(::GreaterThan)
+        this[Gthan::class] = listOf(::GreaterThan)
 
-        productions[PlusOrMinus::class] = listOf(::Plus)
-        productions[PlusOrMinus::class] = listOf(::Minus)
+        this[PlusOrMinus::class] = listOf(::Plus)
+        this[PlusOrMinus::class] = listOf(::Minus)
 
-        productions[MultiplyOrDivideOrExponentiateOrModulus::class] = listOf(::Asterisk)
-        productions[MultiplyOrDivideOrExponentiateOrModulus::class] = listOf(::ForwardSlash)
-        productions[MultiplyOrDivideOrExponentiateOrModulus::class] = listOf(::Caret)
-        productions[MultiplyOrDivideOrExponentiateOrModulus::class] = listOf(::Modulus)
-
-        return productions
+        this[MultiplyOrDivideOrExponentiateOrModulus::class] = listOf(::Asterisk)
+        this[MultiplyOrDivideOrExponentiateOrModulus::class] = listOf(::ForwardSlash)
+        this[MultiplyOrDivideOrExponentiateOrModulus::class] = listOf(::Caret)
+        this[MultiplyOrDivideOrExponentiateOrModulus::class] = listOf(::Modulus)
     }
 }

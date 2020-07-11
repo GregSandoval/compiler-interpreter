@@ -11,7 +11,7 @@ import compiler.parser.follow.FollowSet
 import compiler.parser.lltable.LLTable
 
 class A7Parser {
-    private val productions = A7Grammar.build()
+    private val productions = A7Grammar()
     private val derivesEpsilon = EpsilonDerivation.findAll(productions)
     private val first = FirstSet.findAll(productions, derivesEpsilon)
     private val follow = FollowSet.findFollowSet(productions, derivesEpsilon, first)
