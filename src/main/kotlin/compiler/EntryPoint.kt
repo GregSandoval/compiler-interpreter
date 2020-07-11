@@ -58,5 +58,4 @@ object EntryPoint {
         println()
         println(symtab)
     }
-
 }

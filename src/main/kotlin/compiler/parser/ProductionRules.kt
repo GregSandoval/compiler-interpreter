@@ -9,7 +9,7 @@ typealias ProductionRHS = List<NodeSupplier>
 typealias ProductionRHSs = MutableList<ProductionRHS>
 typealias Productions = MutableMap<NonTerminalClass, ProductionRHSs>
 
-class ProductionRules {
+open class ProductionRules {
     private val productions: Productions = HashMap()
     private val reverseProductions: MutableMap<NonTerminalClass, MutableSet<NonTerminalClass>> = HashMap()
 
