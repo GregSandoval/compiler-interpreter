@@ -3,9 +3,8 @@ package compiler.parser
 import compiler.parser.Symbol.NonTerminal
 import compiler.parser.Symbol.Terminal
 import compiler.parser.Symbol.Terminal.Ignorable.EOFTerminal
-import compiler.parser.lltable.LLTable
 
-class ParseTree(startSymbol: NonTerminal, llTable: LLTable, terminals: List<Terminal>) {
+class ParseTree(startSymbol: NonTerminal) {
     private val tree: TreeNode = NonTerminal.ParseTreeSentinel()
     private val EOF = EOFTerminal()
 
@@ -13,12 +12,6 @@ class ParseTree(startSymbol: NonTerminal, llTable: LLTable, terminals: List<Term
         tree.children.push(EOF)
         tree.children.push(startSymbol)
         tree.children.forEach { it.parent = tree }
-        ParserBuilder()
-                .setStartSymbol(startSymbol)
-                .setNonTerminalReplacedListener(this::link)
-                .setLLTable(llTable)
-                .createParser()
-                .parse(terminals)
     }
 
     fun getTree(): TreeNode {

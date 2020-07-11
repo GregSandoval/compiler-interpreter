@@ -12,17 +12,18 @@ class Parser(
         private val llTable: LLTable
 ) {
 
-    fun parse(tokensIn: List<Terminal>) {
+    fun parse(tokensIn: List<Terminal>): ParseTree {
         val stack = LinkedList<Symbol>()
         val tokens = LinkedList(tokensIn)
+        val tree = ParseTree(this.startSymbol)
         stack.push(startSymbol)
 
         while (!tokens.isEmpty() && !stack.isEmpty()) {
             this.listener.onBeforeRule(stack, tokens.peek())
 
             val rhs = when (val top = stack.pop()) {
-                is Terminal -> matchTerminal(top, tokens)
-                is NonTerminal -> applyProduction(top, tokens)
+                is Terminal -> matchTerminal(top, tokens, tree)
+                is NonTerminal -> applyProduction(top, tokens, tree)
             }
 
             rhs.reversed().forEach(stack::push)
@@ -30,6 +31,7 @@ class Parser(
 
         if (tokens.isEmpty() && stack.isEmpty()) {
             println("Parsing successful")
+            return tree
         }
 
         if (!stack.isEmpty()) {
@@ -44,9 +46,11 @@ class Parser(
                             .collect(Collectors.toList())
             )
         }
+
+        throw Exception("Unexpected parser error")
     }
 
-    fun applyProduction(top: NonTerminal, tokens: LinkedList<Terminal>): List<Symbol> {
+    fun applyProduction(top: NonTerminal, tokens: LinkedList<Terminal>, tree: ParseTree): List<Symbol> {
         val token = tokens.peek()
         val rhs = this.llTable.getRHS(top, token::class)
 
@@ -55,15 +59,17 @@ class Parser(
             throw PredictiveParserException(top, token, this.llTable)
         }
 
+        tree.link(top, token, rhs)
         this.listener.onNonTerminalReplaced(top, token, rhs)
 
         return rhs
     }
 
-    fun matchTerminal(top: Terminal, tokens: LinkedList<Terminal>): List<Symbol> {
+    fun matchTerminal(top: Terminal, tokens: LinkedList<Terminal>, tree: ParseTree): List<Symbol> {
         val token = tokens.pop()
 
         if (isEqual(token, top)) {
+            tree.link(top, token, emptyList())
             this.listener.onNonTerminalReplaced(top, token, emptyList())
             return emptyList()
         }

@@ -8,11 +8,6 @@ class ParserBuilder {
     private lateinit var startSymbol: NonTerminal
     private lateinit var llTable: LLTable
 
-    fun setStartSymbol(startSymbol: NonTerminal): ParserBuilder {
-        this.startSymbol = startSymbol
-        return this
-    }
-
     fun setBeforeRuleListener(listener: BeforeRuleListerner): ParserBuilder {
         this.parserListener = this.parserListener.onBeforeRule(listener)
         return this
@@ -30,6 +25,11 @@ class ParserBuilder {
 
     fun setNonTerminalReplacedListener(listener: NonTerminalReplacedListener): ParserBuilder {
         this.parserListener = this.parserListener.onNonTerminalReplaced(listener)
+        return this
+    }
+
+    fun setStartSymbol(startSymbol: NonTerminal): ParserBuilder {
+        this.startSymbol = startSymbol
         return this
     }
 
