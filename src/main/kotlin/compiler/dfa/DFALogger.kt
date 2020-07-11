@@ -21,5 +21,4 @@ object DFALogger {
     fun escape(text: String): String {
         return text.replace("\n", "\\n")
     }
-
 }

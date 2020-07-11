@@ -11,7 +11,7 @@ typealias EdgeFunction = (Char) -> Optional<StateConstructor>
 typealias Transitions = MutableList<EdgeFunction>
 typealias DFATable = MutableMap<KClass<out LexicalNode>, Transitions>
 
-abstract class DFA(val start: StateConstructor) {
+open class DFA(val start: StateConstructor) {
     private val dfa: DFATable = HashMap()
 
     operator fun get(start: LexicalNode, character: Char): LexicalNode {

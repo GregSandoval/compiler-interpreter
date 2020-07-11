@@ -22,7 +22,7 @@ object EntryPoint {
         val terminals = A5Lexer().lex(inputs.sourceText)
 
         // Build parse tree from terminals
-        val parseTree = A7Parser.parse(terminals)
+        val parseTree = A7Parser().parse(terminals)
 
         // Get root of the parse tree
         var tree = parseTree.getTree()
